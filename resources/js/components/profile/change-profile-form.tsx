@@ -1,8 +1,8 @@
 import { Button } from '@/components/ui/button';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { User } from '@/types';
-import { useForm, router, usePage } from '@inertiajs/react';
+import { router, useForm, usePage } from '@inertiajs/react';
 import { Loader2 } from 'lucide-react';
 
 interface PageProps {
@@ -11,10 +11,8 @@ interface PageProps {
 }
 
 export function ChangeProfileForm() {
-  // Получаем данные пользователя из Inertia ;props
   const { user } = usePage<PageProps>().props;
 
-  // Инициализация формы с начальными значениями из Inertia props
   const { data, setData, put, processing, errors } = useForm({
     name: user.name,
     email: user.email,
@@ -23,9 +21,8 @@ export function ChangeProfileForm() {
   // Функция отправки формы
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    put(route('profile.update'), {
+    put(route('settings.profile.update'), {
       onSuccess: () => {
-        // Перезагружаем только свойство user, чтобы обновить данные на клиенте
         router.reload({ only: ['user'] });
       },
     });
@@ -55,10 +52,12 @@ export function ChangeProfileForm() {
             <Input id="email" type="email" placeholder="myemail@example.com" value={data.email} onChange={(e) => setData('email', e.target.value)} />
             {errors.email && <p className="text-xs text-red-500">{errors.email}</p>}
           </div>
-          <Button type="submit" disabled={processing}>
-            {processing && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            Сохранить
-          </Button>
+          <DialogFooter>
+            <Button type="submit" disabled={processing}>
+              {processing && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              Сохранить
+            </Button>
+          </DialogFooter>
         </form>
       </DialogContent>
     </Dialog>

@@ -27,12 +27,12 @@ export function ProductCard({ item }: { item: SmartphoneFull }) {
   return (
     <Card className="flex min-w-fit flex-col justify-between">
       <CardHeader>
-        <Link href={`/products`} headers={{ productId: item.id.toString() }}>
+        <Link href={route('product.show', { id: item.id })}>
           <img src={item.images[0].image_path} srcSet={'/phone.png'} alt="" />
         </Link>
       </CardHeader>
       <CardContent>
-        <Link href={`/products`} headers={{ productId: item.id.toString() }}>
+        <Link href={route('product.show', { id: item.id })}>
           <p>
             Смартфон {item.brand} {item.model} {item.specifications.find((spec) => spec.spec_key === 'ram')?.spec_value}{' + '}
             {item.specifications.find((spec) => spec.spec_key === 'storage')?.spec_value}

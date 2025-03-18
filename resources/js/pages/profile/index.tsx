@@ -5,6 +5,7 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/componen
 import { Order, User } from '@/types';
 import Layout from '@/layouts/app-layout';
 import { currencyFormatter } from '@/utils/currencyFormatter';
+import ChangePassForm from '@/components/profile/change-pass-form';
 
 interface PageProps {
   user: User;
@@ -39,8 +40,8 @@ export default function Profile() {
           <CardContent className="flex flex-col gap-4">
             <p className="text-zinc-500">Ваше имя: {user.name}</p>
             <p className="text-zinc-500">Ваша почта: {user.email}</p>
-            {/* {user.address && <p className="text-zinc-500">Ваш адрес: {user.address}</p>} */}
           <ChangeProfileForm />
+          <ChangePassForm />
           {/* {isAdmin && (
             <Button className="w-fit" variant="outline">
               <Link href="/admin">Войти в админ панель</Link>

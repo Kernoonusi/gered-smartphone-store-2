@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Inertia\Inertia;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Smartphone;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Inertia\Inertia;
 use Inertia\Response;
 
 class CartController extends Controller
@@ -28,11 +28,11 @@ class CartController extends Controller
             ->first();
 
         // Если корзина отсутствует, создаём новую
-        if (!$cart) {
+        if (! $cart) {
             $cart = Order::create([
                 'user_id' => $user->id,
-                'status'  => 'cart',
-                'total'   => 0,
+                'status' => 'cart',
+                'total' => 0,
             ]);
         }
 
@@ -44,20 +44,19 @@ class CartController extends Controller
             'cart' => $cart,
             'products' => Inertia::defer(fn () => $randomSmartphones),
             'totalPrice' => $totalPrice,
-            'user' => $user
+            'user' => $user,
         ]);
     }
 
     /**
      * Добавить товар в корзину.
-     * 
      */
     public function add(Request $request): RedirectResponse
     {
         $request->validate([
             'product_id' => 'required|integer',
-            'count'      => 'nullable|integer|min:1',
-            'price'      => 'required|numeric|min:0',
+            'count' => 'nullable|integer|min:1',
+            'price' => 'required|numeric|min:0',
         ]);
 
         $user = Auth::user();
@@ -77,8 +76,8 @@ class CartController extends Controller
         } else {
             $cart->items()->create([
                 'product_id' => $request->product_id,
-                'count'      => $count,
-                'price'      => $request->price,
+                'count' => $count,
+                'price' => $request->price,
             ]);
         }
 
@@ -91,7 +90,6 @@ class CartController extends Controller
 
     /**
      * Обновить количество товара в корзине.
-     * 
      */
     public function update(Request $request, int $itemId): RedirectResponse
     {
@@ -113,7 +111,6 @@ class CartController extends Controller
 
     /**
      * Удалить товар из корзины.
-     * 
      */
     public function remove(int $itemId): RedirectResponse
     {
@@ -130,7 +127,6 @@ class CartController extends Controller
 
     /**
      * Оформить заказ (сменить статус с "cart" на "processing").
-     * 
      */
     public function checkout(Request $request): RedirectResponse
     {
@@ -146,10 +142,8 @@ class CartController extends Controller
             ->with('items')
             ->first();
 
-        if (!$order || $order->items->isEmpty()) {
-            return response()->json([
-                'message' => 'Ваша корзина пуста',
-            ], 400);
+        if (! $order || $order->items->isEmpty()) {
+            return back()->with('error', 'Ваша корзина пуста');
         }
 
         $order->address = $request->address;
@@ -157,6 +151,20 @@ class CartController extends Controller
         $order->note = $request->note;
         $order->status = 'processing';
         $order->save();
+
+        $cart = Order::with('items.product.images')
+            ->where('user_id', $user->id)
+            ->where('status', 'cart')
+            ->first();
+
+        // Если корзина отсутствует, создаём новую
+        if (! $cart) {
+            $cart = Order::create([
+                'user_id' => $user->id,
+                'status' => 'cart',
+                'total' => 0,
+            ]);
+        }
 
         return back();
     }

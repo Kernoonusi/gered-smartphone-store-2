@@ -57,7 +57,7 @@ export interface SmartphoneFull extends Smartphone {
 export interface Specification {
     id: number;
     smartphone_id: number;
-    spec_key: 'screen_size' | 'battery_capacity' | 'ram' | 'storage' | 'processor' | 'os';
+    spec_key: 'screen_size' | 'battery_capacity' | 'ram' | 'storage' | 'processor' | 'os' | 'weight' | 'camera';
     spec_value: string;
     created_at: string;
     updated_at: string;

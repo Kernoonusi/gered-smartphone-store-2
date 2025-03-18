@@ -14,7 +14,7 @@ export function OrderForm() {
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    post(route('order.create'), {
+    post(route('cart.checkout'), {
       onSuccess: () => {
         reset();
         toast.success('Заказ успешно оформлен');

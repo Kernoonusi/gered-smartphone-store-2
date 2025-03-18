@@ -1,9 +1,9 @@
 <?php
 
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\MainPageController;
-use App\Http\Controllers\OrderController;
-use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Settings\ProfileController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -23,6 +23,7 @@ Route::get('/contacts', function () {
 Route::get('/about', function () {
     return Inertia::render('about');
 })->name('about');
+Route::get('/product/{id}', [ProductController::class, 'show'])->name('product.show');
 Route::middleware(['auth'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
     Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
@@ -30,7 +31,6 @@ Route::middleware(['auth'])->group(function () {
     Route::patch('/cart/item/{id}', [CartController::class, 'update'])->name('cart.update');
     Route::delete('/cart/item/{id}', [CartController::class, 'remove'])->name('cart.remove');
     Route::post('/cart/checkout', [CartController::class, 'checkout'])->name('cart.checkout');
-    // Route::post('/order/create', [OrderController::class, 'create'])->name('order.create');
 });
 
 require __DIR__.'/auth.php';

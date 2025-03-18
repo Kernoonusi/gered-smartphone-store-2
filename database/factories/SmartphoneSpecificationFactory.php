@@ -37,7 +37,7 @@ class SmartphoneSpecificationFactory extends Factory
             ],
             [
                 'spec_key' => 'battery_capacity',
-                'spec_value' => $faker->numberBetween(2000, 5000).' mAh',
+                'spec_value' => $faker->numberBetween(3000, 7000).' mAh',
             ],
             [
                 'spec_key' => 'ram',
@@ -54,6 +54,14 @@ class SmartphoneSpecificationFactory extends Factory
             [
                 'spec_key' => 'os',
                 'spec_value' => $faker->randomElement(['Android', 'iOS']),
+            ],
+            [
+                'spec_key' => 'camera',
+                'spec_value' => $faker->randomElement(['12 MP', '20 MP', '48 MP']),
+            ],
+            [
+                'spec_key' => 'weight',
+                'spec_value' => $faker->randomFloat(2, 100, 200).' g',
             ],
         ];
     }

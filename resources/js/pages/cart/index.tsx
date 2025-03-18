@@ -11,7 +11,6 @@ import { Minus, Plus, Trash } from 'lucide-react';
 
 interface PageProps {
   cart: Order;
-  // products: SmartphoneFull[];
   user: User;
   totalPrice: number;
   [key: string]: unknown;

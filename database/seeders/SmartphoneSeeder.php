@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Smartphone;
 use Database\Factories\SmartphoneSpecificationFactory;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class SmartphoneSeeder extends Seeder
 {
@@ -13,6 +14,10 @@ class SmartphoneSeeder extends Seeder
      */
     public function run(): void
     {
+        DB::table('smartphone_images')->truncate();
+        DB::table('smartphone_specifications')->truncate();
+        DB::table('smartphones')->truncate();
+        
         Smartphone::factory()
             ->count(10)
             ->create()
