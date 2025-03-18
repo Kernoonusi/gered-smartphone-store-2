@@ -2,21 +2,22 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Smartphone;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Inertia\Response;
 
 class CartController extends Controller
 {
     /**
      * Отобразить корзину пользователя.
      */
-    public function index()
+    public function index(): Response
     {
         $user = Auth::user();
 
@@ -49,11 +50,9 @@ class CartController extends Controller
 
     /**
      * Добавить товар в корзину.
-     *  
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\JsonResponse
+     * 
      */
-    public function add(Request $request): JsonResponse
+    public function add(Request $request): RedirectResponse
     {
         $request->validate([
             'product_id' => 'required|integer',
@@ -87,19 +86,14 @@ class CartController extends Controller
         $cart->total = $cart->items()->sum(DB::raw('price * count'));
         $cart->save();
 
-        return response()->json([
-            'message' => 'Товар добавлен в корзину',
-        ], 200);
+        return back();
     }
 
     /**
      * Обновить количество товара в корзине.
      * 
-     * @param \Illuminate\Http\Request $request
-     * @param int $itemId
-     * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Request $request, $itemId): JsonResponse
+    public function update(Request $request, int $itemId): RedirectResponse
     {
         $request->validate([
             'count' => 'required|integer|min:1',
@@ -114,18 +108,14 @@ class CartController extends Controller
         $cart->total = $cart->items()->sum(DB::raw('price * count'));
         $cart->save();
 
-        return response()->json([
-            'message' => 'Корзина обновлена',
-        ], 200);
+        return back();
     }
 
     /**
      * Удалить товар из корзины.
      * 
-     * @param int $itemId
-     * @return \Illuminate\Http\JsonResponse
      */
-    public function remove($itemId): JsonResponse
+    public function remove(int $itemId): RedirectResponse
     {
         $item = OrderItem::findOrFail($itemId);
         $cart = $item->order;
@@ -135,18 +125,14 @@ class CartController extends Controller
         $cart->total = $cart->items()->sum(DB::raw('price * count'));
         $cart->save();
 
-        return response()->json([
-            'message' => 'Товар удалён из корзины',
-        ], 200);
+        return back();
     }
 
     /**
      * Оформить заказ (сменить статус с "cart" на "processing").
      * 
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\JsonResponse
      */
-    public function checkout(Request $request)
+    public function checkout(Request $request): RedirectResponse
     {
         $request->validate([
             'address' => 'required|string|max:255',
@@ -172,8 +158,6 @@ class CartController extends Controller
         $order->status = 'processing';
         $order->save();
 
-        return response()->json([
-            'message' => 'Заказ успешно оформлен',
-        ], 200);
+        return back();
     }
 }

@@ -30,7 +30,7 @@ Route::middleware(['auth'])->group(function () {
     Route::patch('/cart/item/{id}', [CartController::class, 'update'])->name('cart.update');
     Route::delete('/cart/item/{id}', [CartController::class, 'remove'])->name('cart.remove');
     Route::post('/cart/checkout', [CartController::class, 'checkout'])->name('cart.checkout');
-    Route::post('/order/create', [OrderController::class, 'create'])->name('order.create');
+    // Route::post('/order/create', [OrderController::class, 'create'])->name('order.create');
 });
 
 require __DIR__.'/auth.php';
