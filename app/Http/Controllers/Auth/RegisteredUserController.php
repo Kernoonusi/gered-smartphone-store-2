@@ -15,14 +15,9 @@ use Inertia\Response;
 
 class RegisteredUserController extends Controller
 {
-    /**
-     * Show the registration page.
-     */
-    public function create(): Response
-    {
-        return Inertia::render('auth/register');
+    public function show(){
+        return Inertia::render("profile/index");
     }
-
     /**
      * Handle an incoming registration request.
      *
@@ -46,6 +41,6 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
-        return to_route('dashboard');
+        return back();
     }
 }

@@ -2,6 +2,7 @@ import js from '@eslint/js';
 import prettier from 'eslint-config-prettier';
 import react from 'eslint-plugin-react';
 import reactHooks from 'eslint-plugin-react-hooks';
+import reactCompiler from 'eslint-plugin-react-compiler';
 import globals from 'globals';
 import typescript from 'typescript-eslint';
 
@@ -31,10 +32,12 @@ export default [
     {
         plugins: {
             'react-hooks': reactHooks,
+            'react-compiler': reactCompiler,
         },
         rules: {
             'react-hooks/rules-of-hooks': 'error',
             'react-hooks/exhaustive-deps': 'warn',
+            'react-compiler/react-compiler': 'error'
         },
     },
     {

@@ -2,7 +2,10 @@
 
 namespace App\Providers;
 
+use App\Models\Smartphone;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\ServiceProvider;
+use Inertia\Inertia;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -19,6 +22,16 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        Inertia::share([
+            'brands' => function () {
+                // Кэширование списка брендов на 60 минут
+                return Cache::remember('smartphone_brands', now()->addMinutes(60), function () {
+                    return Smartphone::select('brand')
+                        ->distinct()
+                        ->orderBy('brand')
+                        ->get();
+                });
+            },
+        ]);
     }
 }

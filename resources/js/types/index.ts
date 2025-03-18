@@ -38,3 +38,53 @@ export interface User {
     updated_at: string;
     [key: string]: unknown; // This allows for additional properties...
 }
+
+export interface Smartphone {
+    id: number;
+    brand: string;
+    model: string;
+    price: number;
+    description: string | null;
+    created_at: string;
+    updated_at: string;
+}
+
+export interface SmartphoneFull extends Smartphone {
+    images: Image[];
+    specifications: Specification[];
+}
+
+export interface Specification {
+    id: number;
+    smartphone_id: number;
+    spec_key: 'screen_size' | 'battery_capacity' | 'ram' | 'storage' | 'processor' | 'os';
+    spec_value: string;
+    created_at: string;
+    updated_at: string;
+}
+
+export interface Image {
+    id: number;
+    image_path: string;
+    smartphone_id: number;
+    created_at: string;
+    updated_at: string;
+}
+
+export interface Order {
+    id: number;
+    status: 'processing' | 'delivery' | 'arrived' | 'cart';
+    total: number;
+    items: OrderItem[];
+}
+
+export interface OrderItem {
+    id: number;
+    order_id: number;
+    product_id: number;
+    count: number;
+    price: number;
+    created_at: string;
+    updated_at: string;
+    product: SmartphoneFull;
+}
