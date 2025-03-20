@@ -1,20 +1,41 @@
 import CartButton from '@/components/add-cart-button';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import Layout from '@/layouts/app-layout';
-import { SmartphoneFull } from '@/types';
+import { ReviewFull, SmartphoneFull } from '@/types';
 import { currencyFormatter } from '@/utils/currencyFormatter';
 import { Head, usePage } from '@inertiajs/react';
-import { Camera, Cpu, HardDrive, MemoryStick, MonitorSmartphone, Scale, Smartphone } from 'lucide-react';
+import { Camera, Cpu, HardDrive, MemoryStick, MonitorSmartphone, Scale, Smartphone, Star, StarHalf } from 'lucide-react';
 import { useState } from 'react';
 
 interface PageProps {
   product: SmartphoneFull;
+  reviews: ReviewFull[];
   [key: string]: unknown;
 }
 
+function StarRating({ rating }: { rating: number }) {
+  const fullStars = Math.floor(rating);
+  const hasHalfStar = rating % 1 >= 0.5;
+  const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+
+  return (
+    <div className="flex">
+      {[...Array(fullStars)].map((_, i) => (
+        <Star key={`full-${i}`} className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+      ))}
+      {hasHalfStar && <StarHalf className="h-4 w-4 fill-yellow-400 text-yellow-400" />}
+      {[...Array(emptyStars)].map((_, i) => (
+        <Star key={`empty-${i}`} className="h-4 w-4 text-gray-300 dark:text-gray-600" />
+      ))}
+    </div>
+  );
+}
+
 export default function ProductIndex() {
-  const { product } = usePage<PageProps>().props;
+  const { product, reviews } = usePage<PageProps>().props;
   const [mainImage, setMainImage] = useState(product.images.length > 0 ? product.images[0] : null);
+  const averageRating = reviews.reduce((acc, review) => acc + review.rating, 0) / reviews.length;
 
   return (
     <Layout>
@@ -49,9 +70,9 @@ export default function ProductIndex() {
 
           <div />
 
-          <div className="bg-opacity-20 dark:bg-opacity-20 border-opacity-30 dark:border-opacity-30 col-span-2 flex flex-col justify-between rounded-3xl border border-white bg-white p-6 shadow-xl backdrop-blur-md md:col-span-1 dark:border-gray-700 dark:bg-gray-800 md:w-80 lg:w-96">
+          <div className="bg-opacity-20 dark:bg-opacity-20 border-opacity-30 dark:border-opacity-30 col-span-2 flex flex-col justify-between rounded-3xl border border-white bg-white p-6 shadow-xl backdrop-blur-md md:col-span-1 md:w-80 lg:w-96 dark:border-gray-700 dark:bg-gray-800">
             <p className="text-4xl font-semibold text-slate-800 dark:text-slate-100">{currencyFormatter.format(product.price)}</p>
-            <CartButton/>
+            <CartButton />
           </div>
         </header>
 
@@ -171,6 +192,63 @@ export default function ProductIndex() {
                 </p>
               </div>
             </div>
+          </TabsContent>
+          <TabsContent
+            value="reviews"
+            className="mt-2 rounded-xl border border-white/30 bg-white/20 p-6 shadow-lg backdrop-blur-md dark:border-slate-700/50 dark:bg-slate-800/40"
+          >
+            {reviews.length > 0 ? (
+              <div className="mb-6">
+                <div className="mb-4 flex items-center justify-between">
+                  <h3 className="text-xl font-semibold text-slate-800 dark:text-slate-200">Отзывы покупателей</h3>
+                  <div className="flex items-center gap-2">
+                    <div className="flex">
+                      <StarRating rating={averageRating} />
+                    </div>
+                    <span className="text-sm font-medium text-slate-700 dark:text-slate-300">{averageRating.toFixed(1)} из 5</span>
+                  </div>
+                </div>
+
+                <div className="space-y-6">
+                  {reviews.map((review) => (
+                    <div key={review.id} className="rounded-lg bg-white/30 p-5 backdrop-blur-sm dark:bg-slate-700/30">
+                      <div className="mb-3 flex justify-between">
+                        <div className="flex items-center gap-3">
+                          <Avatar>
+                            <AvatarImage alt={review.user.name} />
+                            <AvatarFallback className="bg-cyan-100 text-cyan-800 dark:bg-cyan-900 dark:text-cyan-200">
+                              {review.user.name
+                                .split(' ')
+                                .map((name) => name[0])
+                                .join('')}
+                            </AvatarFallback>
+                          </Avatar>
+                          <div>
+                            <h4 className="font-medium text-slate-800 dark:text-slate-200">{review.user.name}</h4>
+                            <p className="text-xs text-slate-500 dark:text-slate-400">
+                              {new Date(review.created_at).toLocaleString('ru-RU', {
+                                day: 'numeric',
+                                month: 'long',
+                                year: 'numeric',
+                                hour: '2-digit',
+                                minute: '2-digit',
+                              })}
+                            </p>
+                          </div>
+                        </div>
+                        <StarRating rating={review.rating} />
+                      </div>
+                      <p className="text-slate-700 dark:text-slate-300">{review.text}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ) : (
+              <div className="py-8 text-center">
+                <p className="text-lg text-slate-700 dark:text-slate-300">Пока нет отзывов для этого продукта.</p>
+                <p className="mt-2 text-slate-500 dark:text-slate-400">Будьте первым, кто оставит отзыв!</p>
+              </div>
+            )}
           </TabsContent>
         </Tabs>
       </main>

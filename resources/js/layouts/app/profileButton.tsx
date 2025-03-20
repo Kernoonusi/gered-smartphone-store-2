@@ -11,18 +11,18 @@ export function ProfileButton({ rounded }: { rounded?: boolean }) {
   return (
     <>
       {auth.user?.email ? (
-        <Button variant="ghost" asChild className={`h-full gap-4 ${rounded ? '' : 'rounded-none'}`}>
-          <Link href="/profile">
+        <Button variant="ghost" className={` text-white hover:bg-white/10 ${rounded ? 'rounded-full' : 'rounded-none'}`}>
+          <Link href="/profile" className="flex gap-2 items-center">
             <p className="hidden md:block">{auth.user.name}</p>
-            <User />
+            <User className="h-5 w-5" />
           </Link>
         </Button>
       ) : (
         <Dialog>
           <DialogTrigger asChild>
-            <Button variant="ghost" className={`h-full gap-4 ${rounded ? '' : 'rounded-none'}`}>
+            <Button variant="ghost" className={`flex gap-2 items-center text-white hover:bg-white/10 ${rounded ? 'rounded-full' : 'rounded-none'}`}>
               <p className="hidden md:block">Войти</p>
-              <User />
+              <User className="h-5 w-5" />
             </Button>
           </DialogTrigger>
           <AuthForm />

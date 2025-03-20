@@ -23,4 +23,14 @@ class Smartphone extends Model
     {
         return $this->hasMany(SmartphoneSpecification::class);
     }
+
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
+    }
+
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
 }

@@ -88,3 +88,17 @@ export interface OrderItem {
     updated_at: string;
     product: SmartphoneFull;
 }
+
+export interface Review {
+    id: number;
+    user_id: number;
+    smartphone_id: number;
+    text: string;
+    rating: number;
+    created_at: string;
+    updated_at: string;
+}
+
+export interface ReviewFull extends Review {
+    user: User;
+}

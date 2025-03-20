@@ -3,18 +3,20 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Review;
 use App\Models\Smartphone;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class ProductController extends Controller
 {
     public function show($productId)
     {
-        $product = Smartphone::findOrFail($productId)->with('images', 'specifications')->first();
+        $product = Smartphone::with('images', 'specifications')->findOrFail($productId);
+        $reviews = Review::with('user')->where('smartphone_id', $product->id)->get();
         
         return Inertia::render('product/index', [
             'product' => $product,
+            'reviews' => $reviews,
         ]);
     }
 }
