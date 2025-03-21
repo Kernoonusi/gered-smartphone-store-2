@@ -1,24 +1,257 @@
-/* Оригинальные стили анимации для экранов от 768px и выше */
+/* Header container */
+.header-container {
+  transition: all 0.3s ease;
+}
+
+/* Logo container */
+.logo-container {
+  height: 3rem;
+  display: flex;
+  align-items: center;
+  margin-right: 0.5rem;
+}
+
+/* Logo styles */
+.logo-full {
+  font-size: 1.875rem;
+  line-height: 2.25rem;
+  transition: all 0.3s ease;
+}
+
+/* Navigation button */
+.nav-button {
+  padding-top: 1.25rem;
+  padding-bottom: 1.25rem;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+/* Cart buttons */
+.cart-button-desktop {
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+
+.cart-button-mobile {
+  opacity: 1;
+  visibility: visible;
+  transition: all 0.3s ease;
+}
+
+/* Main header */
+.main-header {
+  height: auto;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  opacity: 1;
+  overflow: visible;
+  transition: all 0.3s ease;
+}
+
+/* Profile button */
+.profile-button {
+  transition: all 0.3s ease;
+}
+
+/* Scroll progress bar */
+.scroll-progress-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  z-index: 100;
+  background: transparent;
+}
+
+.scroll-progress-bar {
+  height: 100%;
+  background: linear-gradient(to right, #67e8f9, #d946ef);
+  transform-origin: 0%;
+  transform: scaleX(0);
+  transition: transform 0.1s ease;
+}
+
+/* JavaScript scrolled state */
+.js-scrolled .main-header {
+  height: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  opacity: 0;
+  overflow: hidden;
+}
+
+.js-scrolled .nav-button {
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+  font-size: 0.875rem;
+}
+
+.js-scrolled .logo-full {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.js-scrolled .cart-button-desktop {
+  opacity: 1;
+  visibility: visible;
+}
+
+.js-scrolled .cart-button-mobile {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.js-scrolled .profile-button {
+  border-radius: 0;
+}
+
+/* Media queries for responsive behavior */
 @media (min-width: 768px) {
-  .anim-elem {
-    animation: header-anim ease-in forwards;
-    animation-timeline: scroll(root);
-    animation-range: 0vh 15vh;
+  .logo-full {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(0);
+  }
+  .js-scrolled .logo-full {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+
+  .cart-button-desktop {
+    display: block;
+  }
+
+  .cart-button-mobile {
+    display: none;
   }
 }
 
-@keyframes header-anim {
-  from {
-    opacity: 0;
-    display: none;
-    transform: scale(0);
-    width: 0;
+/* Scroll-driven animations for modern browsers */
+@supports (animation-timeline: scroll()) {
+  #main-header {
+    view-timeline-name: --page-scroll;
+    view-timeline-axis: block;
   }
-  to {
-    opacity: 1;
+
+  /* Main header animation */
+  .main-header {
+    animation: main-header-animation linear forwards;
+    animation-timeline: scroll(root);
+    animation-range: 0 50px;
     display: flex;
-    transform: scale(1);
-    width: -moz-fit-content;
-    width: fit-content;
+  }
+
+  @keyframes main-header-animation {
+    0% {
+      height: fit-content;
+      padding-top: 1rem;
+      padding-bottom: 1rem;
+      opacity: 1;
+    }
+    90% {
+      display: none;
+    }
+    100% {
+      display: none;
+      height: 0;
+      padding-top: 0;
+      padding-bottom: 0;
+      opacity: 0;
+    }
+  }
+
+  /* Navigation button animation */
+  /* .nav-button {
+    animation: nav-button-animation linear forwards;
+    animation-timeline: scroll(root);
+    animation-range: 0 100px;
+  }
+
+  @keyframes nav-button-animation {
+    from {
+      padding-top: 1.25rem;
+      padding-bottom: 1.25rem;
+      font-size: 1rem;
+    }
+    to {
+      padding-top: 0.75rem;
+      padding-bottom: 0.75rem;
+      font-size: 0.875rem;
+    }
+  } */
+
+  /* Cart button animations */
+  .cart-button-desktop {
+    animation: cart-button-desktop-animation linear forwards;
+    animation-timeline: scroll(root);
+    animation-range: 0 100px;
+  }
+
+  @keyframes cart-button-desktop-animation {
+    from {
+      opacity: 0;
+      visibility: hidden;
+      width: 0;
+      transform: scale(0);
+    }
+    to {
+      opacity: 1;
+      visibility: visible;
+      width: 100%;
+      transform: scale(1);
+    }
+  }
+
+  /* Profile button animation */
+  .profile-button {
+    animation: profile-button-animation linear forwards;
+    animation-timeline: scroll(root);
+    animation-range: 0 100px;
+  }
+
+  @keyframes profile-button-animation {
+    from {
+      border-radius: 9999px;
+      opacity: 0;
+      width: 0;
+      transform: scale(0);
+      visibility: hidden;
+    }
+    to {
+      border-radius: 0;
+      width: 100%;
+      transform: scale(1);
+      opacity: 1;
+      visibility: visible;
+    }
+  }
+
+  /* Media queries for responsive behavior with scroll animations */
+  @media (min-width: 768px) {
+    /* Logo animations */
+    .logo-full {
+      animation: logo-full-animation linear forwards;
+      animation-timeline: scroll(root);
+      animation-range: 0 100px;
+    }
+
+    @keyframes logo-full-animation {
+      from {
+        opacity: 0;
+        transform: scale(0);
+        visibility: hidden;
+        width: 0;
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+        width: 100%;
+        visibility: visible;
+      }
+    }
   }
 }
