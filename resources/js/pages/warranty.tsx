@@ -3,7 +3,7 @@ import Layout from '@/layouts/app-layout';
 export default function Warranty() {
   return (
     <Layout>
-      <main className="mx-auto mt-20 flex w-full h-[60dvh] flex-col gap-12 md:w-10/12">
+      <main className="mx-auto mt-20 flex w-full flex-col gap-12 md:w-10/12">
         <div className="flex w-full flex-col items-center gap-12 bg-white dark:bg-slate-900 p-12 md:gap-20 md:p-24">
           <h1 className="text-center text-4xl font-bold">Информация о гарантии</h1>
           <p className="text-center text-2xl">Мы предлагаем гарантию на 2 года для всех товаров, которые мы продаем на нашем сайте</p>
