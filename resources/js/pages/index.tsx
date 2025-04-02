@@ -20,7 +20,7 @@ export default function Welcome() {
               Новый XPhone Pro <br /> вышел
             </p>
             <Button className="mx-auto w-fit rounded-full bg-cyan-500 p-8 md:mx-0" asChild>
-              <Link href="/products/$productId" headers={{ productId: '23' }}>
+              <Link href={route("product.show", { id: 23 })}>
                 Смотреть
               </Link>
             </Button>
@@ -30,7 +30,7 @@ export default function Welcome() {
         <article className="grid grid-cols-[auto_1fr_auto] grid-rows-[auto_auto] items-center gap-4">
           <h2 className="text-4xl">Новинки</h2>
           <div />
-          <Link href="/products" className="after:content-['->']">
+          <Link href={route("product.show", { id: 23 })} className="after:content-['->']">
             Все новинки
           </Link>
           <div className="col-span-3 row-span-1 grid w-full grid-cols-[repeat(5,minmax(200px,1fr))] gap-4 overflow-x-scroll md:overflow-hidden">

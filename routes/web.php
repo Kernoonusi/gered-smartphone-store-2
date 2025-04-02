@@ -4,6 +4,7 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\MainPageController;
 use App\Http\Controllers\Settings\ProfileController;
+use App\Http\Controllers\SmartphoneController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -23,6 +24,7 @@ Route::get('/contacts', function () {
 Route::get('/about', function () {
     return Inertia::render('about');
 })->name('about');
+Route::get('/search', [SmartphoneController::class, 'index'])->name('search');
 Route::get('/product/{id}', [ProductController::class, 'show'])->name('product.show');
 Route::middleware(['auth'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile');

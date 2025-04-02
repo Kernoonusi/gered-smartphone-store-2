@@ -123,7 +123,7 @@ export default function AppHeaderLayout({ children }: AppHeaderLayoutProps) {
                   Gered Store
                 </Link>
 
-                <Link href="/products">
+                <Link href="/search">
                   <Button variant="ghost" className="nav-button h-full rounded-none text-white hover:bg-white/10">
                     Все смартфоны
                   </Button>
@@ -140,7 +140,7 @@ export default function AppHeaderLayout({ children }: AppHeaderLayoutProps) {
                         key={brand}
                         asChild
                       >
-                        <Link href={`/products?brandSearch=${brand}`}>{brand}</Link>
+                        <Link href={`/search?brand=${brand}`}>{brand}</Link>
                       </Button>
                     ))
                   )}
