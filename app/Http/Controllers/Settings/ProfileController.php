@@ -2,19 +2,23 @@
 
 namespace App\Http\Controllers\Settings;
 
-use App\Models\Order;
-use Inertia\Inertia;
-use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
+use App\Models\Order;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
+use Inertia\Inertia;
 
+// TODO: Add permissions
 class ProfileController extends Controller
 {
     public function index()
     {
+        /** @var \App\Models\User $user */
         $user = Auth::user();
+        
+        $permissions = $user->getAllPermissions();
 
         // Загружаем заказы пользователя вместе с позициями и данными о товарах
         $orders = Order::with('items.product.images', 'items.product.specifications')
@@ -22,12 +26,13 @@ class ProfileController extends Controller
             ->where('status', '!=', 'cart')
             ->has('items')
             ->get();
-
         return Inertia::render('profile/index', [
-            'user'    => $user,
-            'orders'  => $orders,
+            'user' => $user,
+            'permissions' => $permissions,
+            'orders' => $orders,
         ]);
     }
+
     /**
      * Update the user's profile.
      */
