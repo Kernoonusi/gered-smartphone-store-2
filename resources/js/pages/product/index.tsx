@@ -37,6 +37,7 @@ export default function ProductIndex() {
   const [mainImage, setMainImage] = useState(product.images.length > 0 ? product.images[0] : null);
   const averageRating = reviews.reduce((acc, review) => acc + review.rating, 0) / reviews.length;
 
+  console.table(product.images)
   return (
     <Layout>
       <Head title={`${product.brand} ${product.model}`} />
@@ -48,7 +49,7 @@ export default function ProductIndex() {
               <img
                 key={index}
                 src={image.image_path}
-                srcSet={'/phone.png'}
+                srcSet={image.image_path + '/phone.png'}
                 className="h-14 w-14 cursor-pointer rounded-lg border border-gray-200 object-cover transition-all hover:border-cyan-500 dark:border-gray-700"
                 alt={`${product.brand} ${product.model} view ${index + 1}`}
                 onMouseEnter={() => setMainImage(image)}

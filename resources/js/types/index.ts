@@ -105,18 +105,18 @@ export interface ReviewFull extends Review {
   user: User;
 }
 
-type PermissionPivot = {
-  role_id: number;
-  permission_id: number;
-};
-
-type Permission = {
+export interface Role {
   id: number;
-  name: 'edit-database';
-  guard_name: string;
+  slug: string;
+  name: string;
+  permissions: {
+    [key: string]: string; // или boolean, если значения преобразуются в булево
+  };
   created_at: string;
   updated_at: string;
-  pivot: PermissionPivot;
-};
-
-export type PermissionCollection = Permission[];
+  pivot?: {
+    user_id: number;
+    role_id: number;
+    // Дополнительные поля из pivot при необходимости
+  };
+}

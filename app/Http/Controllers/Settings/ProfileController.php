@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 
-// TODO: Add permissions
 class ProfileController extends Controller
 {
     public function index()
@@ -18,7 +17,7 @@ class ProfileController extends Controller
         /** @var \App\Models\User $user */
         $user = Auth::user();
         
-        $permissions = $user->getAllPermissions();
+        $roles = $user->getRoles();
 
         // Загружаем заказы пользователя вместе с позициями и данными о товарах
         $orders = Order::with('items.product.images', 'items.product.specifications')
@@ -26,9 +25,10 @@ class ProfileController extends Controller
             ->where('status', '!=', 'cart')
             ->has('items')
             ->get();
+
         return Inertia::render('profile/index', [
             'user' => $user,
-            'permissions' => $permissions,
+            'roles' => $roles,
             'orders' => $orders,
         ]);
     }
