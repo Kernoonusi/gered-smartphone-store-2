@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 
-// TODO: Add permissions
 class ProfileController extends Controller
 {
     public function index()
