@@ -5,13 +5,15 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\OrderResource\Pages;
 use App\Filament\Resources\OrderResource\RelationManagers;
 use App\Models\Order;
-use Filament\Forms;
+use Filament\Forms\Components\DateTimePicker;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Columns\SelectColumn;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class OrderResource extends Resource
 {
@@ -23,7 +25,25 @@ class OrderResource extends Resource
     {
         return $form
             ->schema([
-                //
+                Select::make('status')
+                    ->label('Статус')
+                    ->options([
+                        'cart' => 'Корзина',
+                        'processing' => 'В обработке',
+                        'completed' => 'Завершён',
+                    ])
+                    ->required(),
+                TextInput::make('total')
+                    ->label('Сумма')
+                    ->numeric()
+                    ->required(),
+                Select::make('user_id')
+                    ->label('Клиент')
+                    ->relationship('user', 'name')
+                    ->required(),
+                DateTimePicker::make('created_at')
+                    ->label('Дата создания')
+                    ->required(),
             ]);
     }
 
@@ -31,7 +51,25 @@ class OrderResource extends Resource
     {
         return $table
             ->columns([
-                //
+                TextColumn::make('id')
+                    ->label('ID')
+                    ->sortable(),
+                SelectColumn::make('status')
+                    ->label('Статус')
+                    ->options([
+                        'new' => 'Новый',
+                        'processing' => 'В обработке',
+                        'completed' => 'Завершён',
+                        'cancelled' => 'Отменён',
+                    ]),
+                TextColumn::make('total')
+                    ->label('Сумма')
+                    ->money('RUB'),
+                TextColumn::make('user.name')
+                    ->label('Клиент'),
+                TextColumn::make('created_at')
+                    ->label('Дата создания')
+                    ->sortable(),
             ])
             ->filters([
                 //
@@ -49,7 +87,7 @@ class OrderResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            RelationManagers\OrderItemsRelationManager::class,
         ];
     }
 

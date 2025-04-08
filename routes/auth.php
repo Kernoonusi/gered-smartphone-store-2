@@ -16,9 +16,7 @@ Route::middleware('guest')->group(function () {
     Route::post('register', [RegisteredUserController::class, 'store'])->name('register');
     // Вход
     Route::post('login', [AuthenticatedSessionController::class, 'store'])->name('login');
-    Route::get('login', function () {
-        return Inertia::render('/');
-    })->name('login.page');
+    Route::get('login', [\App\Http\Controllers\Auth\LoginController::class, 'show'])->name('login.page');
     // Запрос ссылки для сброса пароля
     Route::post('forgot-password', [PasswordResetLinkController::class, 'store'])->name('password.email');
 });

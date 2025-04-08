@@ -1,6 +1,6 @@
 import { FormEvent } from 'react';
 import { useForm } from '@inertiajs/react';
-import { DialogHeader, DialogTitle } from '@/components/ui/dialog';
+
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 
@@ -20,9 +20,6 @@ export default function ForgotPasswordForm({ switchState }: ForgotPasswordFormPr
 
   return (
     <>
-      <DialogHeader>
-        <DialogTitle>Восстановление пароля</DialogTitle>
-      </DialogHeader>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label htmlFor="email">Email</label>

@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button';
-import { DialogHeader, DialogTitle } from '@/components/ui/dialog';
+
 import { Input } from '@/components/ui/input';
 import { useForm } from '@inertiajs/react';
 import { FormEvent } from 'react';
@@ -21,9 +21,6 @@ export default function LoginForm({ switchState }: LoginFormProps) {
 
   return (
     <>
-      <DialogHeader>
-        <DialogTitle>Вход</DialogTitle>
-      </DialogHeader>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label htmlFor="email">Email</label>

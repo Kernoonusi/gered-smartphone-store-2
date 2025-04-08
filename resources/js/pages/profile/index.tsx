@@ -91,7 +91,7 @@ export default function Profile() {
                   <span className="text-sm text-muted-foreground">Заказов</span>
                 </div>
                 <div className="flex flex-col">
-                  <span className="text-3xl font-bold">{currencyFormatter.format(totalSpent)}</span>
+                  <span className={`text-3xl font-bold transition-all duration-300 text-[clamp(1.5rem,3rem_-_5cqw,3rem)]`}>{currencyFormatter.format(totalSpent)}</span>
                   <span className="text-sm text-muted-foreground">Потрачено</span>
                 </div>
               </div>
@@ -183,7 +183,7 @@ export default function Profile() {
                           </CardContent>
                           <CardFooter className="py-3 flex justify-between">
                             <span className="text-sm font-medium">Итого:</span>
-                            <span className="font-bold">{currencyFormatter.format(lastOrder.total)}</span>
+                            <span className="font-bold transition-all duration-300 text-[clamp(1.25rem,2.5rem_-_0.0000125*${totalSpent},2.5rem)]">{currencyFormatter.format(totalSpent)}</span>
                           </CardFooter>
                         </Card>
                         <div className="flex justify-end">
@@ -197,10 +197,10 @@ export default function Profile() {
 
                   {user.roles.some(role => role.name === Roles.Admin) && (
                     <div className="flex justify-center mt-6">
-                      <Button className="w-full" variant="outline">
-                        <Link href="/admin" className="flex items-center w-full justify-center">
+                      <Button asChild className="w-full" variant="outline">
+                        <a href="/admin" className="flex items-center w-full justify-center">
                           <Shield className="h-4 w-4 mr-2" /> Войти в админ панель
-                        </Link>
+                        </a>
                       </Button>
                     </div>
                   )}

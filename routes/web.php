@@ -9,9 +9,7 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 Route::get('/', [MainPageController::class, 'index'])->name('home');
-Route::get('/policy', function () {
-    return Inertia::render('policy');
-})->name('policy');
+Route::get('/policy', [\App\Http\Controllers\PageContentController::class, 'policy'])->name('policy');
 Route::get('/warranty', function () {
     return Inertia::render('warranty');
 })->name('warranty');
