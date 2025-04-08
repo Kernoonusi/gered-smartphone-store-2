@@ -8,7 +8,7 @@ import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Calendar, Package, User, Shield, LogOut, Settings, Clock } from 'lucide-react';
-import { Order, PermissionCollection, User as UserType } from '@/types';
+import { Order, Roles, User as UserType } from '@/types';
 import Layout from '@/layouts/app-layout';
 import { currencyFormatter } from '@/utils/currencyFormatter';
 import ChangePassForm from '@/components/profile/change-pass-form';
@@ -18,13 +18,12 @@ import { ru } from 'date-fns/locale';
 interface PageProps {
   user: UserType;
   orders: Order[];
-  permissions: PermissionCollection;
   [key: string]: unknown;
 }
 
 export default function Profile() {
   // Получаем типизированные данные, переданные с сервера
-  const { user, orders, permissions } = usePage<PageProps>().props;
+  const { user, orders } = usePage<PageProps>().props;
   const [activeTab, setActiveTab] = useState("profile");
 
   // Функция выхода: отправляем POST-запрос по маршруту logout
@@ -65,7 +64,7 @@ export default function Profile() {
 
   // Общая сумма всех заказов
   const totalSpent = orders.reduce((sum, order) => sum + order.total, 0);
-
+  console.table(user);
   return (
     <Layout>
       <main className="w-full max-w-6xl mt-6 px-4 flex flex-col gap-8 mx-auto">
@@ -79,7 +78,7 @@ export default function Profile() {
               </Avatar>
               <CardTitle className="text-2xl">{user.name}</CardTitle>
               <CardDescription className="text-md">{user.email}</CardDescription>
-              {permissions[0].name === 'edit-database' && (
+              {user.roles.some(role => role.name === Roles.Admin) && (
                 <Badge className="mt-2" variant="outline">
                   <Shield className="h-3 w-3 mr-1" /> Администратор
                 </Badge>
@@ -142,7 +141,7 @@ export default function Profile() {
                       <div>
                         <p className="text-sm text-muted-foreground">Роль</p>
                         <p className="font-medium">
-                          {permissions[0].name === 'edit-database' ? 'Администратор' : 'Пользователь'}
+                          {user.roles.some(role => role.name === Roles.Admin) ? 'Администратор' : 'Пользователь'}
                         </p>
                       </div>
                     </div>
@@ -196,7 +195,7 @@ export default function Profile() {
                     </>
                   )}
 
-                  {permissions[0].name === 'edit-database' && (
+                  {user.roles.some(role => role.name === Roles.Admin) && (
                     <div className="flex justify-center mt-6">
                       <Button className="w-full" variant="outline">
                         <Link href="/admin" className="flex items-center w-full justify-center">

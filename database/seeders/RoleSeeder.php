@@ -12,7 +12,6 @@ class RoleSeeder extends Seeder
     {
         // Create roles
         $roles = [
-            'super-admin',
             'admin',
             'user',
         ];
@@ -20,7 +19,7 @@ class RoleSeeder extends Seeder
 
         foreach ($roles as $role) {
             $role = Role::create(['name' => $role]);
-            if ($role->name === 'super-admin' || $role->name === 'admin') {
+            if ($role->name === 'admin') {
                 $role->givePermissionTo($permissionEditDatabase);
                 $permissionEditDatabase->assignRole($role);
             }

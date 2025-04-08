@@ -36,7 +36,27 @@ export interface User {
   email_verified_at: string | null;
   created_at: string;
   updated_at: string;
+  roles: Role[];
   [key: string]: unknown; // This allows for additional properties...
+}
+
+interface Role {
+  id: number;
+  name: Roles;
+  guard_name: string;
+  created_at: string;
+  updated_at: string;
+  permissions: PermissionCollection;
+  pivot: {
+    model_id: number;
+    model_type: string;
+    role_id: number;
+  };
+}
+
+export enum Roles {
+  Admin = 'admin',
+  User = 'user',
 }
 
 export interface Smartphone {

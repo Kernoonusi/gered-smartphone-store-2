@@ -30,11 +30,12 @@ class UserResource extends Resource
                     ->email()
                     ->required()
                     ->maxLength(255),
-                Forms\Components\Select::make('role')
+                Forms\Components\Select::make('roles')
                     ->options([
-                        'admin' => 'Администратор',
-                        'user' => 'Пользователь',
+                        'admin' => 'admin',
+                        'user' => 'user',
                     ])
+                    ->relationship('roles', 'name')
                     ->required(),
                 Forms\Components\TextInput::make('password')
                     ->password()
@@ -52,7 +53,7 @@ class UserResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('email')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('role')
+                Tables\Columns\TextColumn::make('roles.name')
                     ->badge()
                     ->color(fn (string $state): string => match ($state) {
                         'admin' => 'danger',
