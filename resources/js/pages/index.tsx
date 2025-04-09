@@ -98,7 +98,10 @@ export default function Welcome() {
         <section className="mx-auto mt-16 w-10/12 py-6">
           <div className="grid gap-6 md:grid-cols-3">
             {featuredProducts.map((item, index) => (
-              <div key={index} className="group relative overflow-hidden rounded-xl border-fuchsia-500/20 bg-fuchsia-900/80 shadow-lg backdrop-blur-md p-6 transition-all hover:shadow-lg">
+              <div
+                key={index}
+                className="group relative overflow-hidden rounded-xl border-fuchsia-500/20 bg-fuchsia-900/80 p-6 shadow-lg backdrop-blur-md transition-all hover:shadow-lg"
+              >
                 <div className="absolute -top-10 -right-10 rounded-full bg-cyan-500 p-8 transition-transform group-hover:scale-110" />
                 <div className="relative z-10">
                   <h3 className="mb-2 text-xl font-semibold">{item.brand + ' ' + item.model}</h3>
@@ -158,13 +161,13 @@ export default function Welcome() {
           <Carousel className="w-full" opts={{ align: 'start' }}>
             <CarouselContent className="-ml-2 md:-ml-4">
               {trendingProducts.map((item) => (
-                <CarouselItem key={item.id} className="basis-full pl-2 sm:basis-1/2 md:basis-1/3 md:pl-4 lg:basis-1/4 xl:basis-1/5">
+                <CarouselItem key={item.id} className="basis-full pl-2 sm:basis-2/3 md:basis-1/2 md:pl-4 lg:basis-1/3 xl:basis-1/4">
                   <ProductCard item={item} />
                 </CarouselItem>
               ))}
             </CarouselContent>
-            <CarouselPrevious />
-            <CarouselNext />
+            <CarouselPrevious className="hidden md:block" />
+            <CarouselNext className="hidden md:block" />
           </Carousel>
         </section>
 
@@ -213,13 +216,13 @@ export default function Welcome() {
           <Carousel className="w-full" opts={{ align: 'start' }}>
             <CarouselContent className="-ml-2 md:-ml-4">
               {recommendedProducts.map((item) => (
-                <CarouselItem key={item.id} className="basis-full pl-2 sm:basis-1/2 md:basis-1/3 md:pl-4 lg:basis-1/4 xl:basis-1/5">
+                <CarouselItem key={item.id} className="basis-full pl-2 sm:basis-2/3 md:basis-1/2 md:pl-4 lg:basis-1/3 xl:basis-1/4">
                   <ProductCard item={item} />
                 </CarouselItem>
               ))}
             </CarouselContent>
-            <CarouselPrevious />
-            <CarouselNext />
+            <CarouselPrevious className="hidden md:block" />
+            <CarouselNext className="hidden md:block" />
           </Carousel>
         </section>
 
@@ -236,17 +239,17 @@ export default function Welcome() {
             </Link>
           </div>
 
-          <Carousel className="w-full @container" opts={{ align: 'start' }}>
+          <Carousel className="w-full" opts={{ align: 'start' }}>
             <CarouselContent className="-ml-2 md:-ml-4">
               {limitedTimeOffers.map((item) => (
-                <CarouselItem key={item.id} className="relative basis-full pl-2 @sm:basis-1/2 @md:basis-1/3 md:pl-4 @lg:basis-1/4 @xl:basis-1/5">
+                <CarouselItem key={item.id} className="relative basis-full pl-2 md:pl-4 sm:basis-2/3 md:basis-1/2 lg:basis-1/3 xl:basis-1/4">
                   <div className="absolute top-2 left-6 z-10 rounded-full bg-red-500 px-2 py-1 text-xs font-bold text-white">-15%</div>
                   <ProductCard item={item} />
                 </CarouselItem>
               ))}
             </CarouselContent>
-            <CarouselPrevious />
-            <CarouselNext />
+            <CarouselPrevious className="hidden md:block" />
+            <CarouselNext className="hidden md:block" />
           </Carousel>
         </section>
 

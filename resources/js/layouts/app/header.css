@@ -13,8 +13,6 @@
 
 /* Logo styles */
 .logo-full {
-  font-size: 1.875rem;
-  line-height: 2.25rem;
   transition: all 0.3s ease;
 }
 
@@ -111,6 +109,8 @@
 /* Media queries for responsive behavior */
 @media (min-width: 768px) {
   .logo-full {
+    font-size: 1.875rem;
+    line-height: 2.25rem;
     opacity: 0;
     visibility: hidden;
     transform: translateY(0);
@@ -142,7 +142,6 @@
     animation: main-header-animation linear forwards;
     animation-timeline: scroll(root);
     animation-range: 0 50px;
-    display: flex;
   }
 
   @keyframes main-header-animation {
@@ -206,32 +205,31 @@
     }
   }
 
-  /* Profile button animation */
-  .profile-button {
-    animation: profile-button-animation linear forwards;
-    animation-timeline: scroll(root);
-    animation-range: 0 100px;
-  }
-
-  @keyframes profile-button-animation {
-    from {
-      border-radius: 9999px;
-      opacity: 0;
-      width: 0;
-      transform: scale(0);
-      visibility: hidden;
-    }
-    to {
-      border-radius: 0;
-      width: 100%;
-      transform: scale(1);
-      opacity: 1;
-      visibility: visible;
-    }
-  }
-
   /* Media queries for responsive behavior with scroll animations */
   @media (min-width: 768px) {
+    /* Profile button animation */
+    .profile-button {
+      animation: profile-button-animation linear forwards;
+      animation-timeline: scroll(root);
+      animation-range: 0 100px;
+    }
+
+    @keyframes profile-button-animation {
+      from {
+        border-radius: 9999px;
+        opacity: 0;
+        width: 0;
+        transform: scale(0);
+        visibility: hidden;
+      }
+      to {
+        border-radius: 0;
+        width: 100%;
+        transform: scale(1);
+        opacity: 1;
+        visibility: visible;
+      }
+    }
     /* Logo animations */
     .logo-full {
       animation: logo-full-animation linear forwards;

@@ -3,7 +3,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { ProfileButton } from '@/layouts/app/profileButton';
 import type { Order } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
-import { ShoppingCart } from 'lucide-react';
+import { Menu, ShoppingCart } from 'lucide-react';
 import type React from 'react';
 import { useEffect, useState } from 'react';
 import { Footer } from './footer';
@@ -31,6 +31,7 @@ export default function AppHeaderLayout({ children }: AppHeaderLayoutProps) {
   const { brands, cart } = usePage<{ brands: { brand: string }[]; cart: Order | null }>().props;
   const [scrolled, setScrolled] = useState(false);
   const [supportsScrollTimeline, setSupportsScrollTimeline] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     // Check if browser supports scroll-driven animations
@@ -95,7 +96,7 @@ export default function AppHeaderLayout({ children }: AppHeaderLayoutProps) {
         <div className="w-full border-b border-fuchsia-500/20 bg-fuchsia-900/80 shadow-lg backdrop-blur-md">
           <div className="mx-auto max-w-7xl px-4">
             {/* Main header with logo and cart - visible when not scrolled on desktop */}
-            <div className="main-header hidden items-center justify-between">
+            <div className="main-header hidden sm:flex items-center justify-between">
               <Link href="/" className="bg-gradient-to-r from-cyan-300 to-fuchsia-500 bg-clip-text text-3xl font-bold text-transparent">
                 Gered Store
               </Link>
@@ -129,14 +130,14 @@ export default function AppHeaderLayout({ children }: AppHeaderLayoutProps) {
                   </Button>
                 </Link>
 
-                <div className="scrollbar-hide flex">
+                <div className="scrollbar-hide hidden sm:flex">
                   {brands.length === 0 ? (
                     <SkeletonBrands />
                   ) : (
                     brands.map(({ brand }) => (
                       <Button
                         variant="ghost"
-                        className="nav-button h-full rounded-none text-gray-300 hover:bg-white/10 hover:text-white "
+                        className="nav-button h-full rounded-none text-gray-300 hover:bg-white/10 hover:text-white"
                         key={brand}
                         asChild
                       >
@@ -147,7 +148,12 @@ export default function AppHeaderLayout({ children }: AppHeaderLayoutProps) {
                 </div>
               </div>
 
-              <div className="flex items-center">
+              <div className="flex items-center gap-2">
+                {/* Hamburger mobile toggle */}
+                <Button variant="ghost" className="md:hidden" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+                  <Menu />
+                </Button>
+
                 {/* Cart button - visibility controlled by CSS */}
                 <Link href="/cart" className="cart-button-mobile md:hidden">
                   <Button variant="ghost" className="relative rounded-none text-white hover:bg-white/10">
@@ -174,6 +180,26 @@ export default function AppHeaderLayout({ children }: AppHeaderLayoutProps) {
             </div>
           </div>
         </div>
+
+        {/* Mobile Navigation Menu */}
+        {mobileMenuOpen && (
+          <nav className="bg-fuchsia-900/80 shadow-lg backdrop-blur-md md:hidden">
+            <div className="mx-auto flex max-w-7xl flex-col px-4 py-3">
+              <Link href="/about" className="py-1 text-white hover:underline">
+                О компании
+              </Link>
+              <Link href="/delivery" className="py-1 text-white hover:underline">
+                Доставка
+              </Link>
+              <Link href="/warranty" className="py-1 text-white hover:underline">
+                Гарантия
+              </Link>
+              <Link href="/contacts" className="py-1 text-white hover:underline">
+                Контакты
+              </Link>
+            </div>
+          </nav>
+        )}
       </header>
 
       {children}
