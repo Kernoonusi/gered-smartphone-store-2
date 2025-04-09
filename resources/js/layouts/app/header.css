@@ -107,7 +107,7 @@
 }
 
 /* Media queries for responsive behavior */
-@media (min-width: 768px) {
+@media (min-width: 640px) {
   .logo-full {
     font-size: 1.875rem;
     line-height: 2.25rem;
@@ -206,7 +206,7 @@
   }
 
   /* Media queries for responsive behavior with scroll animations */
-  @media (min-width: 768px) {
+  @media (min-width: 640px) {
     /* Profile button animation */
     .profile-button {
       animation: profile-button-animation linear forwards;
