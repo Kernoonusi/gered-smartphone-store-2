@@ -128,14 +128,14 @@ export default function SmartphoneSearchPage() {
                 <Search className="absolute top-1/2 left-3 h-5 w-5 -translate-y-1/2 text-purple-300" />
                 <Input
                   type="text"
-                  placeholder="Search smartphones..."
+                  placeholder="Искать смартфоны..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="border-purple-300/30 bg-purple-700/10 pl-10 text-white placeholder:text-purple-300 focus:border-purple-400"
                 />
               </div>
               <Button type="submit" className="bg-purple-600 hover:bg-purple-700">
-                Search
+                Поиск
               </Button>
               <Button
                 type="button"
@@ -144,7 +144,7 @@ export default function SmartphoneSearchPage() {
                 onClick={() => setShowFilters(!showFilters)}
               >
                 <SlidersHorizontal className="mr-2 h-5 w-5" />
-                Filters
+                Фильтры
               </Button>
             </div>
 
@@ -154,16 +154,16 @@ export default function SmartphoneSearchPage() {
                 <Tabs value={activeFilterTab} onValueChange={setActiveFilterTab} className="w-full">
                   <TabsList className="mb-4 border-purple-300/30 bg-purple-700/20">
                     <TabsTrigger value="basic" className="data-[state=active]:bg-purple-600">
-                      Basic
+                      Основные
                     </TabsTrigger>
                     <TabsTrigger value="display" className="data-[state=active]:bg-purple-600">
-                      Display
+                      Дисплей
                     </TabsTrigger>
                     <TabsTrigger value="performance" className="data-[state=active]:bg-purple-600">
-                      Performance
+                      Производительность
                     </TabsTrigger>
                     <TabsTrigger value="camera" className="data-[state=active]:bg-purple-600">
-                      Camera & Battery
+                      Камера и батарея
                     </TabsTrigger>
                   </TabsList>
 
@@ -171,7 +171,7 @@ export default function SmartphoneSearchPage() {
                   <TabsContent value="basic" className="mt-0">
                     <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
                       <div>
-                        <label className="mb-2 block text-sm font-medium text-purple-100">Brand</label>
+                        <label className="mb-2 block text-sm font-medium text-purple-100">Бренд</label>
                         <MultipleSelector
                           options={brands.map((brand) => ({ value: brand.brand, label: brand.brand }))}
                           value={selectedBrands}
@@ -181,7 +181,7 @@ export default function SmartphoneSearchPage() {
 
                       <div className="grid grid-rows-2">
                         <label className="mb-2 block text-sm font-medium text-purple-100">
-                          Price Range: ${currencyFormatter.format(Number(priceRange[0]))} - ${currencyFormatter.format(Number(priceRange[1]))}
+                          Ценовой диапазон: {currencyFormatter.format(Number(priceRange[0]))} - {currencyFormatter.format(Number(priceRange[1]))}
                         </label>
                         <Slider
                           value={priceRange}
@@ -193,13 +193,13 @@ export default function SmartphoneSearchPage() {
                       </div>
 
                       <div>
-                        <label className="mb-2 block text-sm font-medium text-purple-100">Operating System</label>
+                        <label className="mb-2 block text-sm font-medium text-purple-100">Операционная система</label>
                         <Select value={os} onValueChange={setOs}>
                           <SelectTrigger className="border-purple-300/30 bg-purple-700/20 text-white">
-                            <SelectValue placeholder="Any OS" />
+                            <SelectValue placeholder="Любая ОС" />
                           </SelectTrigger>
                           <SelectContent className="border-purple-300/30 bg-purple-800 text-white">
-                            <SelectItem value="all">Any OS</SelectItem>
+                            <SelectItem value="all">Любая ОС</SelectItem>
                             {filters.operatingSystems.map((osOption) => (
                               <SelectItem key={osOption} value={osOption}>
                                 {osOption}
@@ -217,7 +217,7 @@ export default function SmartphoneSearchPage() {
                       <div>
                         <label className="mb-2 flex items-center text-sm font-medium text-purple-100">
                           <Monitor className="mr-2 h-4 w-4" />
-                          Screen Size: {screenSizeRange[0]}" - {screenSizeRange[1]}"
+                          Размер экрана: {screenSizeRange[0]}" - {screenSizeRange[1]}"
                         </label>
                         <Slider
                           value={screenSizeRange.map(Number)}
@@ -232,7 +232,7 @@ export default function SmartphoneSearchPage() {
                       <div>
                         <label className="mb-2 flex items-center text-sm font-medium text-purple-100">
                           <Weight className="mr-2 h-4 w-4" />
-                          Max Weight: {weightMax}g
+                          Макс. вес: {weightMax}г
                         </label>
                         <Slider
                           value={[Number(weightMax)]}
@@ -252,39 +252,39 @@ export default function SmartphoneSearchPage() {
                       <div>
                         <label className="mb-2 flex items-center text-sm font-medium text-purple-100">
                           <MemoryStick className="mr-2 h-4 w-4" />
-                          Ram
+                          Оперативная память
                         </label>
                         <MultipleSelector
                           options={filters.ramOptions.map((ram) => ({ value: ram.toString(), label: `${ram}` }))}
                           value={ramFilter}
                           onValueChange={(options) => setRamFilter(options)}
-                          placeholder="Select RAM"
+                          placeholder="Выбрать ОЗУ"
                         />
                       </div>
 
                       <div>
                         <label className="mb-2 flex items-center text-sm font-medium text-purple-100">
                           <Database className="mr-2 h-4 w-4" />
-                          Storage
+                          Хранилище
                         </label>
                         <MultipleSelector
                           options={filters.storageOptions.map((storage) => ({ value: storage.toString(), label: `${storage}` }))}
                           value={storageFilter}
                           onValueChange={(options) => setStorageFilter(options)}
-                          placeholder="Select Storage"
+                          placeholder="Выбрать хранилище"
                         />
                       </div>
 
                       <div>
                         <label className="mb-2 flex items-center text-sm font-medium text-purple-100">
                           <Cpu className="mr-2 h-4 w-4" />
-                          Processor
+                          Процессор
                         </label>
                         <MultipleSelector
                           options={filters.processors.map((processor) => ({ value: processor.toString(), label: processor }))}
                           value={processor}
                           onValueChange={(options) => setProcessor(options)}
-                          placeholder="Select Processor"
+                          placeholder="Выбрать процессор"
                         />
                       </div>
                     </div>
@@ -296,20 +296,20 @@ export default function SmartphoneSearchPage() {
                       <div>
                         <label className="mb-2 flex items-center text-sm font-medium text-purple-100">
                           <Camera className="mr-2 h-4 w-4" />
-                          Camera: {cameraFilter.length ? cameraFilter.join(', ') : 'Any'}
+                          Камера: {cameraFilter.length ? cameraFilter.join(', ') : 'Любая'}
                         </label>
                         <MultipleSelector
                           options={filters.cameraRange.map((camera) => ({ value: camera.toString(), label: camera }))}
                           value={cameraFilter}
                           onValueChange={(options) => setCameraFilter(options)}
-                          placeholder="Select Camera"
+                          placeholder="Выбрать камеру"
                         />
                       </div>
 
                       <div>
                         <label className="mb-2 flex items-center text-sm font-medium text-purple-100">
                           <Battery className="mr-2 h-4 w-4" />
-                          Minimum Battery Capacity: {batteryMin}mAh
+                          Минимальная ёмкость батареи: {batteryMin} мАч
                         </label>
                         <Slider
                           value={[Number(batteryMin)]}
@@ -323,18 +323,18 @@ export default function SmartphoneSearchPage() {
                     </div>
                   </TabsContent>
                 </Tabs>
-                <div className="mt-6 flex items-end">
-                  <Button type="submit" className="w-full bg-purple-600 hover:bg-purple-700">
-                    Apply Filters
+                <div className="mt-6 flex items-center justify-end gap-4">
+                  <Button type="submit" className="w-fit bg-purple-600 hover:bg-purple-700">
+                    Применить фильтры
                   </Button>
                   {/* Add the reset button here */}
                   <Button
                     type="button"
                     variant="outline"
-                    className="ml-4 w-full border-purple-400/30 text-purple-100 hover:bg-purple-700/20"
+                    className="w-fit border-purple-400/30 text-purple-100 hover:bg-purple-700/20"
                     onClick={resetFilters}
                   >
-                    Reset Filters
+                    Сбросить фильтры
                   </Button>
                 </div>
               </div>
@@ -352,10 +352,10 @@ export default function SmartphoneSearchPage() {
         {(!smartphones || smartphones.length === 0) && (
           <div className="rounded-2xl border border-purple-300/20 bg-purple-500/10 p-12 text-center shadow-xl backdrop-blur-lg">
             <Search className="mx-auto mb-4 h-12 w-12 text-purple-300" />
-            <h3 className="mb-2 text-xl font-medium text-white">No smartphones found</h3>
-            <p className="mb-6 text-purple-200">Try adjusting your search or filters</p>
+            <h3 className="mb-2 text-xl font-medium text-white">Ничего не найдено</h3>
+            <p className="mb-6 text-purple-200">Попробуйте изменить параметры поиска</p>
             <Button variant="outline" className="border-purple-400/30 text-purple-100 hover:bg-purple-700/20" onClick={resetFilters}>
-              Reset all filters
+              Сбросить фильтры
             </Button>
           </div>
         )}
