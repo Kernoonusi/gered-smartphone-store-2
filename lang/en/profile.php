@@ -31,4 +31,10 @@ return [
     'new_password' => 'New Password',
     'password_confirmation' => 'Password Confirmation',
     'save' => 'Save',
+    'rate_star' => 'Rate star',
+    'your_review' => 'Your review',
+    'leave_review' => 'Leave review',
+    'sending' => 'Sending...',
+    'review_success' => 'Review sent successfully',
+    'review_error' => 'Failed to send review',
 ];

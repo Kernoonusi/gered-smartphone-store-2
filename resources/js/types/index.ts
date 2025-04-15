@@ -77,7 +77,7 @@ export interface SmartphoneFull extends Smartphone {
 export interface Specification {
   id: number;
   smartphone_id: number;
-  spec_key: 'screen_size' | 'battery_capacity' | 'ram' | 'storage' | 'processor' | 'os' | 'weight' | 'camera';
+  spec_key: string;
   spec_value: string;
   created_at: string;
   updated_at: string;
@@ -93,11 +93,12 @@ export interface Image {
 
 export interface Order {
   id: number;
-  status: 'processing' | 'delivery' | 'arrived' | 'cart';
+  status: 'processing' | 'delivery' | 'completed' | 'cart' | 'cancelled';
   total: number;
   items: OrderItem[];
   created_at: string;
   updated_at: string;
+  review?: Review;
 }
 
 export interface OrderItem {
@@ -113,10 +114,10 @@ export interface OrderItem {
 
 export interface Review {
   id: number;
+  order_id: number;
   user_id: number;
-  smartphone_id: number;
-  text: string;
   rating: number;
+  text: string;
   created_at: string;
   updated_at: string;
 }

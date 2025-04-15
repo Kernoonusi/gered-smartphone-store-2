@@ -29,4 +29,10 @@ class Order extends Model
     {
         return $this->hasMany(OrderItem::class);
     }
+
+    // Заказ имеет один отзыв
+    public function review()
+    {
+        return $this->hasOne(Review::class);
+    }
 }

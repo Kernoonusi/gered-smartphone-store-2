@@ -28,11 +28,11 @@ export default function Login() {
     <Layout>
       <Card className="mx-auto mt-20 max-w-md">
         <CardContent>
-          <Head title={authState === 'login' ? t('auth.login_title') : authState === 'register' ? t('auth.register_title') : t('auth.forgot_title')} />
+          <Head title={authState === 'login' ? t('actions.login_title') : authState === 'register' ? t('actions.register_title') : t('actions.forgot_title')} />
           <h1 className="mb-6 text-center text-2xl font-bold">
-            {authState === 'login' && t('auth.login_header')}
-            {authState === 'register' && t('auth.register_header')}
-            {authState === 'forgotPassword' && t('auth.forgot_header')}
+            {authState === 'login' && t('actions.login_header')}
+            {authState === 'register' && t('actions.register_header')}
+            {authState === 'forgotPassword' && t('actions.forgot_header')}
           </h1>
           {renderForm()}
         </CardContent>

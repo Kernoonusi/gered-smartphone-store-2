@@ -20,10 +20,11 @@ class ProfileController extends Controller
         $permissions = $user->getAllPermissions();
 
         // Загружаем заказы пользователя вместе с позициями и данными о товарах
-        $orders = Order::with('items.product.images', 'items.product.specifications')
+        $orders = Order::with('items.product.images', 'items.product.specifications', 'review')
             ->where('user_id', $user->id)
             ->where('status', '!=', 'cart')
             ->has('items')
+            ->orderByDesc('created_at')
             ->get();
         return Inertia::render('profile/index', [
             'user' => $user,

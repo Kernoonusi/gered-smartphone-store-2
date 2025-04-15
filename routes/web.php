@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\OrderReviewController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\MainPageController;
 use App\Http\Controllers\Settings\ProfileController;
@@ -31,6 +32,8 @@ Route::middleware(['auth'])->group(function () {
     Route::patch('/cart/item/{id}', [CartController::class, 'update'])->name('cart.update');
     Route::delete('/cart/item/{id}', [CartController::class, 'remove'])->name('cart.remove');
     Route::post('/cart/checkout', [CartController::class, 'checkout'])->name('cart.checkout');
+    // Оставить отзыв на заказ
+    Route::post('/orders/{order}/review', [OrderReviewController::class, 'store']);
 });
 
 require __DIR__.'/auth.php';

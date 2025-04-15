@@ -16,8 +16,8 @@ class DatabaseSeeder extends Seeder
             SmartphoneSeeder::class,
             PageContentSeeder::class,
             UserSeeder::class,
-            ReviewSeeder::class,
             OrderSeeder::class,
+            ReviewSeeder::class,
         ]);
     }
 }

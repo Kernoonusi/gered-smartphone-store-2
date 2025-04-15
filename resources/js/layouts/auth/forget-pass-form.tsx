@@ -24,24 +24,24 @@ export default function ForgotPasswordForm({ switchState }: ForgotPasswordFormPr
     <>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label htmlFor="email">{t('auth.email_label')}</label>
+          <label htmlFor="email">{t('actions.email_label')}</label>
           <Input
             id="email"
             type="email"
             value={data.email}
             onChange={(e) => setData('email', e.target.value)}
-            placeholder={t('auth.email_placeholder')}
+            placeholder={t('actions.email_placeholder')}
           />
           {errors.email && <span className="text-red-500">{errors.email}</span>}
         </div>
         <Button type="submit" disabled={processing}>
-          {processing ? t('auth.loading') : t('auth.reset_button')}
+          {processing ? t('actions.loading') : t('actions.reset_button')}
         </Button>
       </form>
       <p className="mt-4">
-        {t('auth.remembered')} {' '}
+        {t('actions.remembered')} {' '}
         <button className="underline" onClick={() => switchState('login')}>
-          {t('auth.login_link')}
+          {t('actions.login_link')}
         </button>
       </p>
     </>

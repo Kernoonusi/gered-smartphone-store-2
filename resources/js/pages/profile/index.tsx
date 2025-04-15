@@ -7,7 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Calendar, Package, User, Shield, LogOut, Settings, Clock } from 'lucide-react';
+import { Calendar, Package, User, Shield, LogOut, Settings, Clock, X } from 'lucide-react';
 import { Order, Roles, User as UserType } from '@/types';
 import Layout from '@/layouts/app-layout';
 import { currencyFormatter } from '@/utils/currencyFormatter';
@@ -17,6 +17,7 @@ import 'dayjs/locale/ru';
 import 'dayjs/locale/en';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
 import { useLaravelReactI18n } from 'laravel-react-i18n';
+import { OrderReviewForm } from '@/components/profile/order-review-form';
 
 interface PageProps {
   user: UserType;
@@ -47,10 +48,15 @@ export default function Profile() {
       className: 'bg-blue-100 text-blue-800 border-blue-200', 
       icon: <Package className="h-4 w-4 mr-1" /> 
     },
-    arrived: { 
+    completed: { 
       label: t('profile.status_arrived'), 
       className: 'bg-green-100 text-green-800 border-green-200', 
       icon: <Calendar className="h-4 w-4 mr-1" /> 
+    },
+    cancelled: { 
+      label: t('profile.status_cancelled'), 
+      className: 'bg-red-100 text-red-800 border-red-200', 
+      icon: <X className="h-4 w-4 mr-1" /> 
     },
   };
 
@@ -245,7 +251,7 @@ export default function Profile() {
                                       {item.product.brand.charAt(0)}
                                     </div>
                                     <div>
-                                      <Link href={`/products/${item.product.id}`} className="font-medium hover:underline">
+                                      <Link href={`/product/${item.product.id}`} className="font-medium hover:underline">
                                         {item.product.brand} {item.product.model}
                                       </Link>
                                       <p className="text-sm text-muted-foreground">
@@ -267,6 +273,21 @@ export default function Profile() {
                               <span className="font-bold text-lg">{currentLocale() === 'ru' ? currencyFormatter.format(order.total) : `$${order.total}`}</span>
                             </div>
                           </CardFooter>
+                          {order.status === 'completed' && (
+                            <div className="p-4 bg-muted/10 border-t">
+                              <div className="font-medium mb-2">{t('profile.leave_review')}</div>
+                              {order.review ? (
+                                <OrderReviewForm
+                                  orderId={order.id}
+                                  initialReview={order.review.text}
+                                  initialRating={order.review.rating}
+                                  disabled={true}
+                                />
+                              ) : (
+                                <OrderReviewForm orderId={order.id} />
+                              )}
+                            </div>
+                          )}
                         </Card>
                       ))}
                     </div>

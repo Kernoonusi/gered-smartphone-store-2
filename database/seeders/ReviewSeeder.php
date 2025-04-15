@@ -3,9 +3,9 @@
 namespace Database\Seeders;
 
 use App\Models\Review;
-use App\Models\Smartphone;
 use App\Models\User;
 use Illuminate\Database\Seeder;
+use App\Models\Order;
 
 class ReviewSeeder extends Seeder
 {
@@ -14,18 +14,25 @@ class ReviewSeeder extends Seeder
      */
     public function run(): void
     {
-        $users = User::all();
-        $smartphones = Smartphone::all();
+        $orders = Order::with('items')->get();
+        $this->command->info('Всего заказов: ' . $orders->count());
 
-        if ($users->isEmpty() || $smartphones->isEmpty()) {
-            $this->command->info('Нет пользователей или смартфонов для создания отзывов.');
-            return;
-        }
-
-        Review::factory(100)->make()->each(function ($review) use ($users, $smartphones) {
-            $review->user()->associate($users->random());
-            $review->smartphone()->associate($smartphones->random());
-            $review->save();
+        $ordersWithSmartphone = $orders->filter(function ($order) {
+            return $order->items->isNotEmpty();
         });
+
+        foreach ($ordersWithSmartphone as $order) {
+            // Только если у заказа ещё нет отзыва  
+            if ($order->review) continue;
+
+            $user = $order->user;
+            $item = $order->items->random();
+
+            $review = \Database\Factories\ReviewFactory::new()->make();
+            $review->user_id = $user->id;
+            $review->order_id = $order->id;
+            $review->smartphone_id = $item->product_id;
+            $review->save();
+        }
     }
 }

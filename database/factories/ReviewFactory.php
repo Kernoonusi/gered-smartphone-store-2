@@ -13,7 +13,8 @@ class ReviewFactory extends Factory
     {
         return [
             'text'   => $this->faker->sentence(20),
-            'rating' => $this->faker->randomFloat(1, 1, 5),
+            'rating' => $this->faker->numberBetween(1, 5),
+            // order_id, user_id, smartphone_id будут устанавливаться в сидере
         ];
     }
 }

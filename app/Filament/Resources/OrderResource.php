@@ -30,7 +30,9 @@ class OrderResource extends Resource
                     ->options([
                         'cart' => 'Корзина',
                         'processing' => 'В обработке',
+                        'delivery' => 'В доставке',
                         'completed' => 'Завершён',
+                        'cancelled' => 'Отменён',
                     ])
                     ->required(),
                 TextInput::make('total')
@@ -57,8 +59,9 @@ class OrderResource extends Resource
                 SelectColumn::make('status')
                     ->label('Статус')
                     ->options([
-                        'new' => 'Новый',
+                        'cart' => 'Корзина',
                         'processing' => 'В обработке',
+                        'delivery' => 'В доставке',
                         'completed' => 'Завершён',
                         'cancelled' => 'Отменён',
                     ]),

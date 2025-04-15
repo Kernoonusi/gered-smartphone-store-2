@@ -15,11 +15,15 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('smartphone_id');
+            $table->unsignedBigInteger('order_id');
             $table->text('text');
             $table->float('rating')->default(0);
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('smartphone_id')->references('id')->on('smartphones')->onDelete('cascade');
+            $table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade');
+
+            $table->index(['user_id', 'smartphone_id', 'order_id']);
         });
     }
 

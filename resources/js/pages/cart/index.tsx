@@ -57,7 +57,7 @@ export default function CartIndex() {
   return (
     <Layout>
       <main className="mx-auto mt-6 flex w-full flex-col gap-12 md:w-10/12">
-        {cart.items.length > 0 && (
+        {(cart?.items?.length ?? 0) > 0 && (
           <div className="flex items-end gap-4">
             <h2 className="text-3xl font-semibold">{t('cart.title')}</h2>
             <p className="text-zinc-500">

@@ -24,32 +24,32 @@ export default function LoginForm({ switchState }: LoginFormProps) {
     <>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label htmlFor="email">{t('auth.email')}</label>
-          <Input id="email" type="email" value={data.email} onChange={(e) => setData('email', e.target.value)} placeholder={t('auth.email_placeholder')} />
+          <label htmlFor="email">{t('actions.email')}</label>
+          <Input id="email" type="email" value={data.email} onChange={(e) => setData('email', e.target.value)} placeholder={t('actions.email_placeholder')} />
           {errors.email && <span className="text-red-500">{errors.email}</span>}
         </div>
         <div>
-          <label htmlFor="password">{t('auth.password')}</label>
+          <label htmlFor="password">{t('actions.password')}</label>
           <Input
             id="password"
             type="password"
             value={data.password}
             onChange={(e) => setData('password', e.target.value)}
-            placeholder={t('auth.password_placeholder')}
+            placeholder={t('actions.password_placeholder')}
           />
           {errors.password && <span className="text-red-500">{errors.password}</span>}
           <Button variant="link" className="pl-0" onClick={() => switchState('forgotPassword')}>
-            {t('auth.forgot_link')}
+            {t('actions.forgot_link')}
           </Button>
         </div>
         <Button type="submit" disabled={processing}>
-          {processing ? t('auth.loading') : t('auth.login_button')}
+          {processing ? t('actions.loading') : t('actions.login_button')}
         </Button>
       </form>
       <p className="mt-4 inline-block">
-        {t('auth.no_account')}{' '}
+        {t('actions.no_account')}{' '}
         <Button variant="link" className="pl-0" onClick={() => switchState('register')}>
-          {t('auth.register_link')}
+          {t('actions.register_link')}
         </Button>
       </p>
     </>

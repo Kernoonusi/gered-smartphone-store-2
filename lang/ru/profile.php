@@ -31,4 +31,10 @@ return [
     'new_password' => 'Новый пароль',
     'password_confirmation' => 'Подтверждение пароля',
     'save' => 'Сохранить',
+    'rate_star' => 'Рейтинг',
+    'your_review' => 'Ваш отзыв',
+    'leave_review' => 'Оставить отзыв',
+    'sending' => 'Отправка...',
+    'review_success' => 'Отзыв отправлен',
+    'review_error' => 'Не удалось отправить отзыв',
 ];

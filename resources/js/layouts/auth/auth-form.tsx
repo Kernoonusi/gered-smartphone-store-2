@@ -25,9 +25,9 @@ export function AuthForm() {
   return (
     <DialogContent>
       <h1 className="mb-6 text-center text-2xl font-bold">
-        {authState === 'login' && t('auth.login_header')}
-        {authState === 'register' && t('auth.register_header')}
-        {authState === 'forgotPassword' && t('auth.forgot_header')}
+        {authState === 'login' && t('actions.login_header')}
+        {authState === 'register' && t('actions.register_header')}
+        {authState === 'forgotPassword' && t('actions.forgot_header')}
       </h1>
       {renderForm()}
     </DialogContent>
