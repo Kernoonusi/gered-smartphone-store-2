@@ -1,23 +1,23 @@
-import { usePage, router, Link } from '@inertiajs/react';
-import { useState } from 'react';
-import { ChangeProfileForm } from '@/components/profile/change-profile-form';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardFooter, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Badge } from '@/components/ui/badge';
-import { Separator } from '@/components/ui/separator';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Calendar, Package, User, Shield, LogOut, Settings, Clock, X } from 'lucide-react';
-import { Order, Roles, User as UserType } from '@/types';
-import Layout from '@/layouts/app-layout';
-import { currencyFormatter } from '@/utils/currencyFormatter';
+import React, { useMemo, useState } from 'react';
 import ChangePassForm from '@/components/profile/change-pass-form';
+import { ChangeProfileForm } from '@/components/profile/change-profile-form';
+import { OrderReviewForm } from '@/components/profile/order-review-form';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Separator } from '@/components/ui/separator';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import Layout from '@/layouts/app-layout';
+import { Order, Roles, User as UserType } from '@/types';
+import { currencyFormatter as baseCurrencyFormatter } from '@/utils/currencyFormatter';
+import { Link, router, usePage } from '@inertiajs/react';
 import dayjs from 'dayjs';
-import 'dayjs/locale/ru';
 import 'dayjs/locale/en';
+import 'dayjs/locale/ru';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
 import { useLaravelReactI18n } from 'laravel-react-i18n';
-import { OrderReviewForm } from '@/components/profile/order-review-form';
+import { Calendar, Clock, LogOut, Package, Settings, Shield, User, X } from 'lucide-react';
 
 interface PageProps {
   user: UserType;
@@ -25,72 +25,75 @@ interface PageProps {
   [key: string]: unknown;
 }
 
+dayjs.extend(localizedFormat);
+
 export default function Profile() {
-  // Получаем типизированные данные, переданные с сервера
   const { user, orders } = usePage<PageProps>().props;
-  const [activeTab, setActiveTab] = useState("profile");
+  const [activeTab, setActiveTab] = useState('profile');
   const { t, currentLocale } = useLaravelReactI18n();
-  dayjs.extend(localizedFormat);
-  // Функция выхода: отправляем POST-запрос по маршруту logout
+
+  // Мемоизация локали и форматтера
+  const locale = useMemo(() => (currentLocale() === 'ru' ? 'ru' : 'en'), [currentLocale]);
+  const currencyFormatter = useMemo(() => baseCurrencyFormatter, []); // если baseCurrencyFormatter зависит от локали, скорректируйте
+  const formatPrice = (price: number) =>
+    locale === 'ru' ? currencyFormatter.format(price) : `$${price}`;
+
   const logOut = (): void => {
     router.post(route('logout'));
   };
 
-  // Отображаем понятные статусы заказа
-  const statuses: Record<string, { label: string, className: string, icon: React.ReactNode }> = {
-    processing: { 
-      label: t('profile.status_processing'), 
-      className: 'bg-yellow-100 text-yellow-800 border-yellow-200', 
-      icon: <Clock className="h-4 w-4 mr-1" /> 
+  const statuses: Record<string, { label: string; className: string; icon: React.ReactNode }> = {
+    processing: {
+      label: t('profile.status_processing'),
+      className: 'bg-yellow-100 text-yellow-800 border-yellow-200',
+      icon: <Clock className="mr-1 h-4 w-4" />,
     },
-    delivery: { 
-      label: t('profile.status_delivery'), 
-      className: 'bg-blue-100 text-blue-800 border-blue-200', 
-      icon: <Package className="h-4 w-4 mr-1" /> 
+    delivery: {
+      label: t('profile.status_delivery'),
+      className: 'bg-blue-100 text-blue-800 border-blue-200',
+      icon: <Package className="mr-1 h-4 w-4" />,
     },
-    completed: { 
-      label: t('profile.status_arrived'), 
-      className: 'bg-green-100 text-green-800 border-green-200', 
-      icon: <Calendar className="h-4 w-4 mr-1" /> 
+    completed: {
+      label: t('profile.status_arrived'),
+      className: 'bg-green-100 text-green-800 border-green-200',
+      icon: <Calendar className="mr-1 h-4 w-4" />,
     },
-    cancelled: { 
-      label: t('profile.status_cancelled'), 
-      className: 'bg-red-100 text-red-800 border-red-200', 
-      icon: <X className="h-4 w-4 mr-1" /> 
+    cancelled: {
+      label: t('profile.status_cancelled'),
+      className: 'bg-red-100 text-red-800 border-red-200',
+      icon: <X className="mr-1 h-4 w-4" />,
     },
   };
 
-  // Получение инициалов для аватара
   const getInitials = (name: string) => {
     return name
       .split(' ')
-      .map(part => part.charAt(0).toUpperCase())
+      .map((part) => part.charAt(0).toUpperCase())
       .slice(0, 2)
       .join('');
   };
 
-  // Получение последнего заказа
   const lastOrder = orders.length > 0 ? orders[0] : null;
+  const isAdmin = useMemo(() => user.roles.some((role) => role.name === Roles.Admin), [user.roles]);
+  const totalSpentRaw = useMemo(() => orders.reduce((sum, order) => sum + order.total, 0), [orders]);
+  const totalSpent = formatPrice(totalSpentRaw);
 
-  // Общая сумма всех заказов
-  const totalSpent = orders.reduce((sum, order) => sum + order.total, 0);
-  // console.table(user);
   return (
     <Layout>
-      <main className="w-full max-w-6xl mt-6 px-4 flex flex-col gap-8 mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <main className="mx-auto mt-6 flex w-full max-w-6xl flex-col gap-8 px-4">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
           {/* Блок с профилем */}
           <Card className="md:col-span-1">
             <CardHeader className="flex flex-col items-center text-center">
-              <Avatar className="h-24 w-24 mb-4">
+              <Avatar className="mb-4 h-24 w-24">
                 <AvatarImage src={`https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(user.name)}`} alt={user.name} />
                 <AvatarFallback>{getInitials(user.name)}</AvatarFallback>
               </Avatar>
               <CardTitle className="text-2xl">{user.name}</CardTitle>
               <CardDescription className="text-md">{user.email}</CardDescription>
-              {user.roles.some(role => role.name === Roles.Admin) && (
+              {isAdmin && (
                 <Badge className="mt-2" variant="outline">
-                  <Shield className="h-3 w-3 mr-1" /> {t('profile.admin')}
+                  <Shield className="mr-1 h-3 w-3" /> {t('profile.admin')}
                 </Badge>
               )}
             </CardHeader>
@@ -98,17 +101,17 @@ export default function Profile() {
               <div className="grid grid-cols-2 gap-4 text-center">
                 <div className="flex flex-col">
                   <span className="text-3xl font-bold">{orders.length}</span>
-                  <span className="text-sm text-muted-foreground">{t('profile.orders')}</span>
+                  <span className="text-muted-foreground text-sm">{t('profile.orders')}</span>
                 </div>
                 <div className="flex flex-col">
-                  <span className={`text-3xl font-bold transition-all duration-300 text-[clamp(1.5rem,3rem_-_5cqw,3rem)]`}>{currentLocale() === 'ru' ? currencyFormatter.format(totalSpent) : `$${totalSpent}`}</span>
-                  <span className="text-sm text-muted-foreground">{t('profile.spent')}</span>
+                  <span className={`text-3xl text-[clamp(1.5rem,3rem_-_5cqw,3rem)] font-bold transition-all duration-300`}>{totalSpent}</span>
+                  <span className="text-muted-foreground text-sm">{t('profile.spent')}</span>
                 </div>
               </div>
             </CardContent>
             <CardFooter className="flex justify-center">
               <Button variant="destructive" onClick={logOut} className="w-full">
-                <LogOut className="h-4 w-4 mr-2" /> {t('profile.log_out')}
+                <LogOut className="mr-2 h-4 w-4" /> {t('profile.log_out')}
               </Button>
             </CardFooter>
           </Card>
@@ -122,37 +125,37 @@ export default function Profile() {
               <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
                 <TabsList className="grid w-full grid-cols-3">
                   <TabsTrigger value="profile">
-                    <User className="h-4 w-4 mr-2" /> {t('profile.title')}
+                    <User className="mr-2 h-4 w-4" /> {t('profile.title')}
                   </TabsTrigger>
                   <TabsTrigger value="orders">
-                    <Package className="h-4 w-4 mr-2" /> {t('profile.orders')}
+                    <Package className="mr-2 h-4 w-4" /> {t('profile.orders')}
                   </TabsTrigger>
                   <TabsTrigger value="settings">
-                    <Settings className="h-4 w-4 mr-2" /> {t('profile.settings_title')}
+                    <Settings className="mr-2 h-4 w-4" /> {t('profile.settings_title')}
                   </TabsTrigger>
                 </TabsList>
-                
-                <TabsContent value="profile" className="space-y-6 mt-6">
+
+                <TabsContent value="profile" className="mt-6 space-y-6">
                   <div className="space-y-2">
                     <h3 className="text-lg font-medium">{t('profile.greeting')}</h3>
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <p className="text-sm text-muted-foreground">{t('profile.name')}</p>
+                        <p className="text-muted-foreground text-sm">{t('profile.name')}</p>
                         <p className="font-medium">{user.name}</p>
                       </div>
                       <div>
-                        <p className="text-sm text-muted-foreground">{t('profile.email')}</p>
+                        <p className="text-muted-foreground text-sm">{t('profile.email')}</p>
                         <p className="font-medium">{user.email}</p>
                       </div>
                       <div>
-                        <p className="text-sm text-muted-foreground">{t('profile.registration_date')}</p>
-                        <p className="font-medium">{dayjs(user.created_at).locale(currentLocale() === 'ru' ? 'ru' : 'en').format('LL')}</p>
+                        <p className="text-muted-foreground text-sm">{t('profile.registration_date')}</p>
+                        <p className="font-medium">
+                          {dayjs(user.created_at).locale(locale).format('LL')}
+                        </p>
                       </div>
                       <div>
-                        <p className="text-sm text-muted-foreground">{t('profile.role')}</p>
-                        <p className="font-medium">
-                          {user.roles.some(role => role.name === Roles.Admin) ? t('profile.admin') : t('profile.user')}
-                        </p>
+                        <p className="text-muted-foreground text-sm">{t('profile.role')}</p>
+                        <p className="font-medium">{isAdmin ? t('profile.admin') : t('profile.user')}</p>
                       </div>
                     </div>
                   </div>
@@ -164,8 +167,10 @@ export default function Profile() {
                         <h3 className="text-lg font-medium">{t('profile.last_order')}</h3>
                         <Card>
                           <CardHeader className="py-3">
-                            <div className="flex justify-between items-center">
-                              <CardTitle className="text-base">{t('profile.order')} #{lastOrder.id}</CardTitle>
+                            <div className="flex items-center justify-between">
+                              <CardTitle className="text-base">
+                                {t('profile.order')} #{lastOrder.id}
+                              </CardTitle>
                               <div className="flex items-center">
                                 <Badge variant="outline" className={statuses[lastOrder.status].className}>
                                   {statuses[lastOrder.status].icon}
@@ -181,23 +186,25 @@ export default function Profile() {
                                   <span className="text-sm">
                                     {item.product.brand} {item.product.model} × {item.count}
                                   </span>
-                                  <span className="font-medium text-sm">{currentLocale() === 'ru' ? currencyFormatter.format(item.price * item.count) : `$${item.price * item.count}`}</span>
+                                  <span className="text-sm font-medium">
+                                    {formatPrice(item.price * item.count)}
+                                  </span>
                                 </li>
                               ))}
                               {lastOrder.items.length > 2 && (
-                                <li className="text-sm text-muted-foreground">
-                                  {t('profile.etc', { count: lastOrder.items.length - 2 })}
-                                </li>
+                                <li className="text-muted-foreground text-sm">{t('profile.etc', { count: lastOrder.items.length - 2 })}</li>
                               )}
                             </ul>
                           </CardContent>
-                          <CardFooter className="py-3 flex justify-between">
+                          <CardFooter className="flex justify-between py-3">
                             <span className="text-sm font-medium">{t('profile.total')}</span>
-                            <span className="font-bold transition-all duration-300 text-[clamp(1.25rem,2.5rem_-_0.0000125*${totalSpent},2.5rem)]">{currentLocale() === 'ru' ? currencyFormatter.format(totalSpent) : `$${totalSpent}`}</span>
+                            <span className="text-[clamp(1.25rem,2.5rem_-_0.0000125*${totalSpentRaw},2.5rem)] font-bold transition-all duration-300">
+                              {totalSpent}
+                            </span>
                           </CardFooter>
                         </Card>
                         <div className="flex justify-end">
-                          <Button variant="outline" size="sm" onClick={() => setActiveTab("orders")}>
+                          <Button variant="outline" size="sm" onClick={() => setActiveTab('orders')}>
                             {t('profile.all_orders')}
                           </Button>
                         </div>
@@ -205,11 +212,11 @@ export default function Profile() {
                     </>
                   )}
 
-                  {user.roles.some(role => role.name === Roles.Admin) && (
-                    <div className="flex justify-center mt-6">
+                  {isAdmin && (
+                    <div className="mt-6 flex justify-center">
                       <Button asChild className="w-full" variant="outline">
-                        <a href="/admin" className="flex items-center w-full justify-center">
-                          <Shield className="h-4 w-4 mr-2" /> {t('profile.admin_panel')}
+                        <a href="/admin" className="flex w-full items-center justify-center">
+                          <Shield className="mr-2 h-4 w-4" /> {t('profile.admin_panel')}
                         </a>
                       </Button>
                     </div>
@@ -217,91 +224,104 @@ export default function Profile() {
                 </TabsContent>
 
                 <TabsContent value="orders" className="mt-6">
-                  <h3 className="text-xl font-medium mb-4">{t('profile.orders')}</h3>
+                  <h3 className="mb-4 text-xl font-medium">{t('profile.orders')}</h3>
                   {orders.length === 0 ? (
-                    <div className="text-center py-6">
-                      <Package className="h-12 w-12 mx-auto text-muted-foreground mb-2" />
+                    <div className="py-6 text-center">
+                      <Package className="text-muted-foreground mx-auto mb-2 h-12 w-12" />
                       <p className="text-lg font-medium">{t('profile.no_orders')}</p>
                       <p className="text-muted-foreground">{t('profile.no_orders_desc')}</p>
                     </div>
                   ) : (
                     <div className="space-y-4">
-                      {orders.map((order) => (
-                        <Card key={order.id} className="overflow-hidden">
-                          <CardHeader className="py-3 bg-muted/50">
-                            <div className="flex flex-wrap justify-between items-center gap-2">
-                              <div className="flex items-center gap-2">
-                                <CardTitle className="text-base">{t('profile.order')} #{order.id}</CardTitle>
-                                <Badge variant="outline" className={statuses[order.status].className}>
-                                  {statuses[order.status].icon}
-                                  {statuses[order.status].label}
-                                </Badge>
+                      {orders.map((order) => {
+                        const orderTotalItems = order.items.reduce((sum, item) => sum + item.count, 0);
+                        return (
+                          <Card key={order.id} className="overflow-hidden">
+                            <CardHeader className="bg-muted/50 py-3">
+                              <div className="flex flex-wrap items-center justify-between gap-2">
+                                <div className="flex items-center gap-2">
+                                  <CardTitle className="text-base">
+                                    {t('profile.order')} #{order.id}
+                                  </CardTitle>
+                                  <Badge variant="outline" className={statuses[order.status].className}>
+                                    {statuses[order.status].icon}
+                                    {statuses[order.status].label}
+                                  </Badge>
+                                </div>
+                                <CardDescription>
+                                  {dayjs(order.created_at)
+                                    .locale(locale)
+                                    .format('LL')}
+                                </CardDescription>
                               </div>
-                              <CardDescription>
-                                {dayjs(order.created_at).locale(currentLocale() === 'ru' ? 'ru' : 'en').format('LL')}
-                              </CardDescription>
-                            </div>
-                          </CardHeader>
-                          <CardContent className="py-3">
-                            <ul className="space-y-2 divide-y">
-                              {order.items.map((item) => (
-                                <li key={item.id} className="flex justify-between items-center py-2 first:pt-0 last:pb-0">
-                                  <div className="flex items-center gap-2">
-                                    <div className="w-10 h-10 rounded bg-muted flex items-center justify-center text-xs font-bold">
-                                      {item.product.brand.charAt(0)}
+                            </CardHeader>
+                            <CardContent className="py-3">
+                              <ul className="space-y-2 divide-y">
+                                {order.items.map((item) => (
+                                  <li key={item.id} className="flex items-center justify-between py-2 first:pt-0 last:pb-0">
+                                    <div className="flex items-center gap-2">
+                                      <div className="bg-muted flex h-10 w-10 items-center justify-center rounded text-xs font-bold">
+                                        {item.product.brand.charAt(0)}
+                                      </div>
+                                      <div>
+                                        <Link href={`/product/${item.product.id}`} className="font-medium hover:underline">
+                                          {item.product.brand} {item.product.model}
+                                        </Link>
+                                        <p className="text-muted-foreground text-sm">
+                                          {item.count} × {formatPrice(item.price)}
+                                        </p>
+                                      </div>
                                     </div>
-                                    <div>
-                                      <Link href={`/product/${item.product.id}`} className="font-medium hover:underline">
-                                        {item.product.brand} {item.product.model}
-                                      </Link>
-                                      <p className="text-sm text-muted-foreground">
-                                        {item.count} × {currentLocale() === 'ru' ? currencyFormatter.format(item.price) : item.price}
-                                      </p>
-                                    </div>
-                                  </div>
-                                  <span className="font-medium">{currentLocale() === 'ru' ? currencyFormatter.format(item.price * item.count) : item.price * item.count}</span>
-                                </li>
-                              ))}
-                            </ul>
-                          </CardContent>
-                          <CardFooter className="py-3 bg-muted/30 flex justify-between">
-                            <div>
-                              <span className="text-sm text-muted-foreground">{t('profile.total_items')}: {order.items.reduce((sum, item) => sum + item.count, 0)}</span>
-                            </div>
-                            <div className="flex items-center gap-2">
-                              <span className="text-sm font-medium">{t('profile.total')}:</span>
-                              <span className="font-bold text-lg">{currentLocale() === 'ru' ? currencyFormatter.format(order.total) : `$${order.total}`}</span>
-                            </div>
-                          </CardFooter>
-                          {order.status === 'completed' && (
-                            <div className="p-4 bg-muted/10 border-t">
-                              <div className="font-medium mb-2">{t('profile.leave_review')}</div>
-                              {order.review ? (
-                                <OrderReviewForm
-                                  orderId={order.id}
-                                  initialReview={order.review.text}
-                                  initialRating={order.review.rating}
-                                  disabled={true}
-                                />
-                              ) : (
-                                <OrderReviewForm orderId={order.id} />
-                              )}
-                            </div>
-                          )}
-                        </Card>
-                      ))}
+                                    <span className="font-medium">
+                                      {formatPrice(item.price * item.count)}
+                                    </span>
+                                  </li>
+                                ))}
+                              </ul>
+                            </CardContent>
+                            <CardFooter className="bg-muted/30 flex justify-between py-3">
+                              <div>
+                                <span className="text-muted-foreground text-sm">
+                                  {t('profile.total_items')}: {orderTotalItems}
+                                </span>
+                              </div>
+                              <div className="flex items-center gap-2">
+                                <span className="text-sm font-medium">{t('profile.total')}:</span>
+                                <span className="text-lg font-bold">
+                                  {formatPrice(order.total)}
+                                </span>
+                              </div>
+                            </CardFooter>
+                            {order.status === 'completed' && (
+                              <div className="bg-muted/10 border-t p-4">
+                                <div className="mb-2 font-medium">{t('profile.leave_review')}</div>
+                                {order.review ? (
+                                  <OrderReviewForm
+                                    orderId={order.id}
+                                    initialReview={order.review.text}
+                                    initialRating={order.review.rating}
+                                    disabled={true}
+                                  />
+                                ) : (
+                                  <OrderReviewForm orderId={order.id} />
+                                )}
+                              </div>
+                            )}
+                          </Card>
+                        );
+                      })}
                     </div>
                   )}
                 </TabsContent>
 
-                <TabsContent value="settings" className="space-y-8 mt-6">
+                <TabsContent value="settings" className="mt-6 space-y-8">
                   <div>
-                    <h3 className="text-lg font-medium mb-4">{t('profile.settings_title')}</h3>
+                    <h3 className="mb-4 text-lg font-medium">{t('profile.settings_title')}</h3>
                     <ChangeProfileForm />
                   </div>
                   <Separator />
                   <div>
-                    <h3 className="text-lg font-medium mb-4">{t('profile.password_title')}</h3>
+                    <h3 className="mb-4 text-lg font-medium">{t('profile.password_title')}</h3>
                     <ChangePassForm />
                   </div>
                 </TabsContent>
