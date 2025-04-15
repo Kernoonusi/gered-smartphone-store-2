@@ -2,6 +2,7 @@ import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { Order, OrderItem, SmartphoneFull } from '@/types';
 import { currencyFormatter } from '@/utils/currencyFormatter';
 import { router, usePage } from '@inertiajs/react';
+import { useLaravelReactI18n } from 'laravel-react-i18n';
 import { Cpu, HardDrive, Heart, Maximize2, MemoryStick, Minus, Plus, Scale, ShoppingCart, Smartphone } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
@@ -35,6 +36,7 @@ export function ProductCard({ item }: { item: SmartphoneFull }) {
   const [quantity, setQuantity] = useState(cart?.items.find((smartphone) => smartphone.product_id === item.id)?.count || 0);
   const hasFullData = 'specifications' in item && 'images' in item;
   const fullData = hasFullData ? (item as SmartphoneFull) : null;
+  const { t, currentLocale } = useLaravelReactI18n();
 
   useEffect(() => {
     const itemInCart = cart?.items.find((cartItem) => cartItem.product_id === item.id);
@@ -62,11 +64,11 @@ export function ProductCard({ item }: { item: SmartphoneFull }) {
         preserveScroll: true,
         only: ['cart'],
         onSuccess: () => {
-          toast.success('Товар добавлен в корзину');
+          toast.success(t('products.addedToCart'));
           setIsInCart(true);
         },
         onError: () => {
-          toast.error('Не удалось добавить товар в корзину');
+          toast.error(t('products.notAddedToCart'));
         },
         onFinish: () => {
           setQuantity(1);
@@ -102,7 +104,7 @@ export function ProductCard({ item }: { item: SmartphoneFull }) {
 
   // Функция добавления в избранное
   const onAddToFavorites = () => {
-    toast.error('Добавление в избранное не поддерживается');
+    toast.error(t('products.notSupported'));
     // setIsAddingToFavorites(true);
     // if (isInFavorites) {
     // router.delete(route('favorites.remove', { id: item.id }), {
@@ -179,7 +181,11 @@ export function ProductCard({ item }: { item: SmartphoneFull }) {
           <h3 className="text-lg font-bold tracking-tight text-gray-100 sm:text-xl">
             {item.brand} {item.model}
           </h3>
-          <p className="text-xl font-bold text-gray-200 sm:text-2xl">{currencyFormatter.format(item.price)}</p>
+          <p className="text-xl font-bold text-gray-200 sm:text-2xl">
+            {t('products.price :price', {
+              price: currentLocale() === 'ru' ? currencyFormatter.format(item.price) : item.price,
+            })}
+          </p>
         </div>
 
         {/* Спецификации */}
@@ -210,21 +216,25 @@ export function ProductCard({ item }: { item: SmartphoneFull }) {
             disabled={isAddingToCart}
           >
             <ShoppingCart className="h-5 w-5" />
-            <span className="hidden sm:inline">В корзину</span>
+            <span className="hidden sm:inline">{t('products.addToCart')}</span>
             <div className="hidden sm:block" />
-            <p className="hidden sm:block">{currencyFormatter.format(item.price)}</p>
+            <p className="hidden sm:block">
+              {t('products.price :price', {
+                price: currentLocale() === 'ru' ? currencyFormatter.format(item.price) : item.price,
+              })}
+            </p>
           </button>
         ) : (
           <div className="grid w-full grid-cols-[auto_auto_auto] place-content-center gap-2 rounded-xl border border-white/10 bg-indigo-500/80 px-3 py-2 text-sm shadow-lg backdrop-blur-md sm:gap-4 sm:px-6 sm:py-4 sm:text-base">
             <button onClick={() => decreaseCount(item)} className="rounded-full bg-indigo-600/80 p-1 transition-colors hover:bg-indigo-800/80">
-              <p className="sr-only">Минус товар</p>
+              <p className="sr-only">{t('products.decreaseCount')}</p>
               <Minus className="h-4 w-4" />
             </button>
 
             <span className="flex items-center justify-center font-medium">{quantity}</span>
 
             <button onClick={() => increaseCount(item)} className="rounded-full bg-indigo-600/80 p-1 transition-colors hover:bg-indigo-800/80">
-              <p className="sr-only">Плюс товар</p>
+              <p className="sr-only">{t('products.increaseCount')}</p>
               <Plus className="h-4 w-4" />
             </button>
           </div>

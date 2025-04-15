@@ -16,13 +16,17 @@ return new class extends Migration
             $table->unsignedBigInteger('smartphone_id');
             $table->string('spec_key');    // Название характеристики (например, "screen_size")
             $table->string('spec_value');  // Значение характеристики (например, "6.1 inches")
+            $table->float('spec_value_numeric')->nullable(); // Числовое значение, если применимо
             $table->timestamps();
 
             // Определяем внешний ключ
             $table->foreign('smartphone_id')
-                  ->references('id')
-                  ->on('smartphones')
-                  ->onDelete('cascade');
+                ->references('id')
+                ->on('smartphones')
+                ->onDelete('cascade');
+
+            $table->index('smartphone_id');
+            $table->index(['spec_key', 'spec_value_numeric', 'spec_value', 'smartphone_id']);
         });
     }
 

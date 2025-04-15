@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useLaravelReactI18n } from 'laravel-react-i18n';
 import { DialogContent } from '@/components/ui/dialog';
 import LoginForm from './login-form';
 import RegForm from './reg-form';
@@ -6,6 +7,7 @@ import ForgetPassForm from './forget-pass-form';
 
 export function AuthForm() {
   const [authState, setAuthState] = useState<'login' | 'register' | 'forgotPassword'>('login');
+  const { t } = useLaravelReactI18n();
 
   const renderForm = () => {
     switch (authState) {
@@ -22,6 +24,11 @@ export function AuthForm() {
 
   return (
     <DialogContent>
+      <h1 className="mb-6 text-center text-2xl font-bold">
+        {authState === 'login' && t('auth.login_header')}
+        {authState === 'register' && t('auth.register_header')}
+        {authState === 'forgotPassword' && t('auth.forgot_header')}
+      </h1>
       {renderForm()}
     </DialogContent>
   );

@@ -7,6 +7,7 @@ import { currencyFormatter } from '@/utils/currencyFormatter';
 import { Head, usePage } from '@inertiajs/react';
 import { Camera, Cpu, HardDrive, MemoryStick, MonitorSmartphone, Scale, Smartphone, Star, StarHalf } from 'lucide-react';
 import { useState } from 'react';
+import { useLaravelReactI18n } from 'laravel-react-i18n';
 
 interface PageProps {
   product: SmartphoneFull;
@@ -36,6 +37,7 @@ export default function ProductIndex() {
   const { product, reviews } = usePage<PageProps>().props;
   const [mainImage, setMainImage] = useState(product.images.length > 0 ? product.images[0] : null);
   const averageRating = reviews.reduce((acc, review) => acc + review.rating, 0) / reviews.length;
+  const { t, currentLocale } = useLaravelReactI18n();
 
   return (
     <Layout>
@@ -64,14 +66,20 @@ export default function ProductIndex() {
           />
 
           <p className="col-span-2 text-4xl font-semibold text-slate-800 dark:text-slate-100">
-            Смартфон {product.brand} {product.model} {product.specifications.find((spec) => spec.spec_key === 'ram')?.spec_value} +{' '}
+            {t('products.smartphone')} {product.brand} {product.model} {product.specifications.find((spec) => spec.spec_key === 'ram')?.spec_value} +{' '}
             {product.specifications.find((spec) => spec.spec_key === 'storage')?.spec_value}
           </p>
 
           <div />
 
           <div className="bg-opacity-20 dark:bg-opacity-20 border-opacity-30 dark:border-opacity-30 col-span-2 flex flex-col justify-between rounded-3xl border border-white bg-white p-6 shadow-xl backdrop-blur-md md:col-span-1 md:w-80 lg:w-96 dark:border-gray-700 dark:bg-gray-800">
-            <p className="text-4xl font-semibold text-slate-800 dark:text-slate-100">{currencyFormatter.format(product.price)}</p>
+            <p className="text-4xl font-semibold text-slate-800 dark:text-slate-100">
+              {t('products.price :price', {
+                price: currentLocale() === 'ru'
+                  ? currencyFormatter.format(product.price)
+                  : product.price
+              })}
+            </p>
             <CartButton />
           </div>
         </header>
@@ -82,19 +90,19 @@ export default function ProductIndex() {
               value="description"
               className="flex-1 rounded-lg py-2.5 text-sm font-medium transition-all data-[state=active]:bg-cyan-500 data-[state=active]:text-white data-[state=active]:shadow data-[state=inactive]:text-slate-700 data-[state=inactive]:hover:bg-white/40 dark:data-[state=active]:bg-cyan-500 dark:data-[state=inactive]:text-slate-300 dark:data-[state=inactive]:hover:bg-slate-700/40"
             >
-              Описание
+              {t('products.description')}
             </TabsTrigger>
             <TabsTrigger
               value="specs"
               className="flex-1 rounded-lg py-2.5 text-sm font-medium transition-all data-[state=active]:bg-cyan-500 data-[state=active]:text-white data-[state=active]:shadow data-[state=inactive]:text-slate-700 data-[state=inactive]:hover:bg-white/40 dark:data-[state=active]:bg-cyan-500 dark:data-[state=inactive]:text-slate-300 dark:data-[state=inactive]:hover:bg-slate-700/40"
             >
-              Характеристики
+              {t('products.specs')}
             </TabsTrigger>
             <TabsTrigger
               value="reviews"
               className="flex-1 rounded-lg py-2.5 text-sm font-medium transition-all data-[state=active]:bg-cyan-500 data-[state=active]:text-white data-[state=active]:shadow data-[state=inactive]:text-slate-700 data-[state=inactive]:hover:bg-white/40 dark:data-[state=active]:bg-cyan-500 dark:data-[state=inactive]:text-slate-300 dark:data-[state=inactive]:hover:bg-slate-700/40"
             >
-              Отзывы
+              {t('products.reviews')}
             </TabsTrigger>
           </TabsList>
           <TabsContent
@@ -113,7 +121,7 @@ export default function ProductIndex() {
                   <div className="rounded-full bg-cyan-100 p-2 dark:bg-cyan-900/50">
                     <Cpu className="h-5 w-5 text-cyan-600 dark:text-cyan-400" />
                   </div>
-                  <h3 className="font-semibold text-slate-800 dark:text-slate-200">Процессор</h3>
+                  <h3 className="font-semibold text-slate-800 dark:text-slate-200">{t('products.processor')}</h3>
                 </div>
                 <p className="pl-11 text-slate-700 dark:text-slate-300">
                   {product.specifications.find((spec) => spec.spec_key === 'processor')?.spec_value}
@@ -125,7 +133,7 @@ export default function ProductIndex() {
                   <div className="rounded-full bg-purple-100 p-2 dark:bg-purple-900/50">
                     <MemoryStick className="h-5 w-5 text-purple-600 dark:text-purple-400" />
                   </div>
-                  <h3 className="font-semibold text-slate-800 dark:text-slate-200">Оперативная память</h3>
+                  <h3 className="font-semibold text-slate-800 dark:text-slate-200">{t('products.ram')}</h3>
                 </div>
                 <p className="pl-11 text-slate-700 dark:text-slate-300">
                   {product.specifications.find((spec) => spec.spec_key === 'ram')?.spec_value}
@@ -137,7 +145,7 @@ export default function ProductIndex() {
                   <div className="rounded-full bg-blue-100 p-2 dark:bg-blue-900/50">
                     <HardDrive className="h-5 w-5 text-blue-600 dark:text-blue-400" />
                   </div>
-                  <h3 className="font-semibold text-slate-800 dark:text-slate-200">Встроенная память</h3>
+                  <h3 className="font-semibold text-slate-800 dark:text-slate-200">{t('products.storage')}</h3>
                 </div>
                 <p className="pl-11 text-slate-700 dark:text-slate-300">
                   {product.specifications.find((spec) => spec.spec_key === 'storage')?.spec_value}
@@ -149,7 +157,7 @@ export default function ProductIndex() {
                   <div className="rounded-full bg-amber-100 p-2 dark:bg-amber-900/50">
                     <Scale className="h-5 w-5 text-amber-600 dark:text-amber-400" />
                   </div>
-                  <h3 className="font-semibold text-slate-800 dark:text-slate-200">Вес</h3>
+                  <h3 className="font-semibold text-slate-800 dark:text-slate-200">{t('products.weight')}</h3>
                 </div>
                 <p className="pl-11 text-slate-700 dark:text-slate-300">
                   {product.specifications.find((spec) => spec.spec_key === 'weight')?.spec_value}
@@ -161,10 +169,10 @@ export default function ProductIndex() {
                   <div className="rounded-full bg-green-100 p-2 dark:bg-green-900/50">
                     <Smartphone className="h-5 w-5 text-green-600 dark:text-green-400" />
                   </div>
-                  <h3 className="font-semibold text-slate-800 dark:text-slate-200">Диагональ экрана</h3>
+                  <h3 className="font-semibold text-slate-800 dark:text-slate-200">{t('products.screen_size')}</h3>
                 </div>
                 <p className="pl-11 text-slate-700 dark:text-slate-300">
-                  {product.specifications.find((spec) => spec.spec_key === 'screen_size')?.spec_value}"
+                  {product.specifications.find((spec) => spec.spec_key === 'screen_size')?.spec_value}
                 </p>
               </div>
 
@@ -173,7 +181,7 @@ export default function ProductIndex() {
                   <div className="rounded-full bg-indigo-100 p-2 dark:bg-indigo-900/50">
                     <MonitorSmartphone className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
                   </div>
-                  <h3 className="font-semibold text-slate-800 dark:text-slate-200">Операционная система</h3>
+                  <h3 className="font-semibold text-slate-800 dark:text-slate-200">{t('products.os')}</h3>
                 </div>
                 <p className="pl-11 text-slate-700 dark:text-slate-300">
                   {product.specifications.find((spec) => spec.spec_key === 'os')?.spec_value}
@@ -185,7 +193,7 @@ export default function ProductIndex() {
                   <div className="rounded-full bg-rose-100 p-2 dark:bg-rose-900/50">
                     <Camera className="h-5 w-5 text-rose-600 dark:text-rose-400" />
                   </div>
-                  <h3 className="font-semibold text-slate-800 dark:text-slate-200">Камера</h3>
+                  <h3 className="font-semibold text-slate-800 dark:text-slate-200">{t('products.camera')}</h3>
                 </div>
                 <p className="pl-11 text-slate-700 dark:text-slate-300">
                   {product.specifications.find((spec) => spec.spec_key === 'camera')?.spec_value} Мп
@@ -200,7 +208,7 @@ export default function ProductIndex() {
             {reviews.length > 0 ? (
               <div className="mb-6">
                 <div className="mb-4 flex items-center justify-between">
-                  <h3 className="text-xl font-semibold text-slate-800 dark:text-slate-200">Отзывы покупателей</h3>
+                  <h3 className="text-xl font-semibold text-slate-800 dark:text-slate-200">{t('reviews.title')}</h3>
                   <div className="flex items-center gap-2">
                     <div className="flex">
                       <StarRating rating={averageRating} />
@@ -245,8 +253,8 @@ export default function ProductIndex() {
               </div>
             ) : (
               <div className="py-8 text-center">
-                <p className="text-lg text-slate-700 dark:text-slate-300">Пока нет отзывов для этого продукта.</p>
-                <p className="mt-2 text-slate-500 dark:text-slate-400">Будьте первым, кто оставит отзыв!</p>
+                <p className="text-lg text-slate-700 dark:text-slate-300">{t('reviews.empty')}</p>
+                <p className="mt-2 text-slate-500 dark:text-slate-400">{t('reviews.first')}</p>
               </div>
             )}
           </TabsContent>

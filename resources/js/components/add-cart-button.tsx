@@ -1,6 +1,7 @@
 import { Order, OrderItem, SmartphoneFull } from '@/types';
 import { currencyFormatter } from '@/utils/currencyFormatter';
 import { router, usePage } from '@inertiajs/react';
+import { useLaravelReactI18n } from 'laravel-react-i18n';
 import { Minus, Plus, ShoppingCart } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
@@ -16,6 +17,7 @@ export default function CartButton() {
   const { cart, product, inCartProp } = usePage<PageProps>().props;
   const [quantity, setQuantity] = useState(cart?.items.find((item) => item.product_id === product.id)?.count || 0);
   const [inCart, setInCart] = useState(inCartProp);
+  const { t, currentLocale } = useLaravelReactI18n();
 
   const addCart = (item: SmartphoneFull) => {
     router.post(
@@ -73,9 +75,13 @@ export default function CartButton() {
           className="grid grid-cols-[auto_auto_1fr_auto] place-content-center gap-2 rounded-xl border border-white/10 bg-cyan-500/80 px-6 py-4 text-white shadow-lg backdrop-blur-md transition-all hover:bg-cyan-600/90 hover:shadow-cyan-200/50 dark:hover:shadow-cyan-900/50"
         >
           <ShoppingCart className="h-5 w-5" />
-          <span>В корзину</span>
+          <span>{t('products.addToCart')}</span>
           <div />
-          <p>{currencyFormatter.format(product.price)}</p>
+          <p>
+            {t('products.price :price', {
+              price: currentLocale() === 'ru' ? currencyFormatter.format(product.price) : product.price,
+            })}
+          </p>
         </button>
       ) : (
         <div className="grid grid-cols-[auto_auto_auto] place-content-center gap-4 rounded-xl border border-white/10 bg-cyan-600/80 px-6 py-4 text-white shadow-lg backdrop-blur-md">

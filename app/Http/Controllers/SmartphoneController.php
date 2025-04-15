@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Smartphone;
 use App\Models\SmartphoneSpecification;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
 class SmartphoneController extends Controller
@@ -17,117 +16,147 @@ class SmartphoneController extends Controller
      */
     public function index(Request $request)
     {
-        // Get basic search parameters
+        // Basic search parameters
         $search = $request->input('search');
         $brand = $request->input('brand');
         $priceMin = $request->input('priceMin', 0);
         $priceMax = $request->input('priceMax', 2000);
 
-        // Get specification filter parameters
-        $screenSizeMin = $request->input('screenSizeMin');
-        $screenSizeMax = $request->input('screenSizeMax');
-        $ramFilter = $request->input('ramFilter');
-        $storageFilter = $request->input('storageFilter');
-        $batteryCapacityMin = $request->input('batteryCapacityMin');
-        $processor = $request->input('processor');
-        $os = $request->input('os');
-        $cameraMin = $request->input('cameraMin'); // Minimum megapixels
-        $weightMax = $request->input('weightMax'); // Maximum weight in grams
+        // Get all specification keys from database
+        $specKeys = SmartphoneSpecification::distinct('spec_key')->pluck('spec_key');
 
         // Get search results
-        $smartphones = $this->getSearchResults($request);
+        $smartphones = $this->getSearchResults($request, $specKeys->toArray());
 
-        // Get filter ranges for specifications
-        $specRanges = $this->getSpecificationRanges();
+        // Dynamic filters preparation
+        $dynamicFilters = [];
+        $currentFilters = [
+            'search' => $search,
+            'brand' => is_array($brand) ? $brand : (is_string($brand) ? [$brand] : []),
+            'priceMin' => $priceMin,
+            'priceMax' => $priceMax,
+        ];
 
-        // Get processors and OS options for filters
-        $processors = SmartphoneSpecification::where('spec_key', 'processor')
-            ->distinct()
-            ->pluck('spec_value')
-            ->sort()
-            ->values();
+        foreach ($specKeys as $key) {
+            // Determine filter type (numeric or categorical)
+            $sampleValue = SmartphoneSpecification::where('spec_key', $key)
+                ->first()
+                ?->spec_value;
 
-        $operatingSystems = SmartphoneSpecification::where('spec_key', 'os')
-            ->distinct()
-            ->pluck('spec_value')
-            ->sort()
-            ->values();
+            $isNumeric = is_numeric($sampleValue);
 
+            // Store filter configuration
+            $dynamicFilters[$key] = $isNumeric ? 'range' : 'exact';
+
+            // Collect current filter values
+            $currentFilters[$key] = $isNumeric
+                ? [
+                    'min' => $request->input($key.'Min'),
+                    'max' => $request->input($key.'Max'),
+                ]
+                : $request->input($key.'Filter');
+        }
+
+        // Get specification ranges/options
+        $specRanges = $this->getSpecificationRanges($specKeys->toArray());
+        // Merge specification ranges and dynamic filters
+        $specRangesAndFilters = [];
+        $numericMultipleSelectorKeys = ['ram', 'storage']; // добавь свои ключи
+        foreach ($specKeys as $key) {
+            $sample = SmartphoneSpecification::where('spec_key', $key)->first();
+
+            if (! $sample) {
+                continue;
+            }
+
+            $isNumeric = is_numeric($sample->spec_value);
+
+            if ($isNumeric) {
+                $specValues = SmartphoneSpecification::where('spec_key', $key)
+                    ->pluck('spec_value')
+                    ->filter(fn($v) => $v !== null && $v !== '')
+                    ->map(fn($v) => (string)(floatval($v)))
+                    ->unique()
+                    ->values();
+                $min = $specValues->min() !== null ? floatval($specValues->min()) : 0;
+                $max = $specValues->max() !== null ? floatval($specValues->max()) : 0;
+                $isInteger = $specValues->every(fn($v) => floor(floatval($v)) == floatval($v));
+
+                $filter = [
+                    'type' => 'range',
+                    'range' => [$min, $max],
+                    'numberType' => $isInteger ? 'integer' : 'float',
+                ];
+                // Если ключ в списке — добавляем options для чекбоксов
+                if (in_array($key, $numericMultipleSelectorKeys)) {
+                    $options = $specValues->toArray();
+                    $filter['options'] = $options;
+                }
+                $specRangesAndFilters[$key] = $filter;
+            } else {
+                $specRangesAndFilters[$key] = [
+                    'type' => 'exact',
+                    'options' => SmartphoneSpecification::where('spec_key', $key)
+                        ->distinct()
+                        ->pluck('spec_value')
+                        ->filter(fn($v) => $v !== null && $v !== '')
+                        ->sort()
+                        ->values()
+                        ->toArray(),
+                ];
+            }
+        }
         // Return Inertia view with data
         return Inertia::render('product/search', [
             'smartphones' => $smartphones,
-            'filters' => [
+            'filters' => array_merge([
                 'priceRange' => [
-                    Smartphone::min('price') ?? 0,
-                    Smartphone::max('price') ?? 2000,
+                    'type' => 'range',
+                    'range' => [
+                        Smartphone::min('price') ?? 0,
+                        Smartphone::max('price') ?? 2000,
+                    ],
                 ],
-                'screenSizeRange' => $specRanges['screen_size'],
-                'ramOptions' => $specRanges['ram'],
-                'storageOptions' => $specRanges['storage'],
-                'batteryCapacityRange' => $specRanges['battery_capacity'],
-                'processors' => $processors,
-                'operatingSystems' => $operatingSystems,
-                'cameraRange' => $specRanges['camera'],
-                'weightRange' => $specRanges['weight'],
-            ],
-            'currentFilters' => [
-                'search' => $search,
-                'brand' => is_array($brand) ? $brand : (is_string($brand) ? [$brand] : []),
-                'priceMin' => $priceMin,
-                'priceMax' => $priceMax,
-                'screenSizeMin' => $screenSizeMin,
-                'screenSizeMax' => $screenSizeMax,
-                'ramFilter' => $ramFilter,
-                'storageFilter' => $storageFilter,
-                'batteryCapacityMin' => $batteryCapacityMin,
-                'processor' => $processor,
-                'os' => $os,
-                'cameraMin' => $cameraMin,
-                'weightMax' => $weightMax,
-            ],
+            ], $specRangesAndFilters),
+            'currentFilters' => $currentFilters,
         ]);
     }
 
     /**
      * Get min/max ranges and options for specifications.
      */
-    private function getSpecificationRanges(): array
+    private function getSpecificationRanges(array $specKeys): array
     {
-        return [
-            'screen_size' => [
-                SmartphoneSpecification::where('spec_key', 'screen_size')->min('spec_value') ?? 0,
-                SmartphoneSpecification::where('spec_key', 'screen_size')->max('spec_value') ?? 0,
-            ],
-            'ram' => SmartphoneSpecification::where('spec_key', 'ram')
-                ->distinct()
-                ->pluck('spec_value')
-                ->sort()
-                ->values()
-                ->toArray(),
-            'storage' => SmartphoneSpecification::where('spec_key', 'storage')
-                ->distinct()
-                ->pluck('spec_value')
-                ->sort()
-                ->values()
-                ->toArray(),
-            'battery_capacity' => [
-                SmartphoneSpecification::where('spec_key', 'battery_capacity')->min('spec_value') ?? 0,
-                SmartphoneSpecification::where('spec_key', 'battery_capacity')->max('spec_value') ?? 0,
-            ],
-            'camera' => SmartphoneSpecification::where('spec_key', 'camera')
-                ->distinct()
-                ->pluck('spec_value')
-                ->sort()
-                ->values()
-                ->toArray(),
-            'weight' => [
-                SmartphoneSpecification::where('spec_key', 'weight')->min('spec_value') ?? 0,
-                SmartphoneSpecification::where('spec_key', 'weight')->max('spec_value') ?? 0,
-            ],
-        ];
+        $ranges = [];
+
+        foreach ($specKeys as $key) {
+            $sample = SmartphoneSpecification::where('spec_key', $key)->first();
+
+            if (! $sample) {
+                continue;
+            }
+
+            $isNumeric = is_numeric($sample->spec_value);
+
+            if ($isNumeric) {
+                $ranges[$key] = [
+                    SmartphoneSpecification::where('spec_key', $key)->min('spec_value') ?? 0,
+                    SmartphoneSpecification::where('spec_key', $key)->max('spec_value') ?? 0,
+                ];
+            } else {
+                $ranges[$key] = SmartphoneSpecification::where('spec_key', $key)
+                    ->distinct()
+                    ->pluck('spec_value')
+                    ->sort()
+                    ->values()
+                    ->toArray();
+            }
+        }
+
+        return $ranges;
     }
 
-    private function getSearchResults($request)
+    private function getSearchResults($request, array $specKeys)
     {
         // Общие фильтры
         $search = $request->input('search');
@@ -135,135 +164,96 @@ class SmartphoneController extends Controller
         $priceMin = $request->input('priceMin', 0);
         $priceMax = $request->input('priceMax', 2000);
 
-        // Фильтры по спецификациям
-        $ramFilter = $request->input('ramFilter'); // например: "8,12" или массив
-        $storageFilter = $request->input('storageFilter'); // например: "32,64" или массив
-        $screenSizeMin = $request->input('screenSizeMin'); // например, 4.02
-        $screenSizeMax = $request->input('screenSizeMax'); // например, 6.51
-        $batteryCapacityMin = $request->input('batteryCapacityMin'); // например, 4000
-        $cameraFilter = $request->input('cameraFilter'); // например: "12,16" или массив
-        $weightMax = $request->input('weightMax');
-
-        $os = $request->input('os');
-        $processor = $request->input('processor');
-
         // Базовый запрос
         $query = Smartphone::with(['images', 'specifications'])
             ->when($search, function ($q) use ($search) {
                 $q->where(function ($query) use ($search) {
-                    if (! empty(trim($search))) {
+                    if (trim($search) !== '') {
                         $query->where('model', 'like', "%{$search}%")
                             ->orWhere('description', 'like', "%{$search}%");
                     }
                 });
             })
             ->when($brand, function ($q) use ($brand) {
-                // Преобразуем входной параметр в массив, удаляя пустые значения
                 $brands = is_array($brand)
                     ? $brand
-                    : (is_string($brand)
-                        ? array_map('trim', explode(',', $brand))
-                        : []);
-                $brands = array_filter($brands); // Удаляем пустые элементы
-
+                    : array_map('trim', explode(',', $brand));
+                $brands = array_filter($brands);
                 if (! empty($brands)) {
-                    // Используем whereIn с проверкой регистра или точного совпадения
                     $q->whereIn('brand', $brands);
                 }
             })
             ->whereBetween('price', [$priceMin, $priceMax]);
 
-        // Фильтр по памяти (RAM) — вариант 1: точное совпадение по нескольким значениям
-        if ($ramFilter) {
-            $ramValues = is_array($ramFilter) ? $ramFilter : array_map('trim', explode(',', $ramFilter));
-            $ramValues = array_map(function ($value) {
-                return str_replace(' ', '', strtolower($value)); // Normalize RAM values
-            }, $ramValues);
-            $query->whereHas('specifications', function ($q) use ($ramValues) {
-                $q->where('spec_key', 'ram')
-                    ->whereIn(DB::raw('REPLACE(LOWER(spec_value), " ", "")'), $ramValues);
-            });
-        }
-
-        // Фильтр по размеру экрана — вариант 2: сравнение числового значения
-        if ($screenSizeMin || $screenSizeMax) {
-            $query->whereHas('specifications', function ($q) use ($screenSizeMin, $screenSizeMax) {
-                $q->where('spec_key', 'screen_size')
-                    ->when($screenSizeMin, function ($q2) use ($screenSizeMin) {
-                        $q2->whereRaw('CAST(spec_value AS REAL) >= ?', [$screenSizeMin]);
-                    })
-                    ->when($screenSizeMax, function ($q2) use ($screenSizeMax) {
-                        $q2->whereRaw('CAST(spec_value AS REAL) <= ?', [$screenSizeMax]);
+        // --- Исправление для ram/storage: поддержка массива значений ---
+        foreach (["ram", "storage"] as $specKey) {
+            if ($request->has($specKey) && is_array($request->input($specKey))) {
+                $values = $request->input($specKey);
+                $query->whereHas('specifications', function ($q) use ($specKey, $values) {
+                    $q->where('spec_key', $specKey)
+                      ->whereIn('spec_value', $values);
+                });
+            } else {
+                // Старое поведение с диапазоном
+                $min = $request->input($specKey . 'Min');
+                $max = $request->input($specKey . 'Max');
+                if ($min !== null) {
+                    $query->whereHas('specifications', function ($q) use ($specKey, $min) {
+                        $q->where('spec_key', $specKey)
+                          ->where('spec_value', '>=', $min);
                     });
-            });
-        }
-
-        if ($storageFilter) {
-            $storageValues = is_array($storageFilter) ? $storageFilter : array_map('trim', explode(',', $storageFilter));
-            $storageValues = array_map(function ($value) {
-                return str_replace(' ', '', strtolower($value)); // Normalize storage values
-            }, $storageValues);
-            $query->whereHas('specifications', function ($q) use ($storageValues) {
-                $q->where('spec_key', 'storage')
-                    ->whereIn(DB::raw('REPLACE(LOWER(spec_value), " ", "")'), $storageValues);
-            });
-        }
-
-        // Фильтр по ёмкости батареи — вариант 2: сравнение числового значения
-        if ($batteryCapacityMin) {
-            $query->whereHas('specifications', function ($q) use ($batteryCapacityMin) {
-                $q->where('spec_key', 'battery_capacity')
-                    ->whereRaw("CAST(TRIM(REPLACE(REPLACE(spec_value, 'mAh', ''), 'mah', '')) AS INTEGER) >= ?", [$batteryCapacityMin]);
-            });
-        }
-
-        // Фильтр по камере — вариант 1: множественный выбор
-        if ($cameraFilter) {
-            $cameraValues = is_array($cameraFilter) ? $cameraFilter : explode(',', $cameraFilter);
-            $cameraValues = array_map(fn($value) => str_replace(' ', '', strtolower($value)), $cameraValues);
-        
-            $query->whereHas('specifications', function ($q) use ($cameraValues) {
-                $q->where('spec_key', 'camera')
-                    ->where(function ($query) use ($cameraValues) {
-                        foreach ($cameraValues as $value) {
-                            $query->orWhereRaw("REPLACE(LOWER(spec_value), ' ', '') = ?", [$value]);
-                        }
+                }
+                if ($max !== null) {
+                    $query->whereHas('specifications', function ($q) use ($specKey, $max) {
+                        $q->where('spec_key', $specKey)
+                          ->where('spec_value', '<=', $max);
                     });
-            });
-        }        
-
-        // Фильтр по весу — вариант 2: сравнение числового значения
-        if ($weightMax) {
-            $query->whereHas('specifications', function ($q) use ($weightMax) {
-                $q->where('spec_key', 'weight')
-                    ->whereRaw('CAST(spec_value AS REAL) <= ?', [$weightMax]);
-            });
+                }
+            }
         }
 
-        // Фильтр по операционной системе
-        if ($os) {
-            $query->whereHas('specifications', function ($q) use ($os) {
-                $q->where('spec_key', 'os')
-                    ->where('spec_value', $os);
-            });
+        // Динамическая обработка фильтров
+        foreach ($specKeys as $specKey) {
+            if (! in_array($specKey, ["ram", "storage"])) {
+                // Определяем тип фильтра по примеру значения
+                $sampleValue = SmartphoneSpecification::where('spec_key', $specKey)
+                    ->first()
+                    ?->spec_value;
+                $filterType = is_numeric($sampleValue) ? 'range' : 'exact';
+                // Значение фильтра для данной характеристики может передаваться разными способами:
+                // Для точного совпадения – например, 'ramFilter'
+                // Для диапазона – ожидаем два поля: 'screen_sizeMin' и 'screen_sizeMax'
+                if ($filterType === 'exact') {
+                    $filterParam = $request->input($specKey) ?? $request->input($specKey.'Filter');
+                    if ($filterParam) {
+                        $values = is_array($filterParam)
+                            ? $filterParam
+                            : array_map('trim', explode(',', $filterParam));
+                        $query->whereHas('specifications', function ($q) use ($specKey, $values) {
+                            $q->where('spec_key', $specKey)
+                                ->whereIn('spec_value', $values);
+                        });
+                    }
+                } elseif ($filterType === 'range') {
+                    // Варианты: если переданы минимальное или максимальное значение
+                    $minParam = $request->input($specKey.'Min');
+                    $maxParam = $request->input($specKey.'Max');
+                    if ($minParam || $maxParam) {
+                        $query->whereHas('specifications', function ($q) use ($specKey, $minParam, $maxParam) {
+                            $q->where('spec_key', $specKey);
+                            if ($minParam) {
+                                $q->where('spec_value_numeric', '>=', $minParam);
+                            }
+                            if ($maxParam) {
+                                $q->where('spec_value_numeric', '<=', $maxParam);
+                            }
+                        });
+                    }
+                }
+            }
         }
 
-        // Фильтр по процессору
-        if ($processor = $request->input('processor')) {
-            $processorValues = is_array($processor) ? $processor : explode(',', $processor);
-            $processorValues = array_map(fn ($value) => str_replace(' ', '', strtolower($value)), $processorValues);
-
-            $query->whereHas('specifications', function ($q) use ($processorValues) {
-                $q->where('spec_key', 'processor')
-                    ->where(function ($query) use ($processorValues) {
-                        foreach ($processorValues as $value) {
-                            $query->orWhereRaw("REPLACE(LOWER(spec_value), ' ', '') LIKE ?", ["%{$value}%"]);
-                        }
-                    });
-            });
-        }
-
-        // Получаем результаты и обрабатываем вывод
+        // Выполнение запроса и обработка результата
         $smartphones = $query->get()->map(function ($smartphone) {
             $smartphone->specifications_array = $smartphone->specifications
                 ? $smartphone->specifications->pluck('spec_value', 'spec_key')->toArray()

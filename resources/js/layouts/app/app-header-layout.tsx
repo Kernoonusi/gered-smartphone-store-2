@@ -8,6 +8,7 @@ import type React from 'react';
 import { useEffect, useState } from 'react';
 import { Footer } from './footer';
 import './header.css';
+import { useLaravelReactI18n } from 'laravel-react-i18n';
 
 interface AppHeaderLayoutProps {
   children: React.ReactNode;
@@ -32,6 +33,7 @@ export default function AppHeaderLayout({ children }: AppHeaderLayoutProps) {
   const [scrolled, setScrolled] = useState(false);
   const [supportsScrollTimeline, setSupportsScrollTimeline] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { t } = useLaravelReactI18n();
 
   useEffect(() => {
     // Check if browser supports scroll-driven animations
@@ -72,16 +74,16 @@ export default function AppHeaderLayout({ children }: AppHeaderLayoutProps) {
       <div className={`hidden w-full border-b border-white/10 bg-white/5 backdrop-blur-md md:block ${scrollClass}`}>
         <div className="mx-auto grid w-full max-w-7xl grid-cols-[auto_auto_auto_auto_1fr_auto] items-center px-6 py-3">
           <Link href="/about" className="px-3 text-sm font-medium text-white/80 transition-colors hover:text-white">
-            О компании
+            {t('header.about')}
           </Link>
           <Link href="/delivery" className="px-3 text-sm font-medium text-white/80 transition-colors hover:text-white">
-            Доставка
+            {t('header.delivery')}
           </Link>
           <Link href="/warranty" className="px-3 text-sm font-medium text-white/80 transition-colors hover:text-white">
-            Гарантия
+            {t('header.warranty')}
           </Link>
           <Link href="/contacts" className="px-3 text-sm font-medium text-white/80 transition-colors hover:text-white">
-            Контакты
+            {t('header.contacts')}
           </Link>
           <div />
           <div className="flex gap-4">
@@ -98,12 +100,12 @@ export default function AppHeaderLayout({ children }: AppHeaderLayoutProps) {
             {/* Main header with logo and cart - visible when not scrolled on desktop */}
             <div className="main-header hidden sm:flex items-center justify-between">
               <Link href="/" className="bg-gradient-to-r from-cyan-300 to-fuchsia-500 bg-clip-text text-3xl font-bold text-transparent">
-                Gered Store
+                {t('header.title')}
               </Link>
               <div className="flex items-center gap-4">
                 <Link href="/cart">
                   <Button variant="ghost" className="group relative rounded-full bg-white/10 px-5 text-white hover:bg-white/20">
-                    <span>Корзина</span>
+                    <span>{t('header.cart')}</span>
                     <ShoppingCart className="ml-2" />
                     {cart && cart.items.length > 0 ? (
                       <span className="absolute -top-2 -right-2 flex h-5 w-5 items-center justify-center rounded-full bg-fuchsia-500 text-xs text-white">
@@ -121,12 +123,12 @@ export default function AppHeaderLayout({ children }: AppHeaderLayoutProps) {
               <div className="flex items-center">
                 {/* Logo - changes size based on scroll */}
                 <Link href="/" className="logo-full bg-gradient-to-r from-cyan-300 to-fuchsia-500 bg-clip-text font-bold text-transparent">
-                  Gered Store
+                  {t('header.title')}
                 </Link>
 
                 <Link href="/search">
                   <Button variant="ghost" className="nav-button h-full rounded-none text-white hover:bg-white/10">
-                    Все смартфоны
+                    {t('header.all_phones')}
                   </Button>
                 </Link>
 
@@ -186,16 +188,16 @@ export default function AppHeaderLayout({ children }: AppHeaderLayoutProps) {
           <nav className="bg-fuchsia-900/80 shadow-lg backdrop-blur-md md:hidden">
             <div className="mx-auto flex max-w-7xl flex-col px-4 py-3">
               <Link href="/about" className="py-1 text-white hover:underline">
-                О компании
+                {t('header.about')}
               </Link>
               <Link href="/delivery" className="py-1 text-white hover:underline">
-                Доставка
+                {t('header.delivery')}
               </Link>
               <Link href="/warranty" className="py-1 text-white hover:underline">
-                Гарантия
+                {t('header.warranty')}
               </Link>
               <Link href="/contacts" className="py-1 text-white hover:underline">
-                Контакты
+                {t('header.contacts')}
               </Link>
             </div>
           </nav>

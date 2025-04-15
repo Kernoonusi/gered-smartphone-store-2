@@ -1,7 +1,8 @@
-import { useForm } from '@inertiajs/react';
+import { Button } from '@/components/ui/button';
 import { DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
+import { useForm } from '@inertiajs/react';
+import { useLaravelReactI18n } from 'laravel-react-i18n';
 import { Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -12,16 +13,18 @@ export function OrderForm() {
     note: '',
   });
 
+  const { t } = useLaravelReactI18n();
+
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     post(route('cart.checkout'), {
       onSuccess: () => {
         reset();
-        toast.success('Заказ успешно оформлен');
+        toast.success(t('order.success'));
       },
       onError: (error) => {
         console.error(error);
-        toast.error('Ошибка при оформлении заказа');
+        toast.error(t('order.error'));
       },
     });
   };
@@ -29,59 +32,63 @@ export function OrderForm() {
   return (
     <>
       <DialogHeader>
-        <DialogTitle>Оформление заказа</DialogTitle>
+        <DialogTitle>{t('order.title')}</DialogTitle>
       </DialogHeader>
       <form onSubmit={onSubmit} className="space-y-4">
         <div>
           <label htmlFor="address" className="block text-sm font-medium text-gray-700">
-            Адрес
+            {t('order.address')}
           </label>
           <Input
             id="address"
             type="text"
-            placeholder="Введите адрес"
+            placeholder={t('order.address_placeholder')}
             value={data.address}
             onChange={(e) => setData('address', e.target.value)}
           />
-          {errors.address && <p className="text-red-500 text-xs mt-1">{errors.address}</p>}
+          {errors.address && <p className="mt-1 text-xs text-red-500">{errors.address}</p>}
         </div>
 
         <div>
           <label htmlFor="paymentMethod" className="block text-sm font-medium text-gray-700">
-            Способ оплаты
+            {t('order.payment_method')}
           </label>
           <select
             id="paymentMethod"
             value={data.paymentMethod}
             onChange={(e) => setData('paymentMethod', e.target.value)}
-            className="border rounded p-2 w-full"
+            className="w-full rounded border p-2"
           >
-            <option value="" className="text-zinc-500">Выберите способ оплаты</option>
-            <option value="card" className="text-zinc-500">Картой при получении</option>
-            <option value="cash" className="text-zinc-500">Наличными при получении</option>
+            <option value="" className="text-zinc-500">
+              {t('order.payment_placeholder')}
+            </option>
+            <option value="card" className="text-zinc-500">
+              {t('order.payment_card')}
+            </option>
+            <option value="cash" className="text-zinc-500">
+              {t('order.payment_cash')}
+            </option>
           </select>
-          {errors.paymentMethod && (
-            <p className="text-red-500 text-xs mt-1">{errors.paymentMethod}</p>
-          )}
+          {errors.paymentMethod && <p className="mt-1 text-xs text-red-500">{errors.paymentMethod}</p>}
         </div>
 
         <div>
           <label htmlFor="note" className="block text-sm font-medium text-gray-700">
-            Комментарий
+            {t('order.note')}
           </label>
           <Input
             id="note"
             type="text"
-            placeholder="Комментарий (необязательно)"
+            placeholder={t('order.note_placeholder')}
             value={data.note}
             onChange={(e) => setData('note', e.target.value)}
           />
-          {errors.note && <p className="text-red-500 text-xs mt-1">{errors.note}</p>}
+          {errors.note && <p className="mt-1 text-xs text-red-500">{errors.note}</p>}
         </div>
 
         <Button type="submit" disabled={processing}>
           {processing && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-          Оформить заказ
+          {t('order.submit')}
         </Button>
       </form>
     </>

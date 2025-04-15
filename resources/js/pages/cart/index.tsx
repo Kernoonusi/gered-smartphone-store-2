@@ -7,6 +7,7 @@ import Layout from '@/layouts/app-layout';
 import { Order, OrderItem, SmartphoneFull, User } from '@/types';
 import { currencyFormatter } from '@/utils/currencyFormatter';
 import { Deferred, router, usePage } from '@inertiajs/react';
+import { useLaravelReactI18n } from 'laravel-react-i18n';
 import { Minus, Plus, Trash } from 'lucide-react';
 
 interface PageProps {
@@ -34,6 +35,7 @@ function ProductList() {
 export default function CartIndex() {
   // Получаем данные, переданные с сервера
   const { cart, user, totalPrice } = usePage<PageProps>().props;
+  const { t } = useLaravelReactI18n();
 
   // Функции для обновления корзины через Inertia
   const increaseCount = (item: OrderItem) => {
@@ -57,9 +59,9 @@ export default function CartIndex() {
       <main className="mx-auto mt-6 flex w-full flex-col gap-12 md:w-10/12">
         {cart.items.length > 0 && (
           <div className="flex items-end gap-4">
-            <h2 className="text-3xl font-semibold">Корзина</h2>
+            <h2 className="text-3xl font-semibold">{t('cart.title')}</h2>
             <p className="text-zinc-500">
-              {cart.items.reduce((acc, item) => acc + item.count, 0)} товар(ов), {currencyFormatter.format(totalPrice)}
+              {cart.items.reduce((acc, item) => acc + item.count, 0)} {t('cart.items_total')}, {currencyFormatter.format(totalPrice)}
             </p>
           </div>
         )}
@@ -67,7 +69,7 @@ export default function CartIndex() {
         <div className="flex flex-col justify-between gap-4 lg:flex-row">
           <article className="flex flex-col gap-4">
             {cart.items.length === 0 ? (
-              <p className="text-3xl">Ваша корзина пока пуста</p>
+              <p className="text-3xl">{t('cart.empty')}</p>
             ) : (
               cart.items.map((item) => (
                 <div key={item.id} className="grid grid-cols-4 gap-2 lg:grid-rows-3">
@@ -107,38 +109,38 @@ export default function CartIndex() {
           {cart.items.length > 0 && (
             <Card className="flex h-fit flex-col justify-between transition-all">
               <CardHeader>
-                <CardTitle>К оплате</CardTitle>
+                <CardTitle>{t('cart.to_pay')}</CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="flex justify-between gap-10">
-                  Стоимость товаров: <strong>{currencyFormatter.format(totalPrice)}</strong>
+                  {t('cart.items_total')}: <strong>{currencyFormatter.format(totalPrice)}</strong>
                 </p>
               </CardContent>
               <CardFooter className="flex flex-col items-start gap-4">
                 <p>
-                  Итого:
+                  {t('cart.total')}:
                   <br />
                   <span className="text-5xl font-semibold">{currencyFormatter.format(totalPrice)}</span>
                 </p>
                 {user.email ? (
                   <Dialog>
                     <DialogTrigger asChild>
-                      <Button>Перейти к оформлению</Button>
+                      <Button>{t('cart.checkout')}</Button>
                     </DialogTrigger>
                     <DialogContent>
                       <OrderForm />
                     </DialogContent>
                   </Dialog>
                 ) : (
-                  <Button>Необходима авторизация</Button>
+                  <Button>{t('cart.need_auth')}</Button>
                 )}
               </CardFooter>
             </Card>
           )}
         </div>
 
-        <h2>Рекомендуем</h2>
-        <Deferred data="products" fallback={<div>Загрузка...</div>}>
+        <h2>{t('cart.recommend')}</h2>
+        <Deferred data="products" fallback={<div>{t('cart.loading')}</div>}>
           <ProductList />
         </Deferred>
       </main>

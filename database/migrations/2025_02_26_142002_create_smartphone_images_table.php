@@ -14,14 +14,16 @@ return new class extends Migration
         Schema::create('smartphone_images', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('smartphone_id');
-            $table->string('image_path'); // Путь к изображению (например, URL или путь в storage)
+            $table->string('image_path'); // Путь к изображению (путь в storage)
             $table->timestamps();
 
-            // Определяем внешний ключ
             $table->foreign('smartphone_id')
-                  ->references('id')
-                  ->on('smartphones')
-                  ->onDelete('cascade');
+                ->references('id')
+                ->on('smartphones')
+                ->onDelete('cascade');
+
+            $table->index('smartphone_id');
+            $table->index('image_path');
         });
     }
 

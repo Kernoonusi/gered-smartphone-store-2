@@ -3,6 +3,7 @@ import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogT
 import { Input } from '@/components/ui/input';
 import { router, useForm } from '@inertiajs/react';
 import { Loader2 } from 'lucide-react';
+import { useLaravelReactI18n } from 'laravel-react-i18n';
 
 export default function ChangePassForm() {
   // Инициализация формы с начальными значениями
@@ -11,6 +12,7 @@ export default function ChangePassForm() {
     password: '',
     password_confirmation: '',
   });
+  const { t } = useLaravelReactI18n();
 
   // Функция отправки формы
   const onSubmit = (e: React.FormEvent) => {
@@ -25,21 +27,21 @@ export default function ChangePassForm() {
   return (
     <Dialog>
       <DialogTrigger className="w-fit" asChild>
-        <Button>Изменить пароль</Button>
+        <Button>{t('profile.change_password')}</Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Изменение пароля</DialogTitle>
+          <DialogTitle>{t('profile.password_title')}</DialogTitle>
         </DialogHeader>
         <form onSubmit={onSubmit} className="space-y-8">
           <div>
             <label htmlFor="current_password" className="block text-sm font-medium text-gray-700">
-              Текущий пароль
+              {t('profile.current_password')}
             </label>
             <Input
               id="current_password"
               type="password"
-              placeholder="Текущий пароль"
+              placeholder={t('profile.current_password')}
               value={data.current_password}
               onChange={(e) => setData('current_password', e.target.value)}
             />
@@ -47,12 +49,12 @@ export default function ChangePassForm() {
           </div>
           <div>
             <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-              Новый пароль
+              {t('profile.new_password')}
             </label>
             <Input
               id="password"
               type="password"
-              placeholder="Новый пароль"
+              placeholder={t('profile.new_password')}
               value={data.password}
               onChange={(e) => setData('password', e.target.value)}
             />
@@ -60,12 +62,12 @@ export default function ChangePassForm() {
           </div>
           <div>
             <label htmlFor="password_confirmation" className="block text-sm font-medium text-gray-700">
-              Подтверждение пароля
+              {t('profile.password_confirmation')}
             </label>
             <Input
               id="password_confirmation"
               type="password"
-              placeholder="Подтверждение пароля"
+              placeholder={t('profile.password_confirmation')}
               value={data.password_confirmation}
               onChange={(e) => setData('password_confirmation', e.target.value)}
             />
@@ -74,7 +76,7 @@ export default function ChangePassForm() {
           <DialogFooter>
             <Button type="submit" disabled={processing}>
               {processing && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              Сохранить
+              {t('profile.save')}
             </Button>
           </DialogFooter>
         </form>
