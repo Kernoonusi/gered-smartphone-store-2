@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Smartphone;
 use App\Models\SmartphoneSpecification;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
 class SmartphoneController extends Controller
@@ -74,13 +75,13 @@ class SmartphoneController extends Controller
             if ($isNumeric) {
                 $specValues = SmartphoneSpecification::where('spec_key', $key)
                     ->pluck('spec_value')
-                    ->filter(fn($v) => $v !== null && $v !== '')
-                    ->map(fn($v) => (string)(floatval($v)))
+                    ->filter(fn ($v) => $v !== null && $v !== '')
+                    ->map(fn ($v) => (string) (floatval($v)))
                     ->unique()
                     ->values();
                 $min = $specValues->min() !== null ? floatval($specValues->min()) : 0;
                 $max = $specValues->max() !== null ? floatval($specValues->max()) : 0;
-                $isInteger = $specValues->every(fn($v) => floor(floatval($v)) == floatval($v));
+                $isInteger = $specValues->every(fn ($v) => floor(floatval($v)) == floatval($v));
 
                 $filter = [
                     'type' => 'range',
@@ -99,13 +100,24 @@ class SmartphoneController extends Controller
                     'options' => SmartphoneSpecification::where('spec_key', $key)
                         ->distinct()
                         ->pluck('spec_value')
-                        ->filter(fn($v) => $v !== null && $v !== '')
+                        ->filter(fn ($v) => $v !== null && $v !== '')
                         ->sort()
                         ->values()
                         ->toArray(),
                 ];
             }
         }
+
+        $smartphones->transform(function ($smartphone) {
+            $smartphone->images->transform(function ($image) {
+                $image->image_path = Storage::url($image->image_path);
+
+                return $image;
+            });
+
+            return $smartphone;
+        });
+
         // Return Inertia view with data
         return Inertia::render('product/search', [
             'smartphones' => $smartphones,
@@ -186,27 +198,27 @@ class SmartphoneController extends Controller
             ->whereBetween('price', [$priceMin, $priceMax]);
 
         // --- Исправление для ram/storage: поддержка массива значений ---
-        foreach (["ram", "storage"] as $specKey) {
+        foreach (['ram', 'storage'] as $specKey) {
             if ($request->has($specKey) && is_array($request->input($specKey))) {
                 $values = $request->input($specKey);
                 $query->whereHas('specifications', function ($q) use ($specKey, $values) {
                     $q->where('spec_key', $specKey)
-                      ->whereIn('spec_value', $values);
+                        ->whereIn('spec_value', $values);
                 });
             } else {
                 // Старое поведение с диапазоном
-                $min = $request->input($specKey . 'Min');
-                $max = $request->input($specKey . 'Max');
+                $min = $request->input($specKey.'Min');
+                $max = $request->input($specKey.'Max');
                 if ($min !== null) {
                     $query->whereHas('specifications', function ($q) use ($specKey, $min) {
                         $q->where('spec_key', $specKey)
-                          ->where('spec_value', '>=', $min);
+                            ->where('spec_value', '>=', $min);
                     });
                 }
                 if ($max !== null) {
                     $query->whereHas('specifications', function ($q) use ($specKey, $max) {
                         $q->where('spec_key', $specKey)
-                          ->where('spec_value', '<=', $max);
+                            ->where('spec_value', '<=', $max);
                     });
                 }
             }
@@ -214,7 +226,7 @@ class SmartphoneController extends Controller
 
         // Динамическая обработка фильтров
         foreach ($specKeys as $specKey) {
-            if (! in_array($specKey, ["ram", "storage"])) {
+            if (! in_array($specKey, ['ram', 'storage'])) {
                 // Определяем тип фильтра по примеру значения
                 $sampleValue = SmartphoneSpecification::where('spec_key', $specKey)
                     ->first()

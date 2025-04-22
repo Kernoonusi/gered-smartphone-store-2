@@ -39,7 +39,7 @@ class SmartphoneSpecificationFactory extends Factory
             ],
             [
                 'spec_key' => 'processor',
-                'spec_value' => $faker->word.' processor',
+                'spec_value' => $faker->word().' processor',
             ],
             [
                 'spec_key' => 'os',

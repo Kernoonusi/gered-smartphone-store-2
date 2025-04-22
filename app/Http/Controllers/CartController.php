@@ -9,6 +9,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -39,6 +40,16 @@ class CartController extends Controller
         $totalPrice = $cart->items()->sum(DB::raw('price * count'));
 
         $randomSmartphones = Smartphone::with(['images', 'specifications'])->inRandomOrder()->limit(5)->get();
+
+        $randomSmartphones->transform(function ($smartphone) {
+            $smartphone->images->transform(function ($image) {
+                $image->image_path = Storage::url($image->image_path);
+
+                return $image;
+            });
+
+            return $smartphone;
+        });
 
         return Inertia::render('cart/index', [
             'cart' => $cart,

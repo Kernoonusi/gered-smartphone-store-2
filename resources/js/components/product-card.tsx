@@ -49,6 +49,7 @@ export function ProductCard({ item }: { item: SmartphoneFull }) {
       .sort((a, b) => MAIN_SPECS.indexOf(a.spec_key) - MAIN_SPECS.indexOf(b.spec_key)) || [];
 
   const mainImage = fullData?.images && fullData.images.length > 0 ? fullData.images[0].image_path : 'phone.png';
+  console.log(mainImage);
 
   const onAddToCart = () => {
     setIsAddingToCart(true);
@@ -170,7 +171,8 @@ export function ProductCard({ item }: { item: SmartphoneFull }) {
           <div className="absolute inset-0 bg-gradient-to-b from-black/10 to-black/30 opacity-0 transition-opacity group-hover/image:opacity-100"></div>
           <img
             src={mainImage}
-            srcSet="phone.png"
+            srcSet={mainImage}
+            onError={(e) => { e.currentTarget.src = mainImage; e.currentTarget.srcset = mainImage; }}
             alt={`${item.brand} ${item.model}`}
             className="h-full w-auto object-contain transition-transform duration-500 group-hover/image:scale-105"
           />

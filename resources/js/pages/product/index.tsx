@@ -50,7 +50,8 @@ export default function ProductIndex() {
               <img
                 key={index}
                 src={image.image_path}
-                srcSet={'/phone.png'}
+                srcSet={image.image_path}
+                onError={(e) => { e.currentTarget.src = '/phone.png'; e.currentTarget.srcset = '/phone.png'; }}
                 className="h-14 w-14 cursor-pointer rounded-lg border border-gray-200 object-cover transition-all hover:border-cyan-500 dark:border-gray-700"
                 alt={`${product.brand} ${product.model} view ${index + 1}`}
                 onMouseEnter={() => setMainImage(image)}
@@ -60,7 +61,8 @@ export default function ProductIndex() {
 
           <img
             src={mainImage?.image_path}
-            srcSet={'/phone.png'}
+            srcSet={mainImage?.image_path}
+            onError={(e) => { e.currentTarget.src = '/phone.png'; e.currentTarget.srcset = '/phone.png'; }}
             alt={`${product.brand} ${product.model}`}
             className="row-span-2 max-w-sm rounded-lg shadow-lg"
           />

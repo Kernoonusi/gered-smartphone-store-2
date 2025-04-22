@@ -82,7 +82,13 @@ export default function Welcome() {
                         </Button>
                       </div>
                       <div className="md:w-1/2">
-                        <img src={slide.image} alt={slide.title} className="mx-auto h-[40vh] object-contain drop-shadow-2xl md:h-[50vh]" />
+                        <img
+                          src={slide.image}
+                          srcSet={slide.image}
+                          onError={(e) => { e.currentTarget.src = slide.image; e.currentTarget.srcset = slide.image; }}
+                          alt={slide.title}
+                          className="mx-auto h-[40vh] object-contain drop-shadow-2xl md:h-[50vh]"
+                        />
                       </div>
                     </div>
                   </div>
@@ -112,6 +118,8 @@ export default function Welcome() {
                 </div>
                 <img
                   src={item.images[0]?.image_path || 'placeholder.png'}
+                  srcSet={item.images[0]?.image_path || 'placeholder.png'}
+                  onError={(e) => { e.currentTarget.src = 'placeholder.png'; e.currentTarget.srcset = 'placeholder.png'; }}
                   alt={item.brand + ' ' + item.model}
                   className="absolute right-0 bottom-0 h-36 w-36 object-contain p-2"
                 />

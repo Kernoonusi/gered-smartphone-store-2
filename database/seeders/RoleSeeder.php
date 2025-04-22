@@ -15,10 +15,10 @@ class RoleSeeder extends Seeder
             'admin',
             'user',
         ];
-        $permissionEditDatabase = Permission::create(['name' => 'edit-database']);
+        $permissionEditDatabase = Permission::firstOrCreate(['name' => 'edit-database']);
 
-        foreach ($roles as $role) {
-            $role = Role::create(['name' => $role]);
+        foreach ($roles as $roleName) {
+            $role = Role::firstOrCreate(['name' => $roleName]);
             if ($role->name === 'admin') {
                 $role->givePermissionTo($permissionEditDatabase);
                 $permissionEditDatabase->assignRole($role);
