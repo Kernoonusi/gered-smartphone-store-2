@@ -1,59 +1,121 @@
-import { ProductCard } from '@/components/product-card';
+import SearchList from '@/components/search-list';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { MultipleSelector } from '@/components/ui/multi-select';
+import { Skeleton } from '@/components/ui/skeleton';
 import { Slider } from '@/components/ui/slider';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import Layout from '@/layouts/app-layout';
 import { SmartphoneFull } from '@/types';
-import { router, usePage } from '@inertiajs/react';
+import { currencyFormatter } from '@/utils/currencyFormatter';
+import { Deferred, Head, router, usePage } from '@inertiajs/react';
 import { useLaravelReactI18n } from 'laravel-react-i18n';
 import { Search, SlidersHorizontal } from 'lucide-react';
 import { FormEvent, useState } from 'react';
 
 type FilterOptions = Record<string, { type: string; range?: string[]; options: string[]; numberType?: string }>;
 type CurrentFilters = Record<string, string[]>;
+type PaginationLink = { url: string | null; label: string; active: boolean };
+type PaginationMeta = { current_page: number; last_page: number; per_page: number; total: number };
+type Paginator<T> = { data: T[]; links: PaginationLink[]; meta: PaginationMeta };
 
 interface SearchPageProps {
-  smartphones: SmartphoneFull[];
+  smartphones: Paginator<SmartphoneFull>;
   filters: FilterOptions;
   currentFilters: CurrentFilters;
   [key: string]: unknown;
 }
 
+// Тип для RangeSlider
+type RangeFilter = {
+  key: string;
+  group: string;
+  label: string;
+  type: 'range';
+  min: number;
+  max: number;
+  defaultMin: number;
+  defaultMax: number;
+  step: number;
+  numberType: 'integer' | 'float';
+  options: string[];
+};
+
+type ExactFilter = {
+  key: string;
+  group: string;
+  label: string;
+  type: 'exact';
+  options: string[];
+};
+
+type FilterConfig = RangeFilter | ExactFilter;
+
+type FiltersState = {
+  [key: string]: { min: number; max: number } | string[];
+};
+
+function RangeSlider({ f, v, onChange }: { f: RangeFilter; v: [number, number]; onChange: (v: [number, number]) => void }) {
+  const { currentLocale } = useLaravelReactI18n();
+  const isRu = currentLocale && currentLocale() === 'ru';
+  const formatValue = (val: number) => {
+    if (isRu && f.key === 'priceRange') {
+      return currencyFormatter.format(val);
+    }
+    return f.numberType === 'integer' ? Math.round(val) : val.toFixed(1);
+  };
+  return (
+    <div className="space-y-2">
+      <Slider value={v} min={f.min} max={f.max} step={f.step} onValueChange={onChange} />
+      <div className="flex justify-between text-sm text-purple-300">
+        <span>{formatValue(v[0])}</span>
+        <span>{formatValue(v[1])}</span>
+      </div>
+      <div className="flex justify-between text-xs text-purple-400">
+        <span>{formatValue(f.defaultMin)}</span>
+        <span>{formatValue(f.defaultMax)}</span>
+      </div>
+    </div>
+  );
+}
+
+function SearchListSkeleton() {
+  return (
+    <div className="grid grid-cols-1 place-items-center gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+      {Array.from({ length: 12 }).map((_, index) => (
+        <div
+          key={index}
+          className="relative flex w-full max-w-xs flex-col items-stretch gap-4 rounded-2xl border border-purple-300/20 bg-[#27243a]/80 p-6 shadow-xl backdrop-blur-lg"
+        >
+          <div className="absolute top-4 right-4">
+            <Skeleton className="h-8 w-8 rounded-full" />
+          </div>
+          <div className="flex items-center justify-center">
+            <Skeleton className="h-40 w-36 rounded-xl bg-zinc-200/60" />
+          </div>
+          <div className="mt-2">
+            <Skeleton className="mb-2 h-6 w-32" /> {/* title */}
+            <Skeleton className="mb-2 h-8 w-40" /> {/* price */}
+          </div>
+          <div className="mb-2 flex flex-wrap gap-2">
+            <Skeleton className="h-8 w-12 rounded-xl" />
+            <Skeleton className="h-8 w-16 rounded-xl" />
+            <Skeleton className="h-8 w-14 rounded-xl" />
+            <Skeleton className="h-8 w-36 rounded-xl" />
+          </div>
+          <div className="mt-auto">
+            <Skeleton className="h-12 w-full rounded-xl" />
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 export default function SmartphoneSearchPage() {
   const { t } = useLaravelReactI18n();
-  const { smartphones, filters, currentFilters } = usePage<SearchPageProps>().props;
+  const { filters, currentFilters } = usePage<SearchPageProps>().props;
   const [searchQuery, setSearchQuery] = useState<string>(currentFilters.search?.[0] || '');
-
-  // --- Типы фильтров ---
-  type RangeFilter = {
-    key: string;
-    group: string;
-    label: string;
-    type: 'range';
-    min: number;
-    max: number;
-    defaultMin: number;
-    defaultMax: number;
-    step: number;
-    numberType: 'integer' | 'float';
-    options: string[];
-  };
-
-  type ExactFilter = {
-    key: string;
-    group: string;
-    label: string;
-    type: 'exact';
-    options: string[];
-  };
-
-  type FilterConfig = RangeFilter | ExactFilter;
-
-  type FiltersState = {
-    [key: string]: { min: number; max: number } | string[];
-  };
 
   const filterLabelKey = (key: string) => {
     if (key === 'price') return t('filters.price');
@@ -87,21 +149,18 @@ export default function SmartphoneSearchPage() {
     }
   });
 
-  const initialSpecFilters: FiltersState = Object.entries(filters).reduce(
-    (acc, [key]) => {
-      const specFilter = specFiltersConfig.find((f) => f.key === key);
-      if (specFilter && specFilter.type === 'range') {
-        acc[key] = {
-          min: currentFilters[`${key}Min`] ? Number(currentFilters[`${key}Min`][0]) : specFilter.defaultMin,
-          max: currentFilters[`${key}Max`] ? Number(currentFilters[`${key}Max`][0]) : specFilter.defaultMax,
-        };
-      } else {
-        acc[key] = Array.isArray(currentFilters[key]) ? currentFilters[key] : [];
-      }
-      return acc;
-    },
-    {} as FiltersState,
-  );
+  const initialSpecFilters: FiltersState = Object.entries(filters).reduce((acc, [key]) => {
+    const specFilter = specFiltersConfig.find((f) => f.key === key);
+    if (specFilter && specFilter.type === 'range') {
+      acc[key] = {
+        min: currentFilters[`${key}Min`] ? Number(currentFilters[`${key}Min`][0]) : specFilter.defaultMin,
+        max: currentFilters[`${key}Max`] ? Number(currentFilters[`${key}Max`][0]) : specFilter.defaultMax,
+      };
+    } else {
+      acc[key] = Array.isArray(currentFilters[key]) ? currentFilters[key] : [];
+    }
+    return acc;
+  }, {} as FiltersState);
 
   const [specFiltersState, setSpecFiltersState] = useState<FiltersState>(initialSpecFilters);
 
@@ -132,10 +191,7 @@ export default function SmartphoneSearchPage() {
   ];
 
   // Исправленная типизация функции обновления фильтров
-  const handleSpecFilterChange = (
-    key: string,
-    value: { min: number; max: number } | string[]
-  ) => {
+  const handleSpecFilterChange = (key: string, value: { min: number; max: number } | string[]) => {
     setSpecFiltersState((prev) => ({
       ...prev,
       [key]: value,
@@ -165,18 +221,27 @@ export default function SmartphoneSearchPage() {
 
           if (filterConfig.type === 'range') {
             const rangeValue = value as { min: number; max: number };
-            if (rangeValue.min !== filterConfig.defaultMin) {
-              acc[`${key}Min`] = rangeValue.min;
-            }
-            if (rangeValue.max !== filterConfig.defaultMax) {
-              acc[`${key}Max`] = rangeValue.max;
+            if (key === 'priceRange') {
+              if (rangeValue.min !== filterConfig.defaultMin) {
+                acc['priceMin'] = rangeValue.min;
+              }
+              if (rangeValue.max !== filterConfig.defaultMax) {
+                acc['priceMax'] = rangeValue.max;
+              }
+            } else {
+              if (rangeValue.min !== filterConfig.defaultMin) {
+                acc[`${key}Min`] = rangeValue.min;
+              }
+              if (rangeValue.max !== filterConfig.defaultMax) {
+                acc[`${key}Max`] = rangeValue.max;
+              }
             }
           } else if (Array.isArray(value) && value.length > 0) {
             acc[key] = value;
           }
           return acc;
         },
-        {} as Record<string, unknown>
+        {} as Record<string, unknown>,
       ),
     };
 
@@ -188,17 +253,15 @@ export default function SmartphoneSearchPage() {
     const resetSpec: FiltersState = specFiltersConfig.reduce(
       (acc, filter) => ({
         ...acc,
-        [filter.key]: filter.type === 'range'
-          ? { min: filter.defaultMin, max: filter.defaultMax }
-          : [],
+        [filter.key]: filter.type === 'range' ? { min: filter.defaultMin, max: filter.defaultMax } : [],
       }),
-      {} as FiltersState
+      {} as FiltersState,
     );
     setSpecFiltersState(resetSpec);
     router.get('/search', { preserveState: true, preserveScroll: true }); // Navigate to base search URL to clear query params
   };
   const filtersContent = (
-    <div className="rounded-2xl border border-purple-300/20 bg-purple-500/10 p-6 shadow-xl backdrop-blur-lg">
+    <div className="min-w-[300px] rounded-2xl border border-purple-300/20 bg-purple-500/10 p-6 shadow-xl backdrop-blur-lg dark:shadow-xl dark:shadow-purple-700/20">
       <h3 className="mb-4 text-lg font-semibold text-white">{t('filters.title')}</h3>
       <Tabs value={activeFilterTab} onValueChange={setActiveFilterTab} className="w-full">
         <TabsList className="mb-4 flex flex-wrap gap-2 border-purple-300/30 bg-purple-700/20">
@@ -243,37 +306,14 @@ export default function SmartphoneSearchPage() {
                       className="border-purple-300/30 bg-purple-700/20 text-white placeholder:text-purple-300"
                     />
                   ) : filter.type === 'range' ? (
-                    <div className="space-y-2">
-                      <Slider
-                        // Ensure value is always an array of two numbers
-                        value={[
-                          (specFiltersState[filter.key] as { min: number; max: number })?.min ?? filter.min,
-                          (specFiltersState[filter.key] as { min: number; max: number })?.max ?? filter.max,
-                        ]}
-                        min={filter.min}
-                        max={filter.max}
-                        step={filter.step}
-                        onValueChange={(value) => handleSpecFilterChange(filter.key, { min: value[0], max: value[1] })}
-                      />
-                      {/* Display current selected range */}
-                      <div className="flex justify-between text-sm text-purple-300">
-                        <span>
-                          {filter.numberType === 'integer'
-                            ? Math.round((specFiltersState[filter.key] as { min: number; max: number })?.min ?? filter.defaultMin)
-                            : ((specFiltersState[filter.key] as { min: number; max: number })?.min ?? filter.defaultMin).toFixed(1)}
-                        </span>
-                        <span>
-                          {filter.numberType === 'integer'
-                            ? Math.round((specFiltersState[filter.key] as { min: number; max: number })?.max ?? filter.defaultMax)
-                            : ((specFiltersState[filter.key] as { min: number; max: number })?.max ?? filter.defaultMax).toFixed(1)}
-                        </span>
-                      </div>
-                      {/* Display min/max of the range */}
-                      <div className="flex justify-between text-xs text-purple-400">
-                        <span>{filter.numberType === 'integer' ? Math.round(filter.defaultMin) : filter.defaultMin.toFixed(1)}</span>
-                        <span>{filter.numberType === 'integer' ? Math.round(filter.defaultMax) : filter.defaultMax.toFixed(1)}</span>
-                      </div>
-                    </div>
+                    <RangeSlider
+                      f={filter}
+                      v={[
+                        (specFiltersState[filter.key] as { min: number; max: number })?.min ?? filter.min,
+                        (specFiltersState[filter.key] as { min: number; max: number })?.max ?? filter.max,
+                      ]}
+                      onChange={(value) => handleSpecFilterChange(filter.key, { min: value[0], max: value[1] })}
+                    />
                   ) : null}
                 </div>
               ))}
@@ -318,6 +358,9 @@ export default function SmartphoneSearchPage() {
 
   return (
     <Layout>
+      <Head>
+        <title>{t('pages.search')}</title>
+      </Head>
       <div className="flex min-h-screen flex-col gap-8 p-4 md:flex-row md:p-8">
         {/* Desktop Filters Sidebar - Renders filtersContent */}
         <div className="sticky top-20 hidden h-full w-72 md:block">{filtersContent}</div>
@@ -362,24 +405,9 @@ export default function SmartphoneSearchPage() {
             </div>
           </div>
 
-          {/* Product Grid Section */}
-          <div className="grid grid-cols-1 place-items-center gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {smartphones.map((smartphone) => (
-              <ProductCard key={smartphone.id} item={smartphone} />
-            ))}
-          </div>
-
-          {/* Empty State */}
-          {(!smartphones || smartphones.length === 0) && (
-            <div className="mt-8 rounded-2xl border border-purple-300/20 bg-purple-500/10 p-12 text-center shadow-xl backdrop-blur-lg">
-              <Search className="mx-auto mb-4 h-12 w-12 text-purple-300" />
-              <h3 className="mb-2 text-xl font-medium text-white">{t('empty.title')}</h3>
-              <p className="mb-6 text-purple-200">{t('empty.message')}</p>
-              <Button variant="outline" className="border-purple-400/30 text-purple-100 hover:bg-purple-700/20" onClick={resetFilters}>
-                {t('actions.reset')}
-              </Button>
-            </div>
-          )}
+          <Deferred data="smartphones" fallback={<SearchListSkeleton />}>
+            <SearchList resetFilters={resetFilters} />
+          </Deferred>
         </div>
       </div>
     </Layout>

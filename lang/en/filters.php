@@ -12,4 +12,6 @@ return [
     'weight' => 'Weight',
     'camera' => 'Camera',
     'battery_capacity' => 'Battery capacity',
+    'display' => 'Display',
+    'year' => 'Year of release',
 ];

@@ -31,4 +31,5 @@ return [
     'remembered' => 'Remembered your password?',
     'loading' => 'Loading...',
     'login' => 'Login',
+    'show' => 'Show'
 ];

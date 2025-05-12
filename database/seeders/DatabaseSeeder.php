@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use App\Models\HeroSlide;
 
 class DatabaseSeeder extends Seeder
 {
@@ -12,6 +13,7 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
+            HeroSlideSeeder::class,
             RoleSeeder::class,
             SmartphoneSeeder::class,
             PageContentSeeder::class,

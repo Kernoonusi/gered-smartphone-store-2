@@ -6,7 +6,7 @@ import { ReviewFull, SmartphoneFull } from '@/types';
 import { currencyFormatter } from '@/utils/currencyFormatter';
 import { Head, usePage } from '@inertiajs/react';
 import { Camera, Cpu, HardDrive, MemoryStick, MonitorSmartphone, Scale, Smartphone, Star, StarHalf } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useLaravelReactI18n } from 'laravel-react-i18n';
 
 interface PageProps {
@@ -38,6 +38,13 @@ export default function ProductIndex() {
   const [mainImage, setMainImage] = useState(product.images.length > 0 ? product.images[0] : null);
   const averageRating = reviews.reduce((acc, review) => acc + review.rating, 0) / reviews.length;
   const { t, currentLocale } = useLaravelReactI18n();
+
+  useEffect(() => {
+    product.images.forEach((img) => {
+      const pre = new Image();
+      pre.src = img.image_path;
+    });
+  }, [product.images]);
 
   return (
     <Layout>

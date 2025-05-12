@@ -26,9 +26,6 @@ class SmartphoneController extends Controller
         // Get all specification keys from database
         $specKeys = SmartphoneSpecification::distinct('spec_key')->pluck('spec_key');
 
-        // Get search results
-        $smartphones = $this->getSearchResults($request, $specKeys->toArray());
-
         // Dynamic filters preparation
         $dynamicFilters = [];
         $currentFilters = [
@@ -107,20 +104,11 @@ class SmartphoneController extends Controller
                 ];
             }
         }
-
-        $smartphones->transform(function ($smartphone) {
-            $smartphone->images->transform(function ($image) {
-                $image->image_path = Storage::url($image->image_path);
-
-                return $image;
-            });
-
-            return $smartphone;
-        });
-
         // Return Inertia view with data
         return Inertia::render('product/search', [
-            'smartphones' => $smartphones,
+            'smartphones' => Inertia::defer(function () use ($request, $specKeys) {
+                return $this->getSearchResults($request, $specKeys->toArray());
+            })->deepMerge(),
             'filters' => array_merge([
                 'priceRange' => [
                     'type' => 'range',
@@ -265,8 +253,12 @@ class SmartphoneController extends Controller
             }
         }
 
-        // Выполнение запроса и обработка результата
-        $smartphones = $query->get()->map(function ($smartphone) {
+        // Выполнение запроса с пагинацией и обработка результата
+        $perPage = $request->input('perPage', 12);
+        $page = $request->input('page', 1);
+        $paginator = $query->paginate($perPage, ['*'], 'page', $page)->withQueryString();
+
+        $paginator->getCollection()->transform(function ($smartphone) {
             $smartphone->specifications_array = $smartphone->specifications
                 ? $smartphone->specifications->pluck('spec_value', 'spec_key')->toArray()
                 : [];
@@ -274,10 +266,16 @@ class SmartphoneController extends Controller
                 ? asset('storage/'.$smartphone->images[0]->image_path)
                 : asset('phone.png');
 
+            $smartphone->images->transform(function ($image) {
+                $image->image_path = Storage::url($image->image_path);
+
+                return $image;
+            });
+
             return $smartphone;
         });
 
-        return $smartphones;
+        return $paginator;
     }
 
     /**

@@ -7,4 +7,5 @@ return [
     'contacts' => 'Contacts',
     'all_phones' => 'All smartphones',
     'cart' => 'Cart',
+    'search' => 'Search'
 ];

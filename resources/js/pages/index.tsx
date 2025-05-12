@@ -10,8 +10,24 @@ import { useEffect, useState } from 'react';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import { currencyFormatter } from '@/utils/currencyFormatter';
 
+interface PageProps {
+  smartphones: SmartphoneFull[];
+  heroSlides: {
+    id: number;
+    title: string;
+    subtitle: string;
+    buttonText: string;
+    image: string;
+    backgroundColor: string;
+    productId: number;
+    created_at: string;
+    updated_at: string;
+  }[];
+  [key: string]: unknown;
+}
+
 export default function Welcome() {
-  const { smartphones } = usePage<{ smartphones: SmartphoneFull[] }>().props;
+  const { smartphones, heroSlides } = usePage<PageProps>().props;
   const [isVisible, setIsVisible] = useState(false);
 
   // Featured products
@@ -26,33 +42,7 @@ export default function Welcome() {
   // Limited time offers
   const limitedTimeOffers = smartphones.slice(0, 5);
 
-  // Hero banner slides
-  const heroSlides = [
-    {
-      title: 'Новый XPhone Pro',
-      subtitle: 'Революционная камера, невероятная производительность',
-      buttonText: 'Смотреть',
-      image: 'iphone16.png',
-      backgroundColor: 'bg-gradient-to-r from-cyan-500 to-blue-500',
-      productId: 23,
-    },
-    {
-      title: 'Samsung Galaxy S Ultra',
-      subtitle: 'Безграничные возможности в ваших руках',
-      buttonText: 'Подробнее',
-      image: 'samsung.png',
-      backgroundColor: 'bg-gradient-to-r from-purple-500 to-pink-500',
-      productId: 24,
-    },
-    {
-      title: 'Специальное предложение',
-      subtitle: 'Скидки до 30% на аксессуары при покупке смартфона',
-      buttonText: 'Получить скидку',
-      image: 'accessories.png',
-      backgroundColor: 'bg-gradient-to-r from-amber-500 to-orange-500',
-      productId: 25,
-    },
-  ];
+  // Hero banner slides are now passed from props
 
   // Fade-in effect on load
   useEffect(() => {
@@ -265,11 +255,12 @@ export default function Welcome() {
         <section className="mx-auto mt-16 w-10/12 py-6">
           <h2 className="mb-8 text-center text-3xl font-bold">Наши бренды</h2>
           <div className="flex flex-wrap items-center justify-center gap-12">
-            {['apple.svg', 'samsung.svg', 'xiaomi.svg', 'google.svg', 'huawei.svg'].map((brand, index) => (
+            {['apple.webp', 'samsung.webp', 'xiaomi.webp', 'huawei.webp'].map((brand, index) => (
               <img
                 key={index}
                 src={`/brands/${brand}`}
                 alt="Brand logo"
+                loading='lazy'
                 className="h-12 w-auto opacity-60 grayscale transition-all hover:opacity-100 hover:grayscale-0"
               />
             ))}

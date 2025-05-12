@@ -39,7 +39,28 @@ class SmartphoneSpecificationFactory extends Factory
             ],
             [
                 'spec_key' => 'processor',
-                'spec_value' => $faker->word().' processor',
+                'spec_value' => $faker->randomElement([
+                    'Apple A14',
+                    'Apple A15',
+                    'Apple A16',
+                    'Samsung Exynos 2100',
+                    'Samsung Exynos 2200',
+                    'Qualcomm Snapdragon 888',
+                    'Qualcomm Snapdragon 8 Gen 1',
+                    'Qualcomm Snapdragon 870',
+                    'MediaTek Helio P65',
+                    'MediaTek Dimensity 1200',
+                    'MediaTek Dimensity 9000',
+                    'Kirin 9000',
+                    'Kirin 990',
+                    'Unisoc Tiger T618',
+                    'Google Tensor',
+                    'Apple M1',
+                    'Apple M2',
+                    'Qualcomm Snapdragon 7 Gen 1',
+                    'Samsung Exynos 1080',
+                    'MediaTek Helio G95',
+                ]),
             ],
             [
                 'spec_key' => 'os',
@@ -51,11 +72,20 @@ class SmartphoneSpecificationFactory extends Factory
             ],
             [
                 'spec_key' => 'weight',
-                'spec_value' => $faker->randomFloat(2, 100, 200),
+                'spec_value' => $faker->numberBetween(100, 200),
+            ],
+            [
+                'spec_key' => 'display',
+                'spec_value' => $faker->randomElement(['AMOLED', 'OLED', 'IPS', 'LCD']),
+            ],
+            [
+                'spec_key' => 'year',
+                'spec_value' => $faker->numberBetween(2022, 2025),
             ],
         ];
         $spec = $faker->randomElement($specs);
-        $spec['spec_value_numeric'] = is_numeric($spec['spec_value']) ? (float)$spec['spec_value'] : null;
+        $spec['spec_value_numeric'] = is_numeric($spec['spec_value']) ? (float) $spec['spec_value'] : null;
+
         return $spec;
     }
 
@@ -82,7 +112,28 @@ class SmartphoneSpecificationFactory extends Factory
             ],
             [
                 'spec_key' => 'processor',
-                'spec_value' => $faker->word.' processor',
+                'spec_value' => $faker->randomElement([
+                    'Apple A14',
+                    'Apple A15',
+                    'Apple A16',
+                    'Samsung Exynos 2100',
+                    'Samsung Exynos 2200',
+                    'Qualcomm Snapdragon 888',
+                    'Qualcomm Snapdragon 8 Gen 1',
+                    'Qualcomm Snapdragon 870',
+                    'MediaTek Helio P65',
+                    'MediaTek Dimensity 1200',
+                    'MediaTek Dimensity 9000',
+                    'Kirin 9000',
+                    'Kirin 990',
+                    'Unisoc Tiger T618',
+                    'Google Tensor',
+                    'Apple M1',
+                    'Apple M2',
+                    'Qualcomm Snapdragon 7 Gen 1',
+                    'Samsung Exynos 1080',
+                    'MediaTek Helio G95',
+                ]),
             ],
             [
                 'spec_key' => 'os',
@@ -94,14 +145,23 @@ class SmartphoneSpecificationFactory extends Factory
             ],
             [
                 'spec_key' => 'weight',
-                'spec_value' => $faker->randomFloat(2, 100, 200),
+                'spec_value' => $faker->numberBetween(100, 200),
+            ],
+            [
+                'spec_key' => 'display',
+                'spec_value' => $faker->randomElement(['AMOLED', 'OLED', 'IPS', 'LCD']),
+            ],
+            [
+                'spec_key' => 'year',
+                'spec_value' => $faker->numberBetween(2022, 2025),
             ],
         ];
         // Добавить spec_value_numeric для каждой характеристики
         foreach ($specs as &$spec) {
-            $spec['spec_value_numeric'] = is_numeric($spec['spec_value']) ? (float)$spec['spec_value'] : null;
+            $spec['spec_value_numeric'] = is_numeric($spec['spec_value']) ? (float) $spec['spec_value'] : null;
         }
         unset($spec); // на всякий случай
+
         return $specs;
     }
 }

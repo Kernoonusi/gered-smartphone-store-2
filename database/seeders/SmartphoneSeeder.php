@@ -30,7 +30,7 @@ class SmartphoneSeeder extends Seeder
         
         // create smartphones
         Smartphone::factory()
-            ->count(10)
+            ->count(100)
             ->create();
 
         // seed images from local photos folder
@@ -49,9 +49,6 @@ class SmartphoneSeeder extends Seeder
         foreach ($smartphones as $index => $smartphone) {
             // filter smartphone-specific files
             $smartFiles = array_filter($files, fn($file) => Str::startsWith($file->getFilename(), $index.'_'));
-            if (empty($smartFiles)) {
-                continue; // no source files for this smartphone
-            }
             // group by angle
             $byAngle = [];
             foreach ($smartFiles as $file) {

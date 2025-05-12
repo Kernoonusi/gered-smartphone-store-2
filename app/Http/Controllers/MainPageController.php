@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\HeroSlide;
 use App\Models\Smartphone;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
@@ -22,7 +23,10 @@ class MainPageController extends Controller
             return $smartphone;
         });
 
+        $heroSlides = HeroSlide::all();
+
         return Inertia::render('index', [
+            'heroSlides' => $heroSlides,
             'smartphones' => $smartphones,
         ]);
     }

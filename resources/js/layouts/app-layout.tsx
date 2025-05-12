@@ -1,30 +1,33 @@
-import { Toaster } from 'sonner';
-import AppHeaderLayout from './app/app-header-layout';
-import { usePage } from '@inertiajs/react';
-import { useEffect } from 'react';
 import { currencyFormatter } from '@/utils/currencyFormatter';
+import { usePage } from '@inertiajs/react';
+import { Suspense, lazy, useEffect } from 'react';
+import AppHeaderLayout from './app/app-header-layout';
+
+const Toaster = lazy(() => import('sonner').then((mod) => ({ default: mod.Toaster })));
 
 interface AppLayoutProps {
   children: React.ReactNode;
 }
 interface PageProps {
-    usdToRub: number;
-    [key: string]: unknown;
-  }
+  usdToRub: number;
+  [key: string]: unknown;
+}
 
 export default function Layout({ children, ...props }: AppLayoutProps) {
   const { usdToRub } = usePage<PageProps>().props;
 
-  // При каждом обновлении курса, обновляем глобальный currencyFormatter
   useEffect(() => {
-    if (usdToRub) {
-      currencyFormatter.setRate(usdToRub);
-    }
+    if (usdToRub) currencyFormatter.setRate(usdToRub);
   }, [usdToRub]);
+
   return (
     <AppHeaderLayout {...props}>
+      {/* Показываем детей только после того, как headerReady=true */}
       {children}
-      <Toaster />
+
+      <Suspense fallback={null}>
+        <Toaster />
+      </Suspense>
     </AppHeaderLayout>
   );
 }

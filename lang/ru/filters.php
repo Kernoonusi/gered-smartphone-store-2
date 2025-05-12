@@ -12,4 +12,6 @@ return [
     'camera' => 'Камера',
     'battery_capacity' => 'Ёмкость батареи',
     'priceRange' => 'Цена',
+    'display' => 'Тип экрана',
+    'year' => 'Год выпуска',
 ];

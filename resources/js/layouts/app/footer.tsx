@@ -1,6 +1,6 @@
 import { useLaravelReactI18n } from 'laravel-react-i18n';
 
-export function Footer() {
+export default function Footer() {
   const { t, currentLocale, setLocale } = useLaravelReactI18n();
   return (
     <footer className="mt-10 w-full border-t border-white/5 bg-black/30 backdrop-blur-md">

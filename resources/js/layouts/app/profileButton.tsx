@@ -6,7 +6,7 @@ import { User } from 'lucide-react';
 import { AuthForm } from '../auth/auth-form';
 import { useLaravelReactI18n } from 'laravel-react-i18n';
 
-export function ProfileButton({ rounded, className }: { rounded?: boolean, className?: string }) {
+export default function ProfileButton({ rounded, className }: { rounded?: boolean, className?: string }) {
   const { auth } = usePage<SharedData>().props;
   const { t } = useLaravelReactI18n();
   

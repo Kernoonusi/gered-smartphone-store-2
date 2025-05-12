@@ -49,7 +49,7 @@ export function ProductCard({ item }: { item: SmartphoneFull }) {
       .sort((a, b) => MAIN_SPECS.indexOf(a.spec_key) - MAIN_SPECS.indexOf(b.spec_key)) || [];
 
   const mainImage = fullData?.images && fullData.images.length > 0 ? fullData.images[0].image_path : 'phone.png';
-  console.log(mainImage);
+  // console.log(mainImage);
 
   const onAddToCart = () => {
     setIsAddingToCart(true);
