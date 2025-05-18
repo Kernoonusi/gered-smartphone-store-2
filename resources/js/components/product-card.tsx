@@ -166,15 +166,19 @@ export function ProductCard({ item }: { item: SmartphoneFull }) {
         {/* Изображение */}
         <a
           href={route('product.show', { id: item.id })}
-          className="group/image mb-5 flex h-40 items-center justify-center overflow-hidden rounded-lg p-2 sm:h-52"
+          className="group/image mb-5 flex h-40 items-center justify-center overflow-hidden rounded-xl border border-gray-200 bg-gradient-to-b from-gray-100 via-gray-50 to-gray-200 p-2 shadow-md transition-all duration-300 hover:border-indigo-300 hover:shadow-lg sm:h-52"
         >
-          <div className="absolute inset-0 bg-gradient-to-b from-black/10 to-black/30 opacity-0 transition-opacity group-hover/image:opacity-100"></div>
+          <div className="absolute inset-0 rounded-xl bg-gradient-to-b from-black/10 to-black/30 opacity-0 transition-opacity group-hover/image:opacity-100"></div>
           <img
             src={mainImage}
             srcSet={mainImage}
-            onError={(e) => { e.currentTarget.src = mainImage; e.currentTarget.srcset = mainImage; }}
+            onError={(e) => {
+              e.currentTarget.src = mainImage;
+              e.currentTarget.srcset = mainImage;
+            }}
             alt={`${item.brand} ${item.model}`}
-            className="h-full w-auto object-contain transition-transform duration-500 group-hover/image:scale-105"
+            loading="lazy"
+            className="h-full w-auto rounded-lg border border-white/60 bg-white/70 object-contain transition-transform duration-500 group-hover/image:scale-105"
           />
         </a>
 

@@ -1,4 +1,5 @@
 <?php
+
 return [
     'title' => 'Products',
     'empty' => 'No products to display',
@@ -21,4 +22,6 @@ return [
     'weight' => 'Weight',
     'camera' => 'Camera',
     'battery_capacity' => 'Battery capacity',
+    'year' => 'Year',
+    'display' => 'Display type',
 ];

@@ -54,7 +54,7 @@ export default function Welcome() {
       <Head title="Welcome"></Head>
       <main className={`mx-auto w-full transition-opacity duration-1000 ${isVisible ? 'opacity-100' : 'opacity-0'}`}>
         {/* Hero Section with Carousel */}
-        <section className="relative h-[80vh] overflow-hidden">
+        <section className="relative h-full overflow-hidden">
           <Carousel className="h-full" opts={{ loop: true }}>
             <CarouselContent className="h-full">
               {heroSlides.map((slide, index) => (
@@ -63,7 +63,6 @@ export default function Welcome() {
                     <div className="mx-auto flex w-10/12 flex-col-reverse items-center justify-between gap-8 md:flex-row">
                       <div className="flex flex-col gap-6 text-center md:w-1/2 md:text-left">
                         <div>
-                          <p className="text-lg font-semibold text-white/90 uppercase">Эксклюзивно</p>
                           <h1 className="mt-2 text-5xl font-bold text-white md:text-6xl">{slide.title}</h1>
                           <p className="mt-4 text-xl text-white/90">{slide.subtitle}</p>
                         </div>
@@ -75,7 +74,10 @@ export default function Welcome() {
                         <img
                           src={slide.image}
                           srcSet={slide.image}
-                          onError={(e) => { e.currentTarget.src = slide.image; e.currentTarget.srcset = slide.image; }}
+                          onError={(e) => {
+                            e.currentTarget.src = slide.image;
+                            e.currentTarget.srcset = slide.image;
+                          }}
                           alt={slide.title}
                           className="mx-auto h-[40vh] object-contain drop-shadow-2xl md:h-[50vh]"
                         />
@@ -91,7 +93,8 @@ export default function Welcome() {
         </section>
 
         {/* Featured Products */}
-        <section className="mx-auto mt-16 w-10/12 py-6">
+        <section className="mx-auto mt-16 flex w-10/12 flex-col gap-5 py-6">
+          <h2 className="text-center text-3xl">Интересные предложения</h2>
           <div className="grid gap-6 md:grid-cols-3">
             {featuredProducts.map((item, index) => (
               <div
@@ -109,7 +112,10 @@ export default function Welcome() {
                 <img
                   src={item.images[0]?.image_path || 'placeholder.png'}
                   srcSet={item.images[0]?.image_path || 'placeholder.png'}
-                  onError={(e) => { e.currentTarget.src = 'placeholder.png'; e.currentTarget.srcset = 'placeholder.png'; }}
+                  onError={(e) => {
+                    e.currentTarget.src = 'placeholder.png';
+                    e.currentTarget.srcset = 'placeholder.png';
+                  }}
                   alt={item.brand + ' ' + item.model}
                   className="absolute right-0 bottom-0 h-36 w-36 object-contain p-2"
                 />
@@ -117,31 +123,6 @@ export default function Welcome() {
             ))}
           </div>
         </section>
-
-        {/* Categories Section */}
-        {/* <section className="mx-auto mt-16 w-10/12 py-6">
-          <h2 className="mb-8 text-4xl font-bold">Категории</h2>
-          <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
-            {['Смартфоны', 'Планшеты', 'Аксессуары', 'Умные часы'].map((category, index) => (
-              <Link href={`/category/${index + 1}`} key={index} className="group relative overflow-hidden rounded-xl">
-                <div
-                  className={`absolute inset-0 bg-gradient-to-br ${
-                    index % 4 === 0
-                      ? 'from-blue-500 to-cyan-500'
-                      : index % 4 === 1
-                        ? 'from-purple-500 to-pink-500'
-                        : index % 4 === 2
-                          ? 'from-amber-500 to-orange-500'
-                          : 'from-emerald-500 to-teal-500'
-                  } opacity-80 transition-opacity group-hover:opacity-90`}
-                />
-                <div className="absolute inset-0 flex items-center justify-center p-6">
-                  <h3 className="text-center text-2xl font-bold text-white">{category}</h3>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </section> */}
 
         {/* Trending Products */}
         <section className="mx-auto mt-16 w-10/12 py-6">
@@ -240,7 +221,7 @@ export default function Welcome() {
           <Carousel className="w-full" opts={{ align: 'start' }}>
             <CarouselContent className="-ml-2 md:-ml-4">
               {limitedTimeOffers.map((item) => (
-                <CarouselItem key={item.id} className="relative basis-full pl-2 md:pl-4 sm:basis-2/3 md:basis-1/2 lg:basis-1/3 xl:basis-1/4">
+                <CarouselItem key={item.id} className="relative basis-full pl-2 sm:basis-2/3 md:basis-1/2 md:pl-4 lg:basis-1/3 xl:basis-1/4">
                   <div className="absolute top-2 left-6 z-10 rounded-full bg-red-500 px-2 py-1 text-xs font-bold text-white">-15%</div>
                   <ProductCard item={item} />
                 </CarouselItem>
@@ -260,7 +241,7 @@ export default function Welcome() {
                 key={index}
                 src={`/brands/${brand}`}
                 alt="Brand logo"
-                loading='lazy'
+                loading="lazy"
                 className="h-12 w-auto opacity-60 grayscale transition-all hover:opacity-100 hover:grayscale-0"
               />
             ))}

@@ -209,17 +209,19 @@ export default function AppHeaderLayout({ children }: AppHeaderLayoutProps) {
             </form>
 
             {/* Right side: Cart, Profile, Mobile Menu */}
-            <div className="flex flex-shrink-0 items-center gap-1 sm:gap-2">
+            <div className="flex flex-shrink-0 items-center gap-1 sm:gap-2 sm:ml-2">
               <Button variant="ghost" className="p-2 text-white md:hidden" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
                 <Menu className="h-6 w-6" />
               </Button>
-              <Link ref={cartButtonRef} href="/cart" className="relative rounded-full p-2 text-white hover:bg-white/20">
-                <ShoppingCart className="h-6 w-6" />
-                {cart && cart.items.length > 0 ? (
-                  <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-fuchsia-500 text-xs text-white">
-                    {cart.items.reduce((acc, item) => acc + item.count, 0)}
-                  </span>
-                ) : null}
+              <Link ref={cartButtonRef} href="/cart">
+                <Button variant="ghost" className="h-10 w-10 rounded-full p-2 text-white hover:bg-white/20">
+                  <ShoppingCart className="h-6 w-6" />
+                  {cart && cart.items.length > 0 ? (
+                    <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-fuchsia-500 text-xs text-white">
+                      {cart.items.reduce((acc, item) => acc + item.count, 0)}
+                    </span>
+                  ) : null}
+                </Button>
               </Link>
               <Suspense fallback={<Skeleton className="h-10 w-10 rounded-full bg-white/10" />}>
                 <div ref={profileButtonContainerRef} className="profile-button-container-element">

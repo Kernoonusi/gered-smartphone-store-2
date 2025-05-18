@@ -5,9 +5,9 @@ import Layout from '@/layouts/app-layout';
 import { ReviewFull, SmartphoneFull } from '@/types';
 import { currencyFormatter } from '@/utils/currencyFormatter';
 import { Head, usePage } from '@inertiajs/react';
-import { Camera, Cpu, HardDrive, MemoryStick, MonitorSmartphone, Scale, Smartphone, Star, StarHalf } from 'lucide-react';
-import { useState, useEffect } from 'react';
 import { useLaravelReactI18n } from 'laravel-react-i18n';
+import { Camera, Cpu, HardDrive, MemoryStick, MonitorSmartphone, Scale, Smartphone, Star, StarHalf } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
 interface PageProps {
   product: SmartphoneFull;
@@ -51,42 +51,50 @@ export default function ProductIndex() {
       <Head title={`${product.brand} ${product.model}`} />
 
       <main className="mx-auto mt-6 flex w-full flex-col gap-12 p-4 md:w-10/12">
-        <header className="grid grid-cols-[auto_1fr] gap-4 md:grid-cols-[auto_auto_1fr_auto] md:grid-rows-[auto_auto] md:gap-1">
-          <div className="row-span-2 flex flex-col gap-2">
+        <header className="grid grid-cols-1 gap-4 sm:grid-cols-[auto_1fr] lg:grid-cols-[auto_auto_1fr_auto] lg:grid-rows-[auto_auto] lg:gap-6">
+          {/* Thumbnail images */}
+          <div className="flex flex-row gap-2 overflow-x-auto sm:flex-col sm:overflow-x-visible lg:row-span-2">
             {product.images.map((image, index) => (
               <img
                 key={index}
                 src={image.image_path}
                 srcSet={image.image_path}
-                onError={(e) => { e.currentTarget.src = '/phone.png'; e.currentTarget.srcset = '/phone.png'; }}
-                className="h-14 w-14 cursor-pointer rounded-lg border border-gray-200 object-cover transition-all hover:border-cyan-500 dark:border-gray-700"
+                onError={(e) => {
+                  e.currentTarget.src = '/phone.png';
+                  e.currentTarget.srcset = '/phone.png';
+                }}
+                className="h-16 w-16 shrink-0 cursor-pointer rounded-lg border border-gray-200 object-cover transition-all hover:border-cyan-500 sm:h-14 sm:w-14 dark:border-gray-700"
                 alt={`${product.brand} ${product.model} view ${index + 1}`}
                 onMouseEnter={() => setMainImage(image)}
               />
             ))}
           </div>
 
+          {/* Main product image */}
           <img
             src={mainImage?.image_path}
             srcSet={mainImage?.image_path}
-            onError={(e) => { e.currentTarget.src = '/phone.png'; e.currentTarget.srcset = '/phone.png'; }}
+            onError={(e) => {
+              e.currentTarget.src = '/phone.png';
+              e.currentTarget.srcset = '/phone.png';
+            }}
             alt={`${product.brand} ${product.model}`}
-            className="row-span-2 max-w-sm rounded-lg shadow-lg"
+            className="mx-auto w-full max-w-md rounded-lg shadow-lg sm:row-span-2 lg:max-w-sm"
           />
 
-          <p className="col-span-2 text-4xl font-semibold text-slate-800 dark:text-slate-100">
+          {/* Product title */}
+          <p className="text-2xl font-semibold text-slate-800 sm:col-span-2 sm:text-3xl lg:col-span-1 lg:text-4xl dark:text-slate-100">
             {t('products.smartphone')} {product.brand} {product.model} {product.specifications.find((spec) => spec.spec_key === 'ram')?.spec_value} +{' '}
             {product.specifications.find((spec) => spec.spec_key === 'storage')?.spec_value}
           </p>
 
-          <div />
+          <div className="hidden lg:block" />
 
-          <div className="bg-opacity-20 dark:bg-opacity-20 border-opacity-30 dark:border-opacity-30 col-span-2 flex flex-col justify-between rounded-3xl border border-white bg-white p-6 shadow-xl backdrop-blur-md md:col-span-1 md:w-80 lg:w-96 dark:border-gray-700 dark:bg-gray-800">
-            <p className="text-4xl font-semibold text-slate-800 dark:text-slate-100">
+          {/* Price and cart section */}
+          <div className="bg-opacity-20 dark:bg-opacity-20 border-opacity-30 dark:border-opacity-30 flex h-full flex-col md:place-self-end justify-between rounded-3xl border border-white bg-white p-4 shadow-xl backdrop-blur-md sm:col-span-2 sm:p-6 lg:col-span-1 lg:w-96 dark:border-gray-700 dark:bg-gray-800">
+            <p className="text-2xl font-semibold text-slate-800 sm:text-3xl lg:text-4xl dark:text-slate-100">
               {t('products.price :price', {
-                price: currentLocale() === 'ru'
-                  ? currencyFormatter.format(product.price)
-                  : product.price
+                price: currentLocale() === 'ru' ? currencyFormatter.format(product.price) : product.price,
               })}
             </p>
             <CartButton />
@@ -127,13 +135,49 @@ export default function ProductIndex() {
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
               <div className="rounded-lg bg-white/30 p-4 backdrop-blur-sm transition-all hover:translate-y-[-2px] hover:shadow-md dark:bg-slate-700/30">
                 <div className="mb-2 flex items-center gap-3">
+                  <div className="rounded-full bg-yellow-100 p-2 dark:bg-yellow-900/50">
+                    <Star className="h-5 w-5 text-yellow-600 dark:text-yellow-400" />
+                  </div>
+                  <h3 className="font-semibold text-slate-800 dark:text-slate-200">{t('products.year')}</h3>
+                </div>
+                <p className="pl-11 text-slate-700 dark:text-slate-300">
+                  {product.specifications.find((spec) => spec.spec_key === 'year')?.spec_value} г.
+                </p>
+              </div>
+
+              <div className="rounded-lg bg-white/30 p-4 backdrop-blur-sm transition-all hover:translate-y-[-2px] hover:shadow-md dark:bg-slate-700/30">
+                <div className="mb-2 flex items-center gap-3">
+                  <div className="rounded-full bg-pink-100 p-2 dark:bg-pink-900/50">
+                    <MonitorSmartphone className="h-5 w-5 text-pink-600 dark:text-pink-400" />
+                  </div>
+                  <h3 className="font-semibold text-slate-800 dark:text-slate-200">{t('products.display')}</h3>
+                </div>
+                <p className="pl-11 text-slate-700 dark:text-slate-300">
+                  {product.specifications.find((spec) => spec.spec_key === 'display')?.spec_value}
+                </p>
+              </div>
+
+              <div className="rounded-lg bg-white/30 p-4 backdrop-blur-sm transition-all hover:translate-y-[-2px] hover:shadow-md dark:bg-slate-700/30">
+                <div className="mb-2 flex items-center gap-3">
+                  <div className="rounded-full bg-lime-100 p-2 dark:bg-lime-900/50">
+                    <HardDrive className="h-5 w-5 text-lime-600 dark:text-lime-400" />
+                  </div>
+                  <h3 className="font-semibold text-slate-800 dark:text-slate-200">{t('products.battery_capacity')}</h3>
+                </div>
+                <p className="pl-11 text-slate-700 dark:text-slate-300">
+                  {product.specifications.find((spec) => spec.spec_key === 'battery_capacity')?.spec_value} mAh
+                </p>
+              </div>
+
+              <div className="rounded-lg bg-white/30 p-4 backdrop-blur-sm transition-all hover:translate-y-[-2px] hover:shadow-md dark:bg-slate-700/30">
+                <div className="mb-2 flex items-center gap-3">
                   <div className="rounded-full bg-cyan-100 p-2 dark:bg-cyan-900/50">
                     <Cpu className="h-5 w-5 text-cyan-600 dark:text-cyan-400" />
                   </div>
                   <h3 className="font-semibold text-slate-800 dark:text-slate-200">{t('products.processor')}</h3>
                 </div>
                 <p className="pl-11 text-slate-700 dark:text-slate-300">
-                  {product.specifications.find((spec) => spec.spec_key === 'processor')?.spec_value}
+                  {product.specifications.find((spec) => spec.spec_key === 'processor')?.spec_value} GHz
                 </p>
               </div>
 
@@ -145,7 +189,7 @@ export default function ProductIndex() {
                   <h3 className="font-semibold text-slate-800 dark:text-slate-200">{t('products.ram')}</h3>
                 </div>
                 <p className="pl-11 text-slate-700 dark:text-slate-300">
-                  {product.specifications.find((spec) => spec.spec_key === 'ram')?.spec_value}
+                  {product.specifications.find((spec) => spec.spec_key === 'ram')?.spec_value} GB
                 </p>
               </div>
 
@@ -157,7 +201,7 @@ export default function ProductIndex() {
                   <h3 className="font-semibold text-slate-800 dark:text-slate-200">{t('products.storage')}</h3>
                 </div>
                 <p className="pl-11 text-slate-700 dark:text-slate-300">
-                  {product.specifications.find((spec) => spec.spec_key === 'storage')?.spec_value}
+                  {product.specifications.find((spec) => spec.spec_key === 'storage')?.spec_value} GB
                 </p>
               </div>
 
@@ -169,7 +213,7 @@ export default function ProductIndex() {
                   <h3 className="font-semibold text-slate-800 dark:text-slate-200">{t('products.weight')}</h3>
                 </div>
                 <p className="pl-11 text-slate-700 dark:text-slate-300">
-                  {product.specifications.find((spec) => spec.spec_key === 'weight')?.spec_value}
+                  {product.specifications.find((spec) => spec.spec_key === 'weight')?.spec_value} гр
                 </p>
               </div>
 
@@ -181,7 +225,7 @@ export default function ProductIndex() {
                   <h3 className="font-semibold text-slate-800 dark:text-slate-200">{t('products.screen_size')}</h3>
                 </div>
                 <p className="pl-11 text-slate-700 dark:text-slate-300">
-                  {product.specifications.find((spec) => spec.spec_key === 'screen_size')?.spec_value}
+                  {product.specifications.find((spec) => spec.spec_key === 'screen_size')?.spec_value} дюймов
                 </p>
               </div>
 
