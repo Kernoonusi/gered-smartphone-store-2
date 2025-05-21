@@ -1,9 +1,10 @@
 <?php
 
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\FavoriteController;
+use App\Http\Controllers\MainPageController;
 use App\Http\Controllers\OrderReviewController;
 use App\Http\Controllers\ProductController;
-use App\Http\Controllers\MainPageController;
 use App\Http\Controllers\Settings\ProfileController;
 use App\Http\Controllers\SmartphoneController;
 use Illuminate\Support\Facades\Route;
@@ -34,6 +35,10 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/cart/checkout', [CartController::class, 'checkout'])->name('cart.checkout');
     // Оставить отзыв на заказ
     Route::post('/orders/{order}/review', [OrderReviewController::class, 'store']);
+
+    // Favorites routes
+    Route::post('/favorites', [FavoriteController::class, 'store'])->name('favorites.add');
+    Route::delete('/favorites/{id}', [FavoriteController::class, 'destroy'])->name('favorites.remove');
 });
 
 require __DIR__.'/auth.php';

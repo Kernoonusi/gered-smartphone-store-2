@@ -104,6 +104,7 @@ class SmartphoneController extends Controller
                 ];
             }
         }
+
         // Return Inertia view with data
         return Inertia::render('product/search', [
             'smartphones' => Inertia::defer(function () use ($request, $specKeys) {
@@ -264,7 +265,7 @@ class SmartphoneController extends Controller
                 : [];
             $smartphone->image_url = $smartphone->images->isNotEmpty()
                 ? asset('storage/'.$smartphone->images[0]->image_path)
-                : asset('phone.png');
+                : asset('phone.webp');
 
             $smartphone->images->transform(function ($image) {
                 $image->image_path = Storage::url($image->image_path);
@@ -352,7 +353,7 @@ class SmartphoneController extends Controller
             ->map(function ($relatedPhone) {
                 $imageUrl = $relatedPhone->images->isNotEmpty()
                     ? asset('storage/'.$relatedPhone->images[0]->image_path)
-                    : asset('phone.png');
+                    : asset('phone.webp');
 
                 return [
                     'id' => $relatedPhone->id,

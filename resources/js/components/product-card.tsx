@@ -4,7 +4,7 @@ import { currencyFormatter } from '@/utils/currencyFormatter';
 import { router, usePage } from '@inertiajs/react';
 import { useLaravelReactI18n } from 'laravel-react-i18n';
 import { Cpu, HardDrive, Heart, Maximize2, MemoryStick, Minus, Plus, Scale, ShoppingCart, Smartphone } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { startTransition, useEffect, useOptimistic, useState } from 'react';
 import { toast } from 'sonner';
 import { Button } from './ui/button';
 
@@ -30,9 +30,8 @@ const SPEC_COLORS = {
 export function ProductCard({ item }: { item: SmartphoneFull }) {
   const { cart } = usePage<{ cart: Order | null }>().props;
   const [isAddingToCart, setIsAddingToCart] = useState(false);
-  const [isInCart, setIsInCart] = useState(false);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [isInFavorites, setIsInFavorites] = useState(false);
+  const [optimisticIsInCart, setOptimisticIsInCart] = useOptimistic(false);
+  const [optimisticIsInFavorites, setOptimisticIsInFavorites] = useOptimistic(item.is_in_favorites || false);
   const [quantity, setQuantity] = useState(cart?.items.find((smartphone) => smartphone.product_id === item.id)?.count || 0);
   const hasFullData = 'specifications' in item && 'images' in item;
   const fullData = hasFullData ? (item as SmartphoneFull) : null;
@@ -40,15 +39,17 @@ export function ProductCard({ item }: { item: SmartphoneFull }) {
 
   useEffect(() => {
     const itemInCart = cart?.items.find((cartItem) => cartItem.product_id === item.id);
-    setIsInCart(!!itemInCart);
-  }, [cart, item.id]);
+    startTransition(() => {
+      setOptimisticIsInCart(!!itemInCart);
+    });
+  }, [cart, item.id]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const mainSpecifications =
     fullData?.specifications
       ?.filter((spec) => MAIN_SPECS.includes(spec.spec_key))
       .sort((a, b) => MAIN_SPECS.indexOf(a.spec_key) - MAIN_SPECS.indexOf(b.spec_key)) || [];
 
-  const mainImage = fullData?.images && fullData.images.length > 0 ? fullData.images[0].image_path : 'phone.png';
+  const mainImage = fullData?.images && fullData.images.length > 0 ? fullData.images[0].image_path : 'phone.webp';
   // console.log(mainImage);
 
   const onAddToCart = () => {
@@ -66,7 +67,7 @@ export function ProductCard({ item }: { item: SmartphoneFull }) {
         only: ['cart'],
         onSuccess: () => {
           toast.success(t('products.addedToCart'));
-          setIsInCart(true);
+          setOptimisticIsInCart(true);
         },
         onError: () => {
           toast.error(t('products.notAddedToCart'));
@@ -82,7 +83,7 @@ export function ProductCard({ item }: { item: SmartphoneFull }) {
   const removeItem = (item: OrderItem) => {
     router.delete(route('cart.remove', { id: item.id }), { only: ['cart', 'totalPrice'], preserveScroll: true });
     setQuantity(0);
-    setIsInCart(false);
+    setOptimisticIsInCart(false);
   };
 
   const increaseCount = (phone: SmartphoneFull) => {
@@ -105,43 +106,54 @@ export function ProductCard({ item }: { item: SmartphoneFull }) {
 
   // Функция добавления в избранное
   const onAddToFavorites = () => {
-    toast.error(t('products.notSupported'));
-    // setIsAddingToFavorites(true);
-    // if (isInFavorites) {
-    // router.delete(route('favorites.remove', { id: item.id }), {
-    //   preserveScroll: true,
-    //   onSuccess: () => {
-    //     toast.success('Товар удален из избранного');
-    //     setIsInFavorites(false);
-    //   },
-    // onError: () => {
-    // toast.error('Не удалось удалить товар из избранного');
-    // },
-    // onFinish: () => {
-    // setIsAddingToFavorites(false);
-    // },
-    // });
-    // } else {
-    // router.post(
-    // route('favorites.add'),
-    // {
-    // product_id: item.id,
-    // },
-    // {
-    // preserveScroll: true,
-    // onSuccess: () => {
-    // toast.success('Товар добавлен в избранное');
-    // setIsInFavorites(true);
-    // },
-    // onError: () => {
-    // toast.error('Не удалось добавить товар в избранное');
-    // },
-    // onFinish: () => {
-    // setIsAddingToFavorites(false);
-    // },
-    // },
-    // );
-    // }
+    const currentPropIsInFavorites = item.is_in_favorites || false;
+    const newOptimisticVisualState = !currentPropIsInFavorites;
+
+    // Оптимистично обновляем UI
+    startTransition(() => {
+      setOptimisticIsInFavorites(newOptimisticVisualState);
+    });
+
+    if (currentPropIsInFavorites) {
+      // Если было true (в избранном), то удаляем
+      router.delete(route('favorites.remove', { id: item.id }), {
+        preserveScroll: true,
+        onSuccess: () => {
+          toast.success(t('products.removedFromFavorites'));
+          // Ожидаем, что prop item.is_in_favorites обновился,
+          // и useOptimistic подхватил это новое значение.
+        },
+        onError: () => {
+          toast.error(t('products.notRemovedFromFavorites'));
+          // Откатываем оптимистичное изменение к состоянию пропа до клика
+          startTransition(() => {
+            setOptimisticIsInFavorites(currentPropIsInFavorites);
+          });
+        },
+        // onFinish опционален, если не требуется специфических действий
+      });
+    } else {
+      // Если было false (не в избранном), то добавляем
+      router.post(
+        route('favorites.add'),
+        { product_id: item.id },
+        {
+          preserveScroll: true,
+          onSuccess: () => {
+            toast.success(t('products.addedToFavorites'));
+            // Аналогично, ожидаем обновления пропа и useOptimistic.
+          },
+          onError: () => {
+            toast.error(t('products.notAddedToFavorites'));
+            // Откатываем оптимистичное изменение
+            startTransition(() => {
+              setOptimisticIsInFavorites(currentPropIsInFavorites);
+            });
+          },
+          // onFinish опционален
+        },
+      );
+    }
   };
 
   return (
@@ -153,22 +165,22 @@ export function ProductCard({ item }: { item: SmartphoneFull }) {
 
       {/* Favorites button */}
       <Button
-        variant="outline"
+        variant="ghost"
         size="icon"
-        className="absolute top-1 right-1 rounded-full border-indigo-200/70 bg-white/50 p-1.5 backdrop-blur-sm hover:bg-indigo-50/80 hover:text-indigo-700 sm:top-2 sm:right-2 sm:p-2"
+        className="absolute top-1 right-1 rounded-full bg-white p-1.5 shadow-md backdrop-blur-md transition-all sm:top-2 sm:right-2 sm:p-2"
         onClick={onAddToFavorites}
       >
-        <Heart className={`h-3 w-3 sm:h-4 sm:w-4 ${isInFavorites ? 'fill-indigo-500 text-indigo-500' : 'text-indigo-500'}`} />
+        <Heart className={`h-3 w-3 sm:h-4 sm:w-4 ${optimisticIsInFavorites ? 'fill-indigo-500 text-indigo-500' : 'text-indigo-500'}`} />
       </Button>
 
       {/* Содержимое карточки */}
-      <CardContent className="p-4">
+      <CardContent className="px-4">
         {/* Изображение */}
         <a
           href={route('product.show', { id: item.id })}
           className="group/image mb-5 flex h-40 items-center justify-center overflow-hidden rounded-xl border border-gray-200 bg-gradient-to-b from-gray-100 via-gray-50 to-gray-200 p-2 shadow-md transition-all duration-300 hover:border-indigo-300 hover:shadow-lg sm:h-52"
         >
-          <div className="absolute inset-0 rounded-xl bg-gradient-to-b from-black/10 to-black/30 opacity-0 transition-opacity group-hover/image:opacity-100"></div>
+          {/* <div className="absolute inset-0 rounded-xl bg-gradient-to-b from-black/10 to-black/30 opacity-0 transition-opacity group-hover/image:opacity-100"></div> */}
           <img
             src={mainImage}
             srcSet={mainImage}
@@ -178,7 +190,7 @@ export function ProductCard({ item }: { item: SmartphoneFull }) {
             }}
             alt={`${item.brand} ${item.model}`}
             loading="lazy"
-            className="h-full w-auto rounded-lg border border-white/60 bg-white/70 object-contain transition-transform duration-500 group-hover/image:scale-105"
+            className="h-full w-auto rounded-lg border border-white/60 bg-white object-contain transition-transform duration-500 group-hover/image:scale-105"
           />
         </a>
 
@@ -215,7 +227,7 @@ export function ProductCard({ item }: { item: SmartphoneFull }) {
 
       {/* Кнопки действий */}
       <CardFooter className="mt-auto flex justify-center px-4">
-        {!isInCart ? (
+        {!optimisticIsInCart ? (
           <button
             onClick={onAddToCart}
             className="flex w-full items-center justify-center gap-2 rounded-xl border border-white/10 bg-indigo-500/80 px-4 py-3 text-white shadow-lg backdrop-blur-md transition-all hover:bg-indigo-600/80 sm:grid sm:grid-cols-[auto_auto_1fr_auto] sm:px-6 sm:py-4"

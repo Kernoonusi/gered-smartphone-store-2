@@ -60,8 +60,8 @@ export default function ProductIndex() {
                 src={image.image_path}
                 srcSet={image.image_path}
                 onError={(e) => {
-                  e.currentTarget.src = '/phone.png';
-                  e.currentTarget.srcset = '/phone.png';
+                  e.currentTarget.src = '/phone.webp';
+                  e.currentTarget.srcset = '/phone.webp';
                 }}
                 className="h-16 w-16 shrink-0 cursor-pointer rounded-lg border border-gray-200 object-cover transition-all hover:border-cyan-500 sm:h-14 sm:w-14 dark:border-gray-700"
                 alt={`${product.brand} ${product.model} view ${index + 1}`}
@@ -75,8 +75,8 @@ export default function ProductIndex() {
             src={mainImage?.image_path}
             srcSet={mainImage?.image_path}
             onError={(e) => {
-              e.currentTarget.src = '/phone.png';
-              e.currentTarget.srcset = '/phone.png';
+              e.currentTarget.src = '/phone.webp';
+              e.currentTarget.srcset = '/phone.webp';
             }}
             alt={`${product.brand} ${product.model}`}
             className="mx-auto w-full max-w-md rounded-lg shadow-lg sm:row-span-2 lg:max-w-sm"
@@ -91,7 +91,7 @@ export default function ProductIndex() {
           <div className="hidden lg:block" />
 
           {/* Price and cart section */}
-          <div className="bg-opacity-20 dark:bg-opacity-20 border-opacity-30 dark:border-opacity-30 flex h-full flex-col md:place-self-end justify-between rounded-3xl border border-white bg-white p-4 shadow-xl backdrop-blur-md sm:col-span-2 sm:p-6 lg:col-span-1 lg:w-96 dark:border-gray-700 dark:bg-gray-800">
+          <div className="bg-opacity-20 dark:bg-opacity-20 border-opacity-30 dark:border-opacity-30 flex h-full flex-col justify-between rounded-3xl border border-white bg-white p-4 shadow-xl backdrop-blur-md sm:col-span-2 sm:p-6 md:place-self-end lg:col-span-1 lg:w-96 dark:border-gray-700 dark:bg-gray-800">
             <p className="text-2xl font-semibold text-slate-800 sm:text-3xl lg:text-4xl dark:text-slate-100">
               {t('products.price :price', {
                 price: currentLocale() === 'ru' ? currencyFormatter.format(product.price) : product.price,

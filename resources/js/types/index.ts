@@ -72,6 +72,7 @@ export interface Smartphone {
 export interface SmartphoneFull extends Smartphone {
   images: Image[];
   specifications: Specification[];
+  is_in_favorites?: boolean;
 }
 
 export interface Specification {

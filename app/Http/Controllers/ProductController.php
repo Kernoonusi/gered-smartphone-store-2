@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Review;
 use App\Models\Smartphone;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
@@ -20,6 +21,11 @@ class ProductController extends Controller
 
             return $image;
         });
+
+        $user = Auth::user();
+        if ($user) {
+            $product->is_in_favorites = $user->favorites()->where('product_id', $product->id)->exists();
+        }
 
         $reviews = Review::with('user')->where('smartphone_id', $product->id)->get();
 

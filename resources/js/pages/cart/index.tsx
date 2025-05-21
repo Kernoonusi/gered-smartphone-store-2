@@ -75,7 +75,7 @@ export default function CartIndex() {
                 <div key={item.id} className="grid grid-cols-4 gap-2 lg:grid-rows-3">
                   <img
                     src={item.product.images[0].image_path}
-                    srcSet={'/phone.png'}
+                    srcSet={'/phone.webp'}
                     alt=""
                     className="row-span-2 mx-auto h-10/12 w-auto lg:row-span-3"
                   />
