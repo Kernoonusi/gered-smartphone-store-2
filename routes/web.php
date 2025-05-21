@@ -37,6 +37,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/orders/{order}/review', [OrderReviewController::class, 'store']);
 
     // Favorites routes
+    Route::get('/favorites', [FavoriteController::class, 'index'])->name('favorites.index');
     Route::post('/favorites', [FavoriteController::class, 'store'])->name('favorites.add');
     Route::delete('/favorites/{id}', [FavoriteController::class, 'destroy'])->name('favorites.remove');
 });

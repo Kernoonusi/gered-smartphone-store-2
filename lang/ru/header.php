@@ -1,4 +1,5 @@
 <?php
+
 return [
     'title' => 'Gered Store',
     'about' => 'О компании',
@@ -7,5 +8,6 @@ return [
     'contacts' => 'Контакты',
     'all_phones' => 'Все смартфоны',
     'cart' => 'Корзина',
-    'search' => 'Поиск'
+    'search' => 'Поиск',
+    'favorites' => 'Избранное',
 ];

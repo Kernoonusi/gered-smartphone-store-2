@@ -4,7 +4,7 @@ import type { Order } from '@/types';
 import { Link, router, usePage } from '@inertiajs/react';
 import { animate } from 'animejs';
 import { useLaravelReactI18n } from 'laravel-react-i18n';
-import { Menu, ShoppingCart } from 'lucide-react';
+import { Heart, Menu, ShoppingCart } from 'lucide-react';
 import type React from 'react';
 import { Suspense, lazy, useEffect, useRef, useState } from 'react';
 import './header.css';
@@ -210,6 +210,11 @@ export default function AppHeaderLayout({ children }: AppHeaderLayoutProps) {
 
             {/* Right side: Cart, Profile, Mobile Menu */}
             <div className="flex flex-shrink-0 items-center gap-1 sm:gap-2 sm:ml-2">
+              <Link href="/favorites" className="hidden sm:block">
+                <Button variant="ghost" className="h-10 w-10 rounded-full p-2 text-white hover:bg-white/20">
+                  <Heart className="h-6 w-6" />
+                </Button>
+              </Link>
               <Button variant="ghost" className="p-2 text-white md:hidden" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
                 <Menu className="h-6 w-6" />
               </Button>
@@ -247,6 +252,9 @@ export default function AppHeaderLayout({ children }: AppHeaderLayoutProps) {
               </Link>
               <Link href="/contacts" className="py-2 text-white hover:underline" onClick={() => setMobileMenuOpen(false)}>
                 {t('header.contacts')}
+              </Link>
+              <Link href="/favorites" className="py-2 text-white hover:underline" onClick={() => setMobileMenuOpen(false)}>
+                {t('header.favorites')}
               </Link>
               {/* Mobile Search */}
               <form
