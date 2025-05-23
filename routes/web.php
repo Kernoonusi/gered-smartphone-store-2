@@ -11,19 +11,13 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 Route::get('/', [MainPageController::class, 'index'])->name('home');
-Route::get('/policy', [\App\Http\Controllers\PageContentController::class, 'policy'])->name('policy');
-Route::get('/warranty', function () {
-    return Inertia::render('warranty');
-})->name('warranty');
-Route::get('/delivery', function () {
-    return Inertia::render('delivery');
-})->name('delivery');
-Route::get('/contacts', function () {
-    return Inertia::render('contacts');
-})->name('contacts');
-Route::get('/about', function () {
-    return Inertia::render('about');
-})->name('about');
+use App\Http\Controllers\PageContentController;
+
+Route::get('/policy', [PageContentController::class, 'policy'])->name('policy');
+Route::get('/warranty', [PageContentController::class, 'warranty'])->name('warranty');
+Route::get('/delivery', [PageContentController::class, 'delivery'])->name('delivery');
+Route::get('/contacts', [PageContentController::class, 'contacts'])->name('contacts');
+Route::get('/about', [PageContentController::class, 'about'])->name('about');
 Route::get('/search', [SmartphoneController::class, 'index'])->name('search');
 Route::get('/product/{id}', [ProductController::class, 'show'])->name('product.show');
 Route::middleware(['auth'])->group(function () {
