@@ -24,4 +24,8 @@ return [
     'battery_capacity' => 'Battery capacity',
     'year' => 'Year',
     'display' => 'Display type',
+    'addedToFavorites' => 'Product added to favorites',
+    'notAddedToFavorites' => 'Could not add product to favorites',
+    'removedFromFavorites' => 'Product removed from favorites',
+    'notRemovedFromFavorites' => 'Could not remove product from favorites',
 ];

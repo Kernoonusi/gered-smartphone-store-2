@@ -104,7 +104,7 @@ export default function Welcome() {
                 <div className="absolute -top-10 -right-10 rounded-full bg-cyan-500 p-8 transition-transform group-hover:scale-110" />
                 <div className="relative z-10">
                   <h3 className="mb-2 text-xl font-semibold">{item.brand + ' ' + item.model}</h3>
-                  <p className="mb-6 text-gray-100">от {currencyFormatter.format(item.price)} ₽</p>
+                  <p className="mb-6 text-gray-100">от {currencyFormatter.format(item.price)}</p>
                   <Button asChild variant="outline" className="rounded-full border-white hover:bg-black hover:text-white">
                     <Link href={route('product.show', { id: item.id })}>Подробнее</Link>
                   </Button>

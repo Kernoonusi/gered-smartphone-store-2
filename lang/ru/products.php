@@ -24,4 +24,8 @@ return [
     'battery_capacity' => 'Ёмкость батареи',
     'year' => 'Год выпуска',
     'display' => 'Тип дисплея',
+    'addedToFavorites' => 'Товар добавлен в избранное',
+    'notAddedToFavorites' => 'Не удалось добавить товар в избранное',
+    'removedFromFavorites' => 'Товар удален из избранного',
+    'notRemovedFromFavorites' => 'Не удалось удалить товар из избранного',
 ];
