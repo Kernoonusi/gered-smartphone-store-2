@@ -5,6 +5,30 @@
 
     RewriteEngine On
 
+    # === GZIP / Brotli Static Compression ===
+
+    <IfModule mod_mime.c>
+        AddEncoding br .br
+        AddEncoding gzip .gz
+        AddType application/javascript .js
+        AddType text/css .css
+        AddType application/json .json
+    </IfModule>
+
+    # Отдавать .br или .gz если они есть
+    RewriteCond %{REQUEST_FILENAME}\.br -f
+    RewriteCond %{HTTP:Accept-Encoding} br
+    RewriteRule ^(.+)\.(js|css|json)$ $1.$2.br [L,T=$2,E=ENCODING:br]
+
+    RewriteCond %{REQUEST_FILENAME}\.gz -f
+    RewriteCond %{HTTP:Accept-Encoding} gzip
+    RewriteRule ^(.+)\.(js|css|json)$ $1.$2.gz [L,T=$2,E=ENCODING:gzip]
+
+    Header append Vary Accept-Encoding
+    Header set Content-Encoding "%{ENCODING}e" env=ENCODING
+
+    # === Laravel Rewrite ===
+
     # Handle Authorization Header
     RewriteCond %{HTTP:Authorization} .
     RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
