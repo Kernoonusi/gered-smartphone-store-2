@@ -16,7 +16,7 @@ export default function About() {
 
   return (
     <Layout>
-      <main className="mx-auto mt-6 flex w-full flex-col gap-12 md:w-10/12">
+      <main className="mx-auto mt-6 flex w-full flex-col gap-12 md:max-w-7xl">
         <h1 className="mb-4 text-2xl font-bold">{pageContent?.title || 'О НАС'}</h1>
         {pageContent ? (
           <div dangerouslySetInnerHTML={{ __html: pageContent.content }} className="prose max-w-none" />

@@ -16,7 +16,7 @@ export default function Policy() {
 
   return (
     <Layout>
-      <main className="mx-auto mt-6 flex w-full h-[60dvh] flex-col gap-12 md:w-10/12">
+      <main className="mx-auto mt-6 flex w-full flex-col gap-12 md:max-w-7xl">
         <h1 className="mb-4 text-2xl font-bold">{pageContent?.title || 'ПОЛИТИКА КОНФИДЕНЦИАЛЬНОСТИ'}</h1>
         {pageContent ? (
           <div dangerouslySetInnerHTML={{ __html: pageContent.content }} />

@@ -50,7 +50,7 @@ export default function ProductIndex() {
     <Layout>
       <Head title={`${product.brand} ${product.model}`} />
 
-      <main className="mx-auto mt-6 flex w-full flex-col gap-12 p-4 md:w-10/12">
+      <main className="mx-auto mt-6 flex w-full flex-col gap-12 p-4 md:max-w-7xl">
         <header className="grid grid-cols-1 gap-4 sm:grid-cols-[auto_1fr] lg:grid-cols-[auto_auto_1fr_auto] lg:grid-rows-[auto_auto] lg:gap-6">
           {/* Thumbnail images */}
           <div className="flex flex-row gap-2 overflow-x-auto sm:flex-col sm:overflow-x-visible lg:row-span-2">

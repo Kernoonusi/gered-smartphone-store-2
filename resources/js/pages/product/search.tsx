@@ -264,7 +264,7 @@ export default function SmartphoneSearchPage() {
     <div className="min-w-[300px] rounded-2xl border border-purple-300/20 bg-purple-500/10 p-6 shadow-xl backdrop-blur-lg dark:shadow-xl dark:shadow-purple-700/20">
       <h3 className="mb-4 text-lg font-semibold text-white">{t('filters.title')}</h3>
       <Tabs value={activeFilterTab} onValueChange={setActiveFilterTab} className="w-full">
-        <TabsList className="mb-4 flex flex-wrap gap-2 border-purple-300/30 bg-purple-700/20">
+        <TabsList className="mb-4 hidden flex-wrap gap-2 border-purple-300/30 bg-purple-700/20">
           {Object.entries(filterGroups).map(([groupKey, groupFilters]) => {
             // Find group config for the label
             const groupConfig = groupFilters.length > 0 ? specFiltersConfig.find((f) => f.group === groupKey) : null;
@@ -361,23 +361,23 @@ export default function SmartphoneSearchPage() {
       <Head>
         <title>{t('pages.search')}</title>
       </Head>
-      <div className="flex min-h-screen flex-col gap-8 p-4 md:flex-row md:p-8">
+      <div className="mx-auto mt-8 flex min-h-screen max-w-7xl flex-col gap-8 md:flex-row">
         {/* Desktop Filters Sidebar - Renders filtersContent */}
         <div className="sticky top-20 hidden h-full w-72 md:block">{filtersContent}</div>
 
         {/* Main Content */}
         <div className="flex-1">
           {/* Search Input and Mobile Filter Toggle */}
-          <div className="mb-8 rounded-2xl border border-purple-300/20 bg-purple-500/10 p-6 shadow-xl backdrop-blur-lg">
+          <div className="mb-8 rounded-xl border border-white/10 bg-gradient-to-r from-purple-900/20 via-purple-800/15 to-fuchsia-900/20 p-6 shadow-2xl backdrop-blur-xl">
             <div className="flex flex-col gap-4 md:flex-row">
               <div className="relative flex-1">
-                <Search className="absolute top-1/2 left-3 h-5 w-5 -translate-y-1/2 text-purple-300" />
+                <Search className="absolute top-1/2 left-4 h-5 w-5 -translate-y-1/2 text-purple-300/80" />
                 <Input
                   type="text"
                   placeholder={t('placeholders.search')}
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="border-purple-300/30 bg-purple-700/20 pl-10 text-white placeholder:text-purple-300 focus:border-purple-400"
+                  className="h-12 rounded-xl border-0 bg-white/5 pr-4 pl-12 text-white shadow-inner backdrop-blur-sm transition-all duration-300 placeholder:text-purple-300/60 focus:bg-white/10 focus:shadow-lg focus:ring-2 focus:ring-purple-400/50"
                   // Trigger search on Enter key press
                   onKeyDown={(e) => e.key === 'Enter' && handleSearch(e as unknown as FormEvent)}
                 />
@@ -386,7 +386,7 @@ export default function SmartphoneSearchPage() {
               <Button
                 type="button"
                 variant="outline"
-                className="border-purple-400/30 text-purple-100 hover:bg-purple-700/20 md:hidden" /* Show only on mobile */
+                className="h-12 rounded-xl border-white/20 bg-white/5 text-purple-100 backdrop-blur-sm transition-all duration-300 hover:border-purple-400/50 hover:bg-white/10 md:hidden"
                 onClick={() => setShowFilters(!showFilters)}
               >
                 <SlidersHorizontal className="mr-2 h-5 w-5" />
@@ -397,7 +397,7 @@ export default function SmartphoneSearchPage() {
             {/* Mobile Filters Block - Conditionally Renders filtersContent */}
             <div className="md:hidden">
               {showFilters && (
-                <div className="mt-6">
+                <div className="mt-6 rounded-xl bg-white/5 p-4 backdrop-blur-sm">
                   {/* Render the shared filter content */}
                   {filtersContent}
                 </div>

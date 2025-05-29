@@ -42,9 +42,24 @@ export default function Welcome() {
   // Limited time offers
   const limitedTimeOffers = smartphones.slice(0, 5);
 
-  // Hero banner slides are now passed from props
-
-  // Fade-in effect on load
+  const brandsToShow = [
+    {
+      name: 'Apple',
+      logo: '/brands/apple-logo.svg',
+    },
+    {
+      name: 'Samsung',
+      logo: '/brands/samsung.webp',
+    },
+    {
+      name: 'Xiaomi',
+      logo: '/brands/xiaomi.webp',
+    },
+    {
+      name: 'Huawei',
+      logo: '/brands/huawei.webp',
+    },
+  ];
   useEffect(() => {
     setIsVisible(true);
   }, []);
@@ -60,14 +75,17 @@ export default function Welcome() {
               {heroSlides.map((slide, index) => (
                 <CarouselItem key={index} className="h-full">
                   <div className={`flex h-full w-full items-center ${slide.backgroundColor}`}>
-                    <div className="mx-auto flex w-10/12 flex-col-reverse items-center justify-between gap-8 md:flex-row">
+                    <div className="mx-auto flex max-w-7xl flex-col-reverse items-center justify-between gap-8 md:flex-row">
                       <div className="flex flex-col gap-6 text-center md:w-1/2 md:text-left">
                         <div>
                           <h1 className="mt-2 text-5xl font-bold text-white md:text-6xl">{slide.title}</h1>
                           <p className="mt-4 text-xl text-white/90">{slide.subtitle}</p>
                         </div>
-                        <Button className="mx-auto w-fit rounded-full bg-white p-8 text-black hover:bg-white/90 md:mx-0" asChild>
-                          <Link href={route('product.show', { id: slide.productId })}>{slide.buttonText}</Link>
+                        <Button
+                          className="mx-auto w-fit rounded-full bg-white px-8 py-6 text-base font-semibold text-black transition-all duration-300 hover:scale-105 md:mx-0"
+                          asChild
+                        >
+                          <Link href={`/product/${slide.productId}`}>{slide.buttonText}</Link>
                         </Button>
                       </div>
                       <div className="md:w-1/2">
@@ -93,39 +111,101 @@ export default function Welcome() {
         </section>
 
         {/* Featured Products */}
-        <section className="mx-auto mt-16 flex w-10/12 flex-col gap-5 py-6">
-          <h2 className="text-center text-3xl">Интересные предложения</h2>
-          <div className="grid gap-6 md:grid-cols-3">
+        <section className="mx-auto mt-16 flex max-w-7xl flex-col gap-5 py-6">
+          <h2 className="bg-gradient-to-r from-fuchsia-400 to-cyan-400 bg-clip-text text-center text-3xl font-bold text-transparent">
+            Интересные предложения
+          </h2>
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {featuredProducts.map((item, index) => (
               <div
                 key={index}
-                className="group relative overflow-hidden rounded-xl border-fuchsia-500/20 bg-fuchsia-900/80 p-6 shadow-lg backdrop-blur-md transition-all hover:shadow-lg"
+                className="group relative min-h-[280px] overflow-hidden rounded-2xl border border-fuchsia-500/20 shadow-xl transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl"
               >
-                <div className="absolute -top-10 -right-10 rounded-full bg-cyan-500 p-8 transition-transform group-hover:scale-110" />
-                <div className="relative z-10">
-                  <h3 className="mb-2 text-xl font-semibold">{item.brand + ' ' + item.model}</h3>
-                  <p className="mb-6 text-gray-100">от {currencyFormatter.format(item.price)}</p>
-                  <Button asChild variant="outline" className="rounded-full border-white hover:bg-black hover:text-white">
-                    <Link href={route('product.show', { id: item.id })}>Подробнее</Link>
-                  </Button>
+                {/* Background Image */}
+                <div className="absolute inset-0">
+                  <img
+                    src={item.images[0]?.image_path || '/placeholder.svg?height=280&width=400'}
+                    onError={(e) => {
+                      e.currentTarget.src = '/placeholder.svg?height=280&width=400';
+                    }}
+                    alt={`${item.brand} ${item.model}`}
+                    className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-110"
+                  />
+                  {/* Gradient overlay for text readability */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
                 </div>
-                <img
-                  src={item.images[0]?.image_path || 'placeholder.png'}
-                  srcSet={item.images[0]?.image_path || 'placeholder.png'}
-                  onError={(e) => {
-                    e.currentTarget.src = 'placeholder.png';
-                    e.currentTarget.srcset = 'placeholder.png';
-                  }}
-                  alt={item.brand + ' ' + item.model}
-                  className="absolute right-0 bottom-0 h-36 w-36 object-contain p-2"
-                />
+
+                {/* Decorative elements */}
+                <div className="absolute -top-8 -right-8 h-16 w-16 rounded-full bg-gradient-to-br from-cyan-400 to-blue-500 opacity-60 transition-transform duration-300 group-hover:scale-125 group-hover:rotate-12" />
+                <div className="absolute -bottom-4 -left-4 h-12 w-12 rounded-full bg-gradient-to-br from-fuchsia-400 to-pink-500 opacity-40 transition-transform duration-300 group-hover:scale-110" />
+
+                {/* Content overlay */}
+                <div className="relative z-10 flex h-full flex-col justify-end p-6">
+                  <div className="rounded-xl border border-white/10 bg-black/40 p-4 backdrop-blur-sm">
+                    <h3 className="mb-2 text-2xl leading-tight font-bold text-white">
+                      {item.brand} {item.model}
+                    </h3>
+                    <p className="mb-4 text-sm font-semibold text-cyan-200">{currencyFormatter.format(item.price)}</p>
+
+                    <Button
+                      asChild
+                      variant="outline"
+                      className="w-full rounded-full border-white/50 bg-white/20 text-white backdrop-blur-sm transition-all hover:scale-105 hover:bg-white"
+                    >
+                      <a href={route('product.show', { id: item.id })}>Подробнее</a>
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Brand Showcase */}
+        <section className="mx-auto mt-20 flex max-w-7xl flex-col gap-12 py-8">
+          <div className="text-center">
+            <h2 className="mb-4 bg-gradient-to-r from-cyan-400 to-fuchsia-400 bg-clip-text text-4xl font-bold text-transparent">Наши бренды</h2>
+            <p className="text-xl text-gray-300">Работаем только с проверенными производителями мирового уровня</p>
+          </div>
+
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            {brandsToShow.map((brand, index) => (
+              <div
+                key={index}
+                className="group relative overflow-hidden rounded-xl border border-white/10 bg-gradient-to-br from-white/5 to-white/10 p-8 transition-all duration-300 hover:-translate-y-1 hover:border-cyan-400/30 hover:bg-gradient-to-br hover:from-cyan-400/10 hover:to-fuchsia-400/10 hover:shadow-lg hover:shadow-cyan-400/20"
+              >
+                {/* Декоративный фон */}
+                <div className="absolute inset-0 bg-gradient-to-br from-transparent via-white/5 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+
+                {/* Контент */}
+                <div className="relative z-10 flex flex-col items-center justify-center text-center">
+                  <div className="mb-4 flex h-20 w-full items-center justify-center">
+                    <img
+                      src={brand.logo || '/placeholder.svg'}
+                      alt={`${brand.name} logo`}
+                      className="max-h-16 max-w-full object-contain filter transition-all duration-300 group-hover:scale-105 group-hover:brightness-110"
+                      onError={(e) => {
+                        e.currentTarget.src = `/placeholder.svg?height=64&width=120&text=${brand.name}`;
+                      }}
+                    />
+                  </div>
+
+                  {/* Название бренда */}
+                  <h3 className="text-lg font-semibold text-white/90 transition-colors duration-300 group-hover:text-white">{brand.name}</h3>
+
+                  {/* Декоративные элементы */}
+                  <div className="mt-4 h-px w-0 bg-gradient-to-r from-cyan-400 to-fuchsia-400 transition-all duration-500 group-hover:w-full" />
+                </div>
+
+                {/* Эффект свечения при наведении */}
+                <div className="absolute -inset-1 bg-gradient-to-r from-cyan-400/20 to-fuchsia-400/20 opacity-0 blur transition-opacity duration-300 group-hover:opacity-100" />
               </div>
             ))}
           </div>
         </section>
 
         {/* Trending Products */}
-        <section className="mx-auto mt-16 w-10/12 py-6">
+        <section className="mx-auto mt-16 max-w-7xl py-6">
           <div className="mb-6 flex items-center justify-between">
             <div className="flex items-center gap-2">
               <TrendingUp className="h-6 w-6 text-red-500" />
@@ -151,24 +231,31 @@ export default function Welcome() {
         </section>
 
         {/* Banner */}
-        <section className="mx-auto mt-16 w-10/12 overflow-hidden rounded-xl">
+        <section className="mx-auto mt-16 max-w-7xl overflow-hidden rounded-xl">
           <div className="relative bg-gradient-to-r from-violet-600 to-indigo-600 py-12">
             <div className="mx-auto w-10/12">
               <div className="flex flex-col items-center justify-between gap-8 md:flex-row">
                 <div className="md:w-1/2">
                   <h2 className="text-3xl font-bold text-white md:text-4xl">Подпишитесь на наши новости</h2>
                   <p className="mt-4 text-white/90">Будьте в курсе новинок и специальных предложений</p>
-                  <div className="mt-6 flex flex-col gap-2 sm:flex-row">
-                    <input
-                      type="email"
-                      placeholder="Ваш email"
-                      className="rounded-full px-6 py-3 focus:ring-2 focus:ring-white/20 focus:outline-none"
-                    />
-                    <Button className="rounded-full bg-white px-6 py-3 text-indigo-600 hover:bg-white/90">Подписаться</Button>
+                  <div className="mt-6">
+                    <div className="relative">
+                      <input
+                        type="email"
+                        placeholder="Ваш email"
+                        className="w-full rounded-full border-2 border-white/30 bg-white/10 px-6 py-3 pr-32 text-white placeholder-white/70 backdrop-blur-sm focus:border-white/60 focus:ring-2 focus:ring-white/20 focus:outline-none"
+                      />
+                      <button className="absolute top-1/2 right-2 -translate-y-1/2 rounded-full bg-white px-6 py-2 text-sm font-medium text-indigo-600 transition-colors hover:bg-white/90">
+                        Подписаться
+                      </button>
+                    </div>
                   </div>
                 </div>
                 <div className="relative h-40 w-40 md:h-60 md:w-60">
-                  <div className="animate-spin-slow absolute inset-0 rounded-full border-4 border-dashed border-white/30" />
+                  <div
+                    className="absolute inset-0 animate-spin rounded-full border-4 border-dashed border-white/30"
+                    style={{ animationDuration: '30s' }}
+                  />
                   <div className="absolute inset-4 rounded-full bg-white/10 backdrop-blur-sm" />
                   <div className="absolute inset-0 flex items-center justify-center">
                     <Gift className="h-12 w-12 text-white" />
@@ -180,7 +267,7 @@ export default function Welcome() {
         </section>
 
         {/* Recommended Products */}
-        <section className="mx-auto mt-16 w-10/12 py-6">
+        <section className="mx-auto mt-16 max-w-7xl py-6">
           <div className="mb-6 flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Star className="h-6 w-6 text-amber-500" />
@@ -206,7 +293,7 @@ export default function Welcome() {
         </section>
 
         {/* Limited Time Offers */}
-        <section className="mx-auto mt-16 w-10/12 py-6">
+        <section className="mx-auto mt-16 max-w-7xl py-6">
           <div className="mb-6 flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Clock className="h-6 w-6 text-orange-500" />
@@ -230,22 +317,6 @@ export default function Welcome() {
             <CarouselPrevious className="hidden md:block" />
             <CarouselNext className="hidden md:block" />
           </Carousel>
-        </section>
-
-        {/* Brand Showcase */}
-        <section className="mx-auto mt-16 w-10/12 py-6">
-          <h2 className="mb-8 text-center text-3xl font-bold">Наши бренды</h2>
-          <div className="flex flex-wrap items-center justify-center gap-12">
-            {['apple.webp', 'samsung.webp', 'xiaomi.webp', 'huawei.webp'].map((brand, index) => (
-              <img
-                key={index}
-                src={`/brands/${brand}`}
-                alt="Brand logo"
-                loading="lazy"
-                className="h-12 w-auto opacity-60 grayscale transition-all hover:opacity-100 hover:grayscale-0"
-              />
-            ))}
-          </div>
         </section>
       </main>
     </Layout>

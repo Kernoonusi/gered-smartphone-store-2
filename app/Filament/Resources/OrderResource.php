@@ -38,7 +38,7 @@ class OrderResource extends Resource
                 TextInput::make('total')
                     ->label('Сумма')
                     ->numeric()
-                    ->required(),
+                    ->readOnly(),
                 Select::make('user_id')
                     ->label('Клиент')
                     ->relationship('user', 'name')

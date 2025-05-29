@@ -23,156 +23,136 @@ class PageContentSeeder extends Seeder
         // Поэтому HTML в 'content' начинается сразу с содержимого этого блока.
 
         // Страница политики конфиденциальности
-        PageContent::firstOrCreate(
-            ['key' => 'policy'],
+        PageContent::firstOrCreate(['key' => 'policy'],
             [
-                'title' => 'ПОЛИТИКА КОНФИДЕНЦИАЛЬНОСТИ',
-                'content' => '
-<div class="prose prose-slate max-w-none lg:prose-lg prose-headings:text-sky-700 prose-h2:font-semibold prose-h2:mb-5 prose-h2:pb-2 prose-h2:border-b prose-h2:border-sky-200 prose-h3:text-slate-700 prose-h3:font-medium prose-p:leading-relaxed prose-ul:list-disc prose-ul:pl-6 prose-ul:space-y-1 prose-strong:font-semibold">
-    <p class="text-slate-600">
-        Интернет-магазин «Gered», расположенный на доменном имени www.адрес, (организационно-правовая форма, полное наименование организации, ИП), и
-        юридическим адресом (юридический адрес), в лице (должность уполномоченного лица, ФИО), действующего (-ей) на основании (указать документ,
-        удостоверяющий полномочия и его реквизиты), именуемое в дальнейшем «Продавец», обеспечивает конфиденциальность и защиту персональных данных
-        Пользователей и Покупателей, которые могут быть получены Продавцом при использовании интернет-магазина, в соответствии с действующим
-        законодательством Российской Федерации.
-    </p>
+                'title' => 'Политика конфиденциальности',
+                'content' => <<<'HTML'
+<div class="relative overflow-hidden min-h-screen">
+    <div class="absolute inset-0 bg-gradient-to-br from-slate-900 via-purple-900/20 to-slate-900"></div>
+    <div class="absolute top-0 left-1/4 w-96 h-96 bg-gradient-to-br from-cyan-400/10 to-transparent rounded-full blur-3xl"></div>
+    <div class="absolute top-0 right-1/4 w-96 h-96 bg-gradient-to-br from-fuchsia-400/10 to-transparent rounded-full blur-3xl"></div>
 
-    <h2><i class="fas fa-file-contract fa-fw mr-2 text-sky-600"></i>1. ОБЩИЕ ПОЛОЖЕНИЯ</h2>
-    <p><strong>1.1.</strong> Настоящая Политика конфиденциальности определяет порядок сбора, использования, хранения, обработки, передачи и
-    защиты персональных данных Пользователей и Покупателей интернет-магазина «Gered» (далее – Интернет-магазин).</p>
-    <p><strong>1.2.</strong> Использование интернет-магазина означает безоговорочное согласие Пользователя или Покупателя с настоящей Политикой конфиденциальности и указанными в ней
-    условиями обработки его персональных данных. В случае несогласия с условиями Политики конфиденциальности Пользователь или Покупатель должен
-    воздержаться от использования интернет-магазина.</p>
-    <p><strong>1.3.</strong> Продавец не проверяет достоверность предоставляемых Пользователем или Покупателем
-    персональных данных и не имеет возможности оценивать его дееспособность. Однако Продавец исходит из того, что Пользователь или Покупатель
-    предоставляет достоверные и достаточные персональные данные и поддерживает их в актуальном состоянии.</p>
+    <div class="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-24">
+        <div class="text-center mb-12">
+            <div class="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-white/5 backdrop-blur-xl border border-white/20 mb-6">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                </svg>
+                <h1 class="text-3xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-fuchsia-500 sm:text-4xl">Политика конфиденциальности</h1>
+            </div>
+        </div>
 
-    <h2><i class="fas fa-database fa-fw mr-2 text-sky-600"></i>2. СБОР И ИСПОЛЬЗОВАНИЕ ПЕРСОНАЛЬНЫХ ДАННЫХ</h2>
-    <p><strong>2.1.</strong> Персональные данные Пользователя или Покупателя могут быть собраны и использованы для
-    следующих целей:</p>
-    <ul>
-        <li>оформления заказа и доставки Товара;</li>
-        <li>предоставления информации о Товаре, акциях, скидках и специальных предложениях;</li>
-        <li>обработки и учета платежей;</li>
-        <li>обеспечения обратной связи с Пользователем или Покупателем, включая уведомления, запросы и консультации;</li>
-        <li>улучшения качества работы интернет-магазина, разработки новых услуг и функций;</li>
-        <li>проведения маркетинговых исследований и анализа данных;</li>
-        <li>соблюдения требований законодательства Российской Федерации.</li>
-    </ul>
+        <div class="prose prose-invert prose-lg max-w-none bg-slate-800/50 backdrop-blur-md rounded-2xl shadow-xl p-8 ring-1 ring-white/10">
+            <h2>1. Общие положения</h2>
+            <p>1.1. Настоящая Политика конфиденциальности (далее – «Политика») принята Администратором и действует в отношении всей информации, которую Администратор может получить о Пользователе сайта [укажите доменное имя] (далее – «Сайт» или «Сервис») с любого устройства и при коммуникации с Администратором в любой форме.</p>
+            <p>1.2. Используя Сайт (просмотр, чтение текста, отправка или загрузка информации) и предоставляя свои персональные данные, Пользователь Сайта дает согласие на обработку персональных данных в соответствии с данной Политикой, если дополнительные требования к согласию не установлены настоящей Политикой.</p>
+            <p>1.3. Для целей настоящей Политики под «Администратором» понимается физическое лицо – [Укажите полное ФИО].</p>
 
-    <h2><i class="fas fa-exchange-alt fa-fw mr-2 text-sky-600"></i>3. ПЕРЕДАЧА ПЕРСОНАЛЬНЫХ ДАННЫХ</h2>
-    <p><strong>3.1.</strong> Продавец не передает персональные данные Пользователя или Покупателя третьим лицам, за исключением
-    случаев, предусмотренных действующим законодательством Российской Федерации.</p>
-    <p><strong>3..2</strong> Персональные данные Пользователя или Покупателя могут быть
-    переданы третьим лицам только в случаях, когда это необходимо для выполнения обязательств перед Пользователем или Покупателем, включая
-    оформление заказа и доставку Товара, а также в случаях, предусмотренных действующим законодательством Российской Федерации.</p>
-    <p><strong>3.3.</strong> Передача персональных данных Пользователя или Покупателя третьим лицам может осуществляться только с согласия Пользователя или Покупателя, за
-    исключением случаев, предусмотренных действующим законодательством Российской Федерации.</p>
+            <h2>2. Персональные данные</h2>
+            <p>2.1. Персональные данные – любая информация, относящаяся прямо или косвенно к определенному или определяемому физическому лицу (субъекту персональных данных) - Пользователю.</p>
+            <p>2.2. Обработка персональных данных – любое действие (операция) или совокупность действий (операций) с персональными данными, совершаемое с использованием средств автоматизации или без их использования, в том числе сбор, запись, систематизация, накопление, хранение, уточнение (обновление, изменение), извлечение, использование, передача (предоставление, доступ), обезличивание, блокирование, удаление, уничтожение.</p>
+            <p>2.3. Администратор производит обработку следующих персональных данных: фамилии, имени и отчества (при наличии) пользователя Сервиса.</p>
+            <p>2.4. Cookies – небольшие по размеру текстовые файлы, хранящиеся в браузере посетителей Сервиса. При просмотре Сервиса происходит автоматический сбор (из Cookies) следующих обезличенных статистических данных о посетителе Сервиса, в том числе:</p>
+            <ul>
+                <li>тип выполненного на Сервисе действия (клик, наведение курсора и т.п.);</li>
+                <li>дата и время выполнения действия;</li>
+                <li>URL страницы;</li>
+                <li>Referer;</li>
+                <li>IP (без возможности работы с IP-адресами в статистике);</li>
+                <li>User-Agent;</li>
+                <li>ClientID (идентификатор браузера по файлу Cookie);</li>
+                <li>экранное разрешение;</li>
+                <li>класс HTML-элемента, на который происходит клик;</li>
+                <li>данные о просматриваемых товарах.</li>
+            </ul>
+            <p>2.5. Администратором обрабатываются статистические и иные данные о посетителе Сервиса, в том числе с использованием систем [укажите систему].</p>
+            <p>2.6. Посетитель Сервиса может самостоятельно управлять файлами Cookies, путем изменения настроек браузера.</p>
+            <p>2.7. Изменения пользовательских настроек, в результате которых файлы Cookies будут заблокированы или удалены, могут привести к недоступности отдельных компонентов Сервиса.</p>
+            <p>2.8. Для получения доступа к материалам Сервиса Пользователю необходимо зарегистрироваться путем заполнения регистрационной формы, содержащей следующие идентифицирующие Пользователя персональные данные: [укажите данные для регистрации].</p>
+            <p>2.9. Пройдя процедуру регистрации Пользователь считается принявшим условия Политики в полном объеме, без каких-либо исключений, оговорок, возражений.</p>
+            <p>2.10. При регистрации в Сервисе Пользователь обязан предоставить Администратору необходимую, достоверную и актуальную информацию для формирования профиля, включая уникальные для каждого Пользователя логин (адрес электронной почты) и пароль доступа к Сервису.</p>
+            <p>2.11. Пользователь считается прошедшим регистрацию после предоставления необходимой, достоверной и актуальной информацию для формирования профиля.</p>
+            <p>2.12. По завершении процесса регистрации Пользователь становится обладателем учетных данных Пользователя. Пользователь несет ответственность за безопасность учетных данных, а также за все, что будет сделано на Сервисе под учетными данными Пользователя. Пользователь обязан немедленно уведомить Администратора о любом случае несанкционированного доступа к Сервису без согласия и ведома Пользователя и (или) о любом нарушении безопасности учетной информации Пользователя.</p>
 
-    <h2><i class="fas fa-shield-alt fa-fw mr-2 text-sky-600"></i>4. ЗАЩИТА ПЕРСОНАЛЬНЫХ ДАННЫХ</h2>
-    <p><strong>4.1.</strong> Продавец принимает все необходимые организационные и технические меры для защиты персональных данных Пользователя или Покупателя от
-    неправомерного доступа, изменения, раскрытия или уничтожения.</p>
-    <p><strong>4.2.</strong> Продавец обеспечивает конфиденциальность персональных данных Пользователя
-    или Покупателя и не разглашает их третьим лицам, за исключением случаев, предусмотренных действующим законодательством Российской Федерации.</p>
-    <p><strong>4.3.</strong> Продавец принимает все необходимые меры для обеспечения безопасности персональных данных Пользователя или Покупателя при их передаче по
-    сети Интернет, включая использование защищенных протоколов и шифрования данных.</p>
+            <h2>3. Цели обработки персональных данных</h2>
+            <p>3.1. Администратор обрабатывает персональные данные Пользователя для целей информационно-справочного обслуживания, в том числе предоставления информации о товарах Администратора, а также идентификации Пользователя Сервиса.</p>
 
-    <div class="mt-8 p-4 bg-sky-50 border-l-4 border-sky-500 rounded-md">
-        <p class="text-sm text-sky-700 flex items-start">
-            <i class="fas fa-info-circle fa-fw mr-3 mt-1 text-sky-600"></i>
-            <span><strong>Важно:</strong> Внимательно ознакомьтесь с текстом политики конфиденциальности, и если Вы не согласны с каким-либо пунктом политики, Вы вправе отказаться от
-            использования интернет-магазина и не совершать действий, указанный в п. 1.2. настоящей Политики.</span>
-        </p>
+            <h2>4. Порядок и условия обработки персональных данных</h2>
+            <p>4.1. Обработка персональных данных Пользователя осуществляется без ограничения срока, любым законным способом, в том числе в информационных системах персональных данных с использованием средств автоматизации или без использования таких средств.</p>
+            <p>4.2. Обработка персональных данных Пользователя осуществляется на срок действия договорных и иных правоотношений Пользователя и Администратора, любым законным способом, в том числе в информационных системах персональных данных с использованием средств автоматизации или без использования таких средств.</p>
+            <p>4.3. Все персональные данные Администратор получает непосредственно от Пользователя или от его представителя, либо от лица, поручившего Администратору обработку персональных данных Пользователя, за исключением случаев, предусмотренных законодательством Российской Федерации.</p>
+            <p>4.4. Администратор вправе передавать персональные данные органам дознания и следствия, иным уполномоченным органам по основаниям, предусмотренным действующим законодательством Российской Федерации.</p>
+            <p>4.5. Правовым основанием обработки персональных данных Администратором являются: Конституция РФ, Гражданский кодекс РФ, Трудовой кодекс РФ, согласие Пользователя на обработку его персональных данных, договоры, заключаемые между Администратором и Пользователем.</p>
+            <p>4.6. Для обеспечения защиты персональных данных Пользователя при их обработке Администратором приняты следующие меры от несанкционированного доступа, а также иных неправомерных действий в отношении персональных данных Пользователя:</p>
+            <ul>
+                <li>4.6.1. Правовые меры, включающие в себя, в том числе создание документов, направленных на защиту персональных данных: положение о защите персональных данных, издание приказа о назначении лиц, ответственных за защиту персональных данных, заключение соглашений о конфиденциальности с лицами, имеющими доступ к персональным данным.</li>
+                <li>4.6.2. Организационные меры, в том числе назначение лиц, ответственных за защиту персональных данных, хранение персональных данных, содержащихся на материальных носителях, в сейфе.</li>
+                <li>4.6.3. Технические меры: использование средств защиты информации, прошедших процедуру оценки соответствия требованиям законодательства РФ, взаимодействовать с госсистемой обнаружения, предупреждения и ликвидации последствий кибератак.</li>
+            </ul>
+
+            <h2>5. Права пользователя</h2>
+            <p>5.1. Пользователь вправе реализовать свои права, предусмотренные законодательством Российской Федерации о персональных данных, в том числе, но не ограничиваясь:</p>
+            <ul>
+                <li>уточнять, обновлять свои персональные данные, требовать их блокирования или уничтожения;</li>
+                <li>запрашивать у Администратора перечень обрабатываемых персональных данных, правовых оснований обработки, источники их получения, информацию о сроках обработки и хранения, а также иные сведения, связанные с обработкой своих персональных данных.</li>
+            </ul>
+
+            <h2>6. Права и обязанности Администратора</h2>
+            <p>6.1. Администратор обязуется использовать полученную персональную информацию Пользователя только в целях, названных в настоящей Политике.</p>
+            <p>6.2. Администратор обязан принимать меры предосторожности для защиты конфиденциальности персональных данных Пользователя согласно порядку, обычно используемого для защиты такого рода информации в деловом обороте.</p>
+            <p>6.3. Администратор обязан хранить персональную информацию Пользователя в течение периода времени, необходимого для целей, указанных в настоящей Политике конфиденциальности, если только более длительный срок хранения не является необходимым в соответствии с действующим законодательством.</p>
+            <p>6.4. Администратор вправе не удалять данные Пользователя, необходимые для хранения в соответствии с действующим законодательством Российской Федерации.</p>
+
+            <h2>7. Заключительные положения</h2>
+            <p>7.1. Согласие действует в течение неограниченного времени. Пользователь вправе отозвать настоящее согласие на обработку своих персональных данных, письменно уведомив об этом Администратора по электронной почте.</p>
+        </div>
     </div>
-</div>',
-            ]
-        );
+</div>
+HTML,
+            ]);
+        PageContent::firstOrCreate(['key' => 'about'], [
+            'title' => 'О НАС',
+            'content' => <<<'HTML'
+<div class="relative overflow-hidden min-h-screen">
+    <div class="absolute inset-0 bg-gradient-to-br from-slate-900 via-purple-900/20 to-slate-900"></div>
+    <div class="absolute top-0 left-1/4 w-96 h-96 bg-gradient-to-br from-emerald-400/10 to-transparent rounded-full blur-3xl"></div>
+    <div class="absolute top-0 right-1/4 w-96 h-96 bg-gradient-to-br from-sky-400/10 to-transparent rounded-full blur-3xl"></div>
 
-        // Страница "О нас"
-        PageContent::firstOrCreate(
-            ['key' => 'about'],
-            [
-                'title' => 'О НАС',
-                'content' => '
-<div class="space-y-16">
-    <section class="text-center py-8 bg-gradient-to-r from-sky-500 to-indigo-600 rounded-xl shadow-xl text-white">
-        <i class="fas fa-store fa-3x mb-4 opacity-75"></i>
-        <h2 class="text-4xl font-extrabold mb-3 tracking-tight">Добро пожаловать в Gered Store!</h2>
-        <p class="text-xl font-light max-w-3xl mx-auto px-4 opacity-90">
-            Мы - современный интернет-магазин электроники, сфокусированный на предоставлении вам лучших гаджетов и аксессуаров от ведущих мировых брендов.
-        </p>
-    </section>
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-24">
+        <div class="text-center mb-16">
+            <div class="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-white/5 backdrop-blur-xl border border-white/20 mb-6">
+                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <h1 class="text-3xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-sky-500 sm:text-4xl">О нас</h1>
+            </div>
+            <p class="mt-4 max-w-2xl text-xl text-slate-400 mx-auto">
+                Узнайте больше о нашей миссии, команде и ценностях, которые движут нами каждый день.
+            </p>
+        </div>
 
-    <section class="bg-slate-50 p-8 rounded-xl shadow-lg">
-        <div class="flex flex-col md:flex-row items-center text-center md:text-left">
-            <i class="fas fa-bullseye fa-3x text-sky-500 mb-4 md:mb-0 md:mr-6"></i>
+        <div class="grid lg:grid-cols-2 gap-12 items-center mb-16">
+            <div class="prose prose-invert prose-lg max-w-none bg-slate-800/50 backdrop-blur-md rounded-2xl shadow-xl p-8 ring-1 ring-white/10">
+                <h2>Наша история</h2>
+                <p>Мы начали свой путь в 1861 простой идеи: сделать лучшие смартфоны доступными для каждого. С тех пор мы выросли в команду увлеченных профессионалов, стремящихся предоставить вам не только качественные продукты, но и первоклассный сервис.</p>
+                <h2>Наша миссия</h2>
+                <p>Наша миссия — предоставлять инновационные и надежные мобильные технологии, которые улучшают жизнь людей, обеспечивая при этом исключительный клиентский опыт.</p>
+                <h2>Наши ценности</h2>
+                <ul>
+                    <li><strong>Клиентоориентированность:</strong> Вы — наш главный приоритет.</li>
+                    <li><strong>Инновации:</strong> Мы всегда в поиске лучших решений.</li>
+                    <li><strong>Качество:</strong> Мы предлагаем только проверенные и надежные продукты.</li>
+                    <li><strong>Прозрачность:</strong> Мы честны с нашими клиентами и партнерами.</li>
+                </ul>
+            </div>
             <div>
-                <h3 class="text-3xl font-bold text-slate-800 mb-2">Наша миссия</h3>
-                <p class="text-lg text-slate-600 leading-relaxed">
-                    Предоставлять нашим клиентам доступ к самым современным технологиям по справедливым ценам, обеспечивая при этом высокий уровень сервиса, экспертные консультации и качественное обслуживание на каждом этапе.
-                </p>
+                <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80" alt="Наша команда" class="rounded-3xl shadow-2xl object-cover w-full h-full aspect-[4/3]"/>
             </div>
         </div>
-    </section>
-
-    <section>
-        <h3 class="text-3xl font-bold text-slate-800 mb-10 text-center">Почему выбирают нас?</h3>
-        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-sky-200 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
-                <div class="flex items-center text-sky-500 mb-3">
-                    <i class="fas fa-box-open fa-2x mr-3"></i>
-                    <h4 class="font-semibold text-xl text-slate-700">Широкий ассортимент</h4>
-                </div>
-                <p class="text-slate-500">Продукции от проверенных и надежных производителей.</p>
-            </div>
-            <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-sky-200 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
-                <div class="flex items-center text-sky-500 mb-3">
-                    <i class="fas fa-shield-alt fa-2x mr-3"></i>
-                    <h4 class="font-semibold text-xl text-slate-700">Гарантия на все товары</h4>
-                </div>
-                <p class="text-slate-500">Мы уверены в качестве и предоставляем официальную гарантию.</p>
-            </div>
-            <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-sky-200 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
-                <div class="flex items-center text-sky-500 mb-3">
-                    <i class="fas fa-shipping-fast fa-2x mr-3"></i>
-                    <h4 class="font-semibold text-xl text-slate-700">Быстрая доставка</h4>
-                </div>
-                <p class="text-slate-500">Оперативная доставка по всей России.</p>
-            </div>
-            <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-sky-200 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
-                <div class="flex items-center text-sky-500 mb-3">
-                    <i class="fas fa-headset fa-2x mr-3"></i>
-                    <h4 class="font-semibold text-xl text-slate-700">Проф. консультации</h4>
-                </div>
-                <p class="text-slate-500">Поможем с выбором и ответим на все вопросы.</p>
-            </div>
-            <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-sky-200 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
-                <div class="flex items-center text-sky-500 mb-3">
-                    <i class="fas fa-tags fa-2x mr-3"></i>
-                     <h4 class="font-semibold text-xl text-slate-700">Скидки и бонусы</h4>
-                </div>
-                <p class="text-slate-500">Гибкая система лояльности для наших клиентов.</p>
-            </div>
-             <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-sky-200 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
-                <div class="flex items-center text-sky-500 mb-3">
-                    <i class="fas fa-thumbs-up fa-2x mr-3"></i>
-                     <h4 class="font-semibold text-xl text-slate-700">Клиентоориентированность</h4>
-                </div>
-                <p class="text-slate-500">Ваше удобство и удовлетворенность – наш приоритет.</p>
-            </div>
-        </div>
-    </section>
-
-    <section class="text-center bg-slate-800 text-white p-10 rounded-xl shadow-xl">
-         <i class="fas fa-users fa-3x mb-4 opacity-75"></i>
-        <h3 class="text-3xl font-bold mb-3">Наша команда</h3>
-        <p class="text-lg leading-relaxed max-w-2xl mx-auto opacity-90">
-            Наша команда состоит из опытных специалистов и энтузиастов своего дела, которые всегда готовы помочь с выбором, предоставить подробную информацию и ответить на все ваши вопросы. Мы любим то, что делаем, и стремимся сделать ваш опыт покупок максимально приятным и продуктивным!
-        </p>
-    </section>
-</div>',
-            ]
-        );
+    </div>
+</div>
+HTML,
+        ], );
 
         // Страница контактов
         PageContent::firstOrCreate(
@@ -180,70 +160,201 @@ class PageContentSeeder extends Seeder
             [
                 'title' => 'КОНТАКТЫ',
                 'content' => '
-<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-    <div class="lg:col-span-2 bg-white p-8 rounded-xl shadow-xl">
-        <h2 class="text-3xl font-bold text-sky-700 mb-8 flex items-center">
-            <i class="fas fa-address-book fa-fw mr-4"></i> Свяжитесь с нами
-        </h2>
-        <div class="space-y-6">
-            <div class="flex items-start group">
-                <i class="fas fa-map-marker-alt fa-lg text-sky-500 mt-1 mr-4 group-hover:text-sky-700 transition-colors"></i>
-                <div>
-                    <h3 class="font-semibold text-lg text-slate-800">Наш адрес:</h3>
-                    <p class="text-slate-600">г. Москва, ул. Примерная, д. 123, офис 45</p>
-                </div>
-            </div>
-            <hr class="border-slate-200">
-            <div class="flex items-start group">
-                <i class="fas fa-phone-alt fa-lg text-sky-500 mt-1 mr-4 group-hover:text-sky-700 transition-colors"></i>
-                <div>
-                    <h3 class="font-semibold text-lg text-slate-800">Телефон для связи:</h3>
-                    <p><a href="tel:+79991234567" class="text-sky-600 hover:text-sky-800 hover:underline transition duration-150 text-lg">+7 (999) 123-45-67</a></p>
-                </div>
-            </div>
-            <hr class="border-slate-200">
-            <div class="flex items-start group">
-                <i class="fas fa-envelope fa-lg text-sky-500 mt-1 mr-4 group-hover:text-sky-700 transition-colors"></i>
-                <div>
-                    <h3 class="font-semibold text-lg text-slate-800">Электронная почта:</h3>
-                    <p><a href="mailto:info@gered-store.ru" class="text-sky-600 hover:text-sky-800 hover:underline transition duration-150 text-lg">info@gered-store.ru</a></p>
-                </div>
-            </div>
+<div class="min-h-screen bg-slate-900 text-white">
+    <div class="relative isolate overflow-hidden">
+        <!-- Background gradient -->
+        <svg class="absolute inset-0 -z-10 h-full w-full stroke-white/10 [mask-image:radial-gradient(100%_100%_at_top_right,white,transparent)]" aria-hidden="true">
+            <defs>
+                <pattern id="contacts-pattern" width="200" height="200" x="50%" y="-1" patternUnits="userSpaceOnUse">
+                    <path d="M.5 200V.5H200" fill="none" />
+                </pattern>
+            </defs>
+            <svg x="50%" y="-1" class="overflow-visible fill-gray-800/20">
+                <path d="M-200 0h201v201h-201Z M600 0h201v201h-201Z M-400 600h201v201h-201Z M200 800h201v201h-201Z" stroke-width="0" />
+            </svg>
+            <rect width="100%" height="100%" stroke-width="0" fill="url(#contacts-pattern)" />
+        </svg>
+        <div class="absolute inset-x-0 top-[calc(100%-13rem)] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[calc(100%-30rem)]" aria-hidden="true">
+            <div class="relative left-[calc(50%+3rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 bg-gradient-to-tr from-[#0ea5e9] to-[#a855f7] opacity-20 sm:left-[calc(50%+36rem)] sm:w-[72.1875rem]" style="clip-path: polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)"></div>
         </div>
-    </div>
 
-    <div class="bg-sky-600 text-white p-8 rounded-xl shadow-xl flex flex-col justify-between">
-        <div>
-            <h2 class="text-2xl font-bold mb-6 flex items-center">
-                <i class="fas fa-clock fa-fw mr-3"></i> Режим работы
-            </h2>
-            <div class="space-y-2 mb-8 opacity-90">
-                <p><span class="font-medium">Понедельник - Пятница:</span> 9:00 - 20:00</p>
-                <p><span class="font-medium">Суббота:</span> 10:00 - 18:00</p>
-                <p><span class="font-medium">Воскресенье:</span> выходной</p>
+        <div class="max-w-7xl mx-auto px-6 lg:px-8 py-24 sm:py-32">
+            <!-- Header -->
+            <div class="text-center mb-16">
+                <h1 class="text-5xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-purple-500 mb-4">
+                    Контакты
+                </h1>
+                <p class="text-xl text-slate-300 max-w-2xl mx-auto">
+                    Мы всегда готовы помочь! Свяжитесь с нами удобным способом
+                </p>
             </div>
-        </div>
-        <div>
-            <h2 class="text-2xl font-bold mb-4 flex items-center">
-                <i class="fas fa-comment-dots fa-fw mr-3"></i> Обратная связь
-            </h2>
-            <p class="opacity-90 leading-relaxed mb-4">
-                Остались вопросы или есть предложения? Мы всегда рады помочь!
-            </p>
-            <a href="mailto:info@gered-store.ru?subject=Обратная%20связь" class="inline-block w-full text-center bg-white text-sky-600 font-semibold py-3 px-6 rounded-lg hover:bg-sky-100 transition duration-150">
-                <i class="fas fa-paper-plane mr-2"></i> Написать нам
-            </a>
-        </div>
-    </div>
-</div>
 
-<div class="mt-12 bg-white rounded-xl shadow-xl overflow-hidden">
-    <h2 class="text-2xl md:text-3xl font-bold text-sky-700 pt-8 px-8 text-center md:text-left">Мы на карте</h2>
-    <div class="bg-slate-200 h-72 md:h-96 flex items-center justify-center text-slate-500 mt-6">
-        <div class="text-center">
-            <i class="fas fa-map-marked-alt fa-5x mb-4 text-slate-400"></i>
-            <p class="text-lg">Здесь будет интерактивная карта нашего местоположения.</p>
-            <p class="text-sm">(Не забудьте вставить код для встраивания карты)</p>
+            <!-- Main Contact Info -->
+            <div class="grid lg:grid-cols-2 gap-8 mb-16">
+                <!-- Office Info -->
+                <div class="bg-slate-800/50 backdrop-blur-md rounded-2xl shadow-xl p-8 ring-1 ring-white/10 hover:ring-sky-400/50 transition-all">
+                    <div class="flex items-center mb-6">
+                        <div class="w-12 h-12 bg-sky-500/20 rounded-xl flex items-center justify-center mr-4 ring-1 ring-sky-500/30">
+                            <i class="fas fa-building text-sky-400 text-xl"></i>
+                        </div>
+                        <h2 class="text-2xl font-bold text-sky-300">Наш офис</h2>
+                    </div>
+                    
+                    <div class="space-y-6">
+                        <div class="flex items-start">
+                            <i class="fas fa-map-marker-alt text-red-400 text-xl mr-4 mt-1"></i>
+                            <div>
+                                <h3 class="font-bold text-slate-100 mb-1">Главный офис</h3>
+                                <p class="text-slate-300">г. Челябинск, ул. Кирова, д. 25, офис 402</p>
+                                <p class="text-sm text-slate-400">4 этаж, лифт работает</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <i class="fas fa-store text-green-400 text-xl mr-4 mt-1"></i>
+                            <div>
+                                <h3 class="font-bold text-slate-100 mb-1">Розничный магазин</h3>
+                                <p class="text-slate-300">г. Челябинск, пр. Ленина, д. 58</p>
+                                <p class="text-sm text-slate-400">1 этаж, вход с улицы</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <i class="fas fa-tools text-purple-400 text-xl mr-4 mt-1"></i>
+                            <div>
+                                <h3 class="font-bold text-slate-100 mb-1">Сервисный центр</h3>
+                                <p class="text-slate-300">г. Челябинск, ул. Братьев Кашириных, д. 12</p>
+                                <p class="text-sm text-slate-400">Ремонт и диагностика</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contact Methods -->
+                <div class="bg-slate-800/50 backdrop-blur-md rounded-2xl shadow-xl p-8 ring-1 ring-white/10 hover:ring-green-400/50 transition-all">
+                    <div class="flex items-center mb-6">
+                        <div class="w-12 h-12 bg-green-500/20 rounded-xl flex items-center justify-center mr-4 ring-1 ring-green-500/30">
+                            <i class="fas fa-phone text-green-400 text-xl"></i>
+                        </div>
+                        <h2 class="text-2xl font-bold text-green-300">Связь с нами</h2>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <div class="p-4 bg-slate-700/50 rounded-xl ring-1 ring-green-500/20">
+                            <div class="flex items-center mb-2">
+                                <i class="fas fa-phone text-green-400 mr-3"></i>
+                                <h3 class="font-bold text-slate-100">Горячая линия</h3>
+                            </div>
+                            <p class="text-slate-200 font-semibold">+7 (351) 200-15-25</p>
+                            <p class="text-sm text-slate-400">Круглосуточно, без выходных</p>
+                        </div>
+                        
+                        <div class="p-4 bg-slate-700/50 rounded-xl ring-1 ring-sky-500/20">
+                            <div class="flex items-center mb-2">
+                                <i class="fab fa-whatsapp text-green-400 mr-3"></i>
+                                <h3 class="font-bold text-slate-100">WhatsApp</h3>
+                            </div>
+                            <p class="text-slate-200 font-semibold">+7 (351) 200-15-25</p>
+                            <p class="text-sm text-slate-400">Быстрые ответы в мессенджере</p>
+                        </div>
+                        
+                        <div class="p-4 bg-slate-700/50 rounded-xl ring-1 ring-purple-500/20">
+                            <div class="flex items-center mb-2">
+                                <i class="fas fa-clock text-purple-400 mr-3"></i>
+                                <h3 class="font-bold text-slate-100">Режим работы</h3>
+                            </div>
+                            <p class="text-slate-200">Пн-Пт: 9:00 - 20:00</p>
+                            <p class="text-slate-200">Сб-Вс: 10:00 - 19:00</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Email Contacts Grid -->
+            <div class="mb-16">
+                <h2 class="text-3xl font-bold text-center text-slate-100 mb-8">Электронная почта</h2>
+                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="bg-slate-800/50 backdrop-blur-md p-6 rounded-xl shadow-lg ring-1 ring-white/10 hover:ring-sky-400/50 transition-all">
+                        <div class="w-12 h-12 bg-sky-500/20 rounded-xl flex items-center justify-center mb-4 ring-1 ring-sky-500/30">
+                            <i class="fas fa-envelope text-sky-400 text-xl"></i>
+                        </div>
+                        <h3 class="font-bold text-sky-300 mb-2">Общие вопросы</h3>
+                        <p class="text-sky-400 font-medium mb-2">info@gered-store.ru</p>
+                        <p class="text-slate-400 text-sm">Информация о товарах, заказах</p>
+                    </div>
+                    
+                    <div class="bg-slate-800/50 backdrop-blur-md p-6 rounded-xl shadow-lg ring-1 ring-white/10 hover:ring-red-400/50 transition-all">
+                        <div class="w-12 h-12 bg-red-500/20 rounded-xl flex items-center justify-center mb-4 ring-1 ring-red-500/30">
+                            <i class="fas fa-exclamation-triangle text-red-400 text-xl"></i>
+                        </div>
+                        <h3 class="font-bold text-red-300 mb-2">Претензии</h3>
+                        <p class="text-red-400 font-medium mb-2">claims@gered-store.ru</p>
+                        <p class="text-slate-400 text-sm">Жалобы, возвраты, споры</p>
+                    </div>
+                    
+                    <div class="bg-slate-800/50 backdrop-blur-md p-6 rounded-xl shadow-lg ring-1 ring-white/10 hover:ring-green-400/50 transition-all">
+                        <div class="w-12 h-12 bg-green-500/20 rounded-xl flex items-center justify-center mb-4 ring-1 ring-green-500/30">
+                            <i class="fas fa-tools text-green-400 text-xl"></i>
+                        </div>
+                        <h3 class="font-bold text-green-300 mb-2">Техподдержка</h3>
+                        <p class="text-green-400 font-medium mb-2">support@gered-store.ru</p>
+                        <p class="text-slate-400 text-sm">Помощь с сайтом, заказами</p>
+                    </div>
+                    
+                    <div class="bg-slate-800/50 backdrop-blur-md p-6 rounded-xl shadow-lg ring-1 ring-white/10 hover:ring-purple-400/50 transition-all">
+                        <div class="w-12 h-12 bg-purple-500/20 rounded-xl flex items-center justify-center mb-4 ring-1 ring-purple-500/30">
+                            <i class="fas fa-wrench text-purple-400 text-xl"></i>
+                        </div>
+                        <h3 class="font-bold text-purple-300 mb-2">Сервис</h3>
+                        <p class="text-purple-400 font-medium mb-2">service@gered-store.ru</p>
+                        <p class="text-slate-400 text-sm">Ремонт, гарантия, диагностика</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Additional Services -->
+            <div class="grid md:grid-cols-3 gap-6 mb-16">
+                <div class="bg-gradient-to-br from-sky-600/80 to-cyan-700/80 backdrop-blur-md rounded-2xl shadow-xl p-8 text-white ring-1 ring-white/10 hover:shadow-sky-500/40 transition-all">
+                    <i class="fas fa-shipping-fast text-3xl mb-4 text-sky-300"></i>
+                    <h3 class="text-xl font-bold mb-2 text-sky-200">Доставка</h3>
+                    <p class="mb-4 text-slate-300">По Челябинску - в день заказа</p>
+                    <p class="text-sky-300 font-medium">delivery@gered-store.ru</p>
+                </div>
+                
+                <div class="bg-gradient-to-br from-green-600/80 to-emerald-700/80 backdrop-blur-md rounded-2xl shadow-xl p-8 text-white ring-1 ring-white/10 hover:shadow-green-500/40 transition-all">
+                    <i class="fas fa-handshake text-3xl mb-4 text-green-300"></i>
+                    <h3 class="text-xl font-bold mb-2 text-green-200">Партнерство</h3>
+                    <p class="mb-4 text-slate-300">Сотрудничество с бизнесом</p>
+                    <p class="text-green-300 font-medium">partners@gered-store.ru</p>
+                </div>
+                
+                <div class="bg-gradient-to-br from-purple-600/80 to-indigo-700/80 backdrop-blur-md rounded-2xl shadow-xl p-8 text-white ring-1 ring-white/10 hover:shadow-purple-500/40 transition-all">
+                    <i class="fas fa-briefcase text-3xl mb-4 text-purple-300"></i>
+                    <h3 class="text-xl font-bold mb-2 text-purple-200">Карьера</h3>
+                    <p class="mb-4 text-slate-300">Вакансии и трудоустройство</p>
+                    <p class="text-purple-300 font-medium">hr@gered-store.ru</p>
+                </div>
+            </div>
+
+            <!-- Call to Action -->
+            <div class="bg-slate-800/50 backdrop-blur-md rounded-2xl shadow-xl p-8 ring-1 ring-white/10 text-center">
+                <h2 class="text-3xl font-bold text-slate-100 mb-4">Остались вопросы?</h2>
+                <p class="text-slate-300 mb-6 max-w-2xl mx-auto">
+                    Наша команда всегда готова помочь! Выберите удобный способ связи, 
+                    и мы ответим в кратчайшие сроки.
+                </p>
+                <div class="flex flex-wrap justify-center gap-4">
+                    <a href="tel:+73512001525" class="bg-gradient-to-r from-sky-500 to-sky-600 text-white px-6 py-3 rounded-xl font-medium shadow-md hover:shadow-lg hover:from-sky-600 hover:to-sky-700 transition-all ring-1 ring-sky-700/50">
+                        <i class="fas fa-phone mr-2"></i>Позвонить
+                    </a>
+                    <a href="mailto:info@gered-store.ru" class="bg-gradient-to-r from-pink-500 to-pink-600 text-white px-6 py-3 rounded-xl font-medium shadow-md hover:shadow-lg hover:from-pink-600 hover:to-pink-700 transition-all ring-1 ring-pink-700/50">
+                        <i class="fas fa-envelope mr-2"></i>Написать
+                    </a>
+                    <a href="https://wa.me/73512001525" class="bg-gradient-to-r from-green-500 to-green-600 text-white px-6 py-3 rounded-xl font-medium shadow-md hover:shadow-lg hover:from-green-600 hover:to-green-700 transition-all ring-1 ring-green-700/50">
+                        <i class="fab fa-whatsapp mr-2"></i>WhatsApp
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
 </div>',
@@ -256,86 +367,222 @@ class PageContentSeeder extends Seeder
             [
                 'title' => 'ДОСТАВКА И ОПЛАТА',
                 'content' => '
-<div class="space-y-16">
-    <section>
-        <div class="text-center mb-12">
-            <i class="fas fa-truck-loading fa-3x text-sky-500 mb-4"></i>
-            <h2 class="text-4xl font-extrabold text-slate-800 tracking-tight">Условия доставки</h2>
-            <p class="mt-3 text-xl text-slate-600 max-w-2xl mx-auto">Мы предлагаем несколько удобных способов доставки ваших заказов.</p>
+<div class="min-h-screen bg-slate-900 text-white">
+    <div class="relative isolate overflow-hidden">
+        <!-- Background gradient -->
+        <svg class="absolute inset-0 -z-10 h-full w-full stroke-white/10 [mask-image:radial-gradient(100%_100%_at_top_right,white,transparent)]" aria-hidden="true">
+            <defs>
+                <pattern id="delivery-pattern" width="200" height="200" x="50%" y="-1" patternUnits="userSpaceOnUse">
+                    <path d="M.5 200V.5H200" fill="none" />
+                </pattern>
+            </defs>
+            <svg x="50%" y="-1" class="overflow-visible fill-gray-800/20">
+                <path d="M-200 0h201v201h-201Z M600 0h201v201h-201Z M-400 600h201v201h-201Z M200 800h201v201h-201Z" stroke-width="0" />
+            </svg>
+            <rect width="100%" height="100%" stroke-width="0" fill="url(#delivery-pattern)" />
+        </svg>
+        <div class="absolute inset-x-0 top-[calc(100%-13rem)] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[calc(100%-30rem)]" aria-hidden="true">
+            <div class="relative left-[calc(50%+3rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 bg-gradient-to-tr from-[#10b981] to-[#3b82f6] opacity-20 sm:left-[calc(50%+36rem)] sm:w-[72.1875rem]" style="clip-path: polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)"></div>
         </div>
 
-        <div class="grid md:grid-cols-1 lg:grid-cols-3 gap-8">
-            <div class="bg-white p-8 rounded-xl shadow-lg hover:shadow-sky-200 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
-                <div class="flex items-center text-sky-600 mb-4">
-                    <i class="fas fa-motorcycle fa-2x mr-4"></i>
-                    <h3 class="text-2xl font-bold text-slate-800">Курьерская доставка (Москва)</h3>
+        <div class="max-w-7xl mx-auto px-6 lg:px-8 py-24 sm:py-32">
+            <!-- Header -->
+            <div class="text-center mb-16">
+                <h1 class="text-5xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-sky-500 mb-4">
+                    Доставка и оплата
+                </h1>
+                <p class="text-xl text-slate-300 max-w-2xl mx-auto">
+                    Быстро, удобно и безопасно - выберите подходящий способ
+                </p>
+            </div>
+
+            <!-- Delivery Methods -->
+            <div class="mb-16">
+                <h2 class="text-3xl font-bold text-center text-slate-100 mb-12">Способы доставки</h2>
+                <div class="grid md:grid-cols-3 gap-8">
+                    <div class="bg-slate-800/50 backdrop-blur-md rounded-2xl shadow-xl p-8 ring-1 ring-white/10 hover:ring-emerald-400/50 transition-all">
+                        <div class="w-16 h-16 bg-emerald-500/20 rounded-2xl flex items-center justify-center mb-6 ring-1 ring-emerald-500/30">
+                            <i class="fas fa-motorcycle text-emerald-400 text-2xl"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-emerald-300 mb-4">Курьерская доставка</h3>
+                        <div class="space-y-3 mb-6">
+                            <div class="flex justify-between items-center">
+                                <span class="text-slate-300">По Челябинску</span>
+                                <span class="font-bold text-emerald-400">250 ₽</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-slate-300">Область</span>
+                                <span class="font-bold text-emerald-400">400 ₽</span>
+                            </div>
+                            <div class="bg-emerald-700/30 p-3 rounded-lg ring-1 ring-emerald-600/40">
+                                <p class="text-sm text-emerald-300 font-medium">Бесплатно от 8 000 ₽</p>
+                            </div>
+                        </div>
+                        <ul class="text-sm text-slate-400 space-y-2">
+                            <li class="flex items-center"><i class="fas fa-check text-emerald-500 mr-2"></i>Доставка в день заказа</li>
+                            <li class="flex items-center"><i class="fas fa-check text-emerald-500 mr-2"></i>Время доставки: 2-4 часа</li>
+                            <li class="flex items-center"><i class="fas fa-check text-emerald-500 mr-2"></i>Проверка при получении</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-slate-800/50 backdrop-blur-md rounded-2xl shadow-xl p-8 ring-1 ring-white/10 hover:ring-sky-400/50 transition-all">
+                        <div class="w-16 h-16 bg-sky-500/20 rounded-2xl flex items-center justify-center mb-6 ring-1 ring-sky-500/30">
+                            <i class="fas fa-store text-sky-400 text-2xl"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-sky-300 mb-4">Самовывоз</h3>
+                        <div class="space-y-3 mb-6">
+                            <div class="flex justify-between items-center">
+                                <span class="text-slate-300">Стоимость</span>
+                                <span class="font-bold text-sky-400">Бесплатно</span>
+                            </div>
+                            <div class="bg-sky-700/30 p-3 rounded-lg ring-1 ring-sky-600/40">
+                                <p class="text-sm text-sky-300 font-medium">Готов через 30 минут</p>
+                            </div>
+                        </div>
+                        <ul class="text-sm text-slate-400 space-y-2">
+                            <li class="flex items-center"><i class="fas fa-check text-sky-500 mr-2"></i>пр. Ленина, д. 58</li>
+                            <li class="flex items-center"><i class="fas fa-check text-sky-500 mr-2"></i>Пн-Пт: 9:00-20:00</li>
+                            <li class="flex items-center"><i class="fas fa-check text-sky-500 mr-2"></i>Сб-Вс: 10:00-19:00</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-slate-800/50 backdrop-blur-md rounded-2xl shadow-xl p-8 ring-1 ring-white/10 hover:ring-purple-400/50 transition-all">
+                        <div class="w-16 h-16 bg-purple-500/20 rounded-2xl flex items-center justify-center mb-6 ring-1 ring-purple-500/30">
+                            <i class="fas fa-shipping-fast text-purple-400 text-2xl"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-purple-300 mb-4">По России</h3>
+                        <div class="space-y-3 mb-6">
+                            <div class="flex justify-between items-center">
+                                <span class="text-slate-300">СДЭК</span>
+                                <span class="font-bold text-purple-400">от 300 ₽</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-slate-300">Почта России</span>
+                                <span class="font-bold text-purple-400">от 250 ₽</span>
+                            </div>
+                            <div class="bg-purple-700/30 p-3 rounded-lg ring-1 ring-purple-600/40">
+                                <p class="text-sm text-purple-300 font-medium">Расчет при оформлении</p>
+                            </div>
+                        </div>
+                        <ul class="text-sm text-slate-400 space-y-2">
+                            <li class="flex items-center"><i class="fas fa-check text-purple-500 mr-2"></i>Доставка 2-7 дней</li>
+                            <li class="flex items-center"><i class="fas fa-check text-purple-500 mr-2"></i>Отслеживание посылки</li>
+                            <li class="flex items-center"><i class="fas fa-check text-purple-500 mr-2"></i>Страхование груза</li>
+                        </ul>
+                    </div>
                 </div>
-                <ul class="list-none text-slate-600 space-y-3">
-                    <li class="flex items-center"><i class="fas fa-check-circle text-green-500 mr-2"></i>Стоимость: <span class="font-semibold ml-1">300 руб.</span></li>
-                    <li class="flex items-center"><i class="fas fa-check-circle text-green-500 mr-2"></i>Сроки: <span class="font-semibold ml-1">1-2 рабочих дня</span></li>
-                    <li class="flex items-center"><i class="fas fa-check-circle text-green-500 mr-2"></i>Время: с 10:00 до 22:00</li>
-                    <li class="flex items-center text-green-600 font-semibold"><i class="fas fa-star text-yellow-400 mr-2"></i>При заказе от 10 000 руб. - <span class="underline">бесплатно!</span></li>
-                </ul>
             </div>
 
-            <div class="bg-white p-8 rounded-xl shadow-lg hover:shadow-sky-200 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
-                <div class="flex items-center text-sky-600 mb-4">
-                    <i class="fas fa-store-alt fa-2x mr-4"></i>
-                    <h3 class="text-2xl font-bold text-slate-800">Самовывоз (Москва)</h3>
+            <!-- Payment Methods -->
+            <div class="mb-16">
+                <h2 class="text-3xl font-bold text-center text-slate-100 mb-12">Способы оплаты</h2>
+                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="bg-slate-800/50 backdrop-blur-md p-6 rounded-xl shadow-lg ring-1 ring-white/10 hover:ring-emerald-400/50 transition-all">
+                        <div class="w-12 h-12 bg-emerald-500/20 rounded-xl flex items-center justify-center mb-4 ring-1 ring-emerald-500/30">
+                            <i class="fas fa-credit-card text-emerald-400 text-xl"></i>
+                        </div>
+                        <h3 class="font-bold text-emerald-300 mb-2">Банковские карты</h3>
+                        <p class="text-slate-400 text-sm mb-3">Visa, MasterCard, МИР</p>
+                        <div class="text-xs text-slate-500">
+                            <p>• Мгновенное зачисление</p>
+                            <p>• Безопасные платежи</p>
+                            <p>• 3D Secure</p>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-slate-800/50 backdrop-blur-md p-6 rounded-xl shadow-lg ring-1 ring-white/10 hover:ring-sky-400/50 transition-all">
+                        <div class="w-12 h-12 bg-sky-500/20 rounded-xl flex items-center justify-center mb-4 ring-1 ring-sky-500/30">
+                            <i class="fas fa-mobile-alt text-sky-400 text-xl"></i>
+                        </div>
+                        <h3 class="font-bold text-sky-300 mb-2">Электронные кошельки</h3>
+                        <p class="text-slate-400 text-sm mb-3">ЮMoney, QIWI, WebMoney</p>
+                        <div class="text-xs text-slate-500">
+                            <p>• Быстрые переводы</p>
+                            <p>• Без комиссии</p>
+                            <p>• Удобно с телефона</p>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-slate-800/50 backdrop-blur-md p-6 rounded-xl shadow-lg ring-1 ring-white/10 hover:ring-orange-400/50 transition-all">
+                        <div class="w-12 h-12 bg-orange-500/20 rounded-xl flex items-center justify-center mb-4 ring-1 ring-orange-500/30">
+                            <i class="fas fa-money-bill-wave text-orange-400 text-xl"></i>
+                        </div>
+                        <h3 class="font-bold text-orange-300 mb-2">Наличными</h3>
+                        <p class="text-slate-400 text-sm mb-3">При получении</p>
+                        <div class="text-xs text-slate-500">
+                            <p>• Курьеру или в магазине</p>
+                            <p>• Проверка перед оплатой</p>
+                            <p>• Сдача с любой суммы</p>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-slate-800/50 backdrop-blur-md p-6 rounded-xl shadow-lg ring-1 ring-white/10 hover:ring-purple-400/50 transition-all">
+                        <div class="w-12 h-12 bg-purple-500/20 rounded-xl flex items-center justify-center mb-4 ring-1 ring-purple-500/30">
+                            <i class="fas fa-university text-purple-400 text-xl"></i>
+                        </div>
+                        <h3 class="font-bold text-purple-300 mb-2">Для юр. лиц</h3>
+                        <p class="text-slate-400 text-sm mb-3">Безналичный расчет</p>
+                        <div class="text-xs text-slate-500">
+                            <p>• Выставление счетов</p>
+                            <p>• Работа с НДС</p>
+                            <p>• Отсрочка платежа</p>
+                        </div>
+                    </div>
                 </div>
-                <p class="text-slate-600 mb-2">Заберите заказ из нашего офиса:</p>
-                <p class="font-medium text-slate-700 mb-3"><i class="fas fa-map-marker-alt mr-2 text-sky-500"></i>г. Москва, ул. Примерная, д. 123, офис 45</p>
-                <p class="text-slate-600"><i class="fas fa-clock mr-2 text-sky-500"></i>График пункта выдачи: <span class="font-semibold">Пн-Пт с 10:00 до 20:00</span></p>
             </div>
 
-            <div class="bg-white p-8 rounded-xl shadow-lg hover:shadow-sky-200 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
-                <div class="flex items-center text-sky-600 mb-4">
-                    <i class="fas fa-globe-americas fa-2x mr-4"></i>
-                    <h3 class="text-2xl font-bold text-slate-800">Доставка по России</h3>
+            <!-- Additional Info -->
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="bg-slate-800/50 backdrop-blur-md rounded-2xl shadow-xl p-8 ring-1 ring-white/10">
+                    <h3 class="text-2xl font-bold text-sky-300 mb-6 flex items-center">
+                        <i class="fas fa-clock text-sky-400 mr-3"></i>Время обработки
+                    </h3>
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between p-3 bg-sky-700/30 rounded-lg ring-1 ring-sky-600/40">
+                            <span class="text-slate-200">Заказы до 16:00</span>
+                            <span class="font-bold text-sky-300">Отправка в тот же день</span>
+                        </div>
+                        <div class="flex items-center justify-between p-3 bg-slate-700/40 rounded-lg ring-1 ring-slate-600/40">
+                            <span class="text-slate-300">Заказы после 16:00</span>
+                            <span class="font-bold text-slate-400">Отправка на следующий день</span>
+                        </div>
+                        <div class="flex items-center justify-between p-3 bg-emerald-700/30 rounded-lg ring-1 ring-emerald-600/40">
+                            <span class="text-slate-200">Срочная доставка</span>
+                            <span class="font-bold text-emerald-300">В течение 2 часов</span>
+                        </div>
+                    </div>
                 </div>
-                 <ul class="list-none text-slate-600 space-y-3">
-                    <li class="flex items-start"><i class="fas fa-check-circle text-green-500 mr-2 mt-1"></i>Стоимость рассчитывается индивидуально при оформлении заказа.</li>
-                    <li class="flex items-start"><i class="fas fa-check-circle text-green-500 mr-2 mt-1"></i>Сроки: от <span class="font-semibold mx-1">2 до 14 рабочих дней</span> (зависит от региона).</li>
-                    <li class="flex items-start"><i class="fas fa-check-circle text-green-500 mr-2 mt-1"></i>Компании: СДЭК, Boxberry, Почта России.</li>
-                </ul>
+                
+                <div class="bg-slate-800/50 backdrop-blur-md rounded-2xl shadow-xl p-8 ring-1 ring-white/10">
+                    <h3 class="text-2xl font-bold text-emerald-300 mb-6 flex items-center">
+                        <i class="fas fa-shield-alt text-emerald-400 mr-3"></i>Гарантии
+                    </h3>
+                    <div class="space-y-3 text-slate-300">
+                        <div class="flex items-center">
+                            <i class="fas fa-check-circle text-emerald-400 mr-3"></i>
+                            <span>Проверка товара при получении</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-check-circle text-emerald-400 mr-3"></i>
+                            <span>Возврат в течение 14 дней</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-check-circle text-emerald-400 mr-3"></i>
+                            <span>Официальная гарантия производителя</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-check-circle text-emerald-400 mr-3"></i>
+                            <span>Обмен при обнаружении брака</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-check-circle text-emerald-400 mr-3"></i>
+                            <span>Страхование дорогих заказов</span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-    </section>
-
-    <hr class="border-slate-200">
-
-    <section>
-        <div class="text-center mb-12">
-            <i class="fas fa-credit-card fa-3x text-sky-500 mb-4"></i>
-            <h2 class="text-4xl font-extrabold text-slate-800 tracking-tight">Способы оплаты</h2>
-            <p class="mt-3 text-xl text-slate-600 max-w-2xl mx-auto">Выберите удобный для вас способ оплаты заказа.</p>
-        </div>
-        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div class="flex flex-col items-center text-center bg-slate-50 p-6 rounded-xl shadow hover:shadow-md transition-shadow">
-                <i class="fas fa-money-bill-wave fa-2x text-green-500 mb-3"></i>
-                <h4 class="font-semibold text-lg text-slate-700">Наличными курьеру</h4>
-                <p class="text-sm text-slate-500">(При получении)</p>
-            </div>
-            <div class="flex flex-col items-center text-center bg-slate-50 p-6 rounded-xl shadow hover:shadow-md transition-shadow">
-                <div class="flex mb-3">
-                    <i class="fab fa-cc-visa fa-2x text-blue-700 mr-2"></i>
-                    <i class="fab fa-cc-mastercard fa-2x text-red-600 mr-2"></i>
-                    <i class="fas fa-credit-card fa-2x text-yellow-500"></i> </div>
-                <h4 class="font-semibold text-lg text-slate-700">Банковской картой</h4>
-                 <p class="text-sm text-slate-500">(Онлайн или курьеру)</p>
-            </div>
-            <div class="flex flex-col items-center text-center bg-slate-50 p-6 rounded-xl shadow hover:shadow-md transition-shadow">
-                <i class="fas fa-file-invoice-dollar fa-2x text-purple-500 mb-3"></i>
-                <h4 class="font-semibold text-lg text-slate-700">Безналичный расчет</h4>
-                <p class="text-sm text-slate-500">(Для юридических лиц)</p>
-            </div>
-            <div class="flex flex-col items-center text-center bg-slate-50 p-6 rounded-xl shadow hover:shadow-md transition-shadow">
-                <i class="fas fa-qrcode fa-2x text-gray-700 mb-3"></i>
-                <h4 class="font-semibold text-lg text-slate-700">Система Быстрых Платежей</h4>
-                <p class="text-sm text-slate-500">(СБП)</p>
-            </div>
-        </div>
-    </section>
+    </div>
 </div>',
             ]
         );
@@ -346,50 +593,289 @@ class PageContentSeeder extends Seeder
             [
                 'title' => 'ГАРАНТИЯ И ВОЗВРАТ',
                 'content' => '
-<div class="prose prose-slate max-w-none lg:prose-lg prose-headings:text-sky-700 prose-h2:font-bold prose-h2:mb-6 prose-h2:pb-3 prose-h2:border-b prose-h2:border-sky-200 prose-h3:text-slate-800 prose-h3:font-semibold prose-h3:mb-3 prose-ul:list-none prose-ul:pl-0 prose-ul:space-y-3 prose-li:flex prose-li:items-start prose-li:before:content-["\f058"] prose-li:before:font-[FontAwesome] prose-li:before:text-green-500 prose-li:before:mr-3 prose-li:before:mt-1 prose-ol:list-none prose-ol:pl-0 prose-ol:space-y-3 prose-ol:counter-reset-list-item prose-li:items-start prose-li:counter-increment-list-item prose-li:before:content-[counter(list-item)"._"] prose-li:before:font-semibold prose-li:before:text-sky-600 prose-li:before:mr-2 prose-a:text-sky-600 hover:prose-a:text-sky-800 hover:prose-a:underline prose-p:leading-relaxed">
-    
-    <h2>
-        <i class="fas fa-shield-alt fa-fw mr-3 text-sky-600"></i>Гарантийные обязательства
-    </h2>
-    <p>На всю продукцию, приобретенную в нашем магазине Gered Store, распространяется официальная гарантия. Срок гарантии составляет от 12 до 24 месяцев в зависимости от типа товара и конкретного производителя. Мы ценим ваше доверие и гарантируем качество каждого товара.</p>
-    
-    <h3><i class="fas fa-clipboard-list fa-fw mr-2 text-slate-600"></i>Условия предоставления гарантии:</h3>
-    <ul>
-        <li>Гарантия действительна при наличии правильно заполненного гарантийного талона (если он предусмотрен) и документа, подтверждающего покупку (кассовый/товарный чек).</li>
-        <li>Гарантия не распространяется на повреждения, вызванные неправильной эксплуатацией, механическими воздействиями, попаданием влаги, использованием неоригинальных аксессуаров или самостоятельным ремонтом.</li>
-        <li>Ремонт и обслуживание осуществляются в авторизованных сервисных центрах производителя. Контакты СЦ указаны в гарантийном талоне или на сайте производителя.</li>
-        <li>Транспортировка товара в сервисный центр и обратно осуществляется силами и за счет покупателя, если иное не предусмотрено условиями гарантии.</li>
-    </ul>
-    
-    <hr class="my-10 border-sky-100">
+<div class="min-h-screen bg-slate-900 text-white">
+    <div class="relative isolate overflow-hidden">
+        <!-- Background gradient -->
+        <svg class="absolute inset-0 -z-10 h-full w-full stroke-white/10 [mask-image:radial-gradient(100%_100%_at_top_right,white,transparent)]" aria-hidden="true">
+            <defs>
+                <pattern id="warranty-pattern" width="200" height="200" x="50%" y="-1" patternUnits="userSpaceOnUse">
+                    <path d="M.5 200V.5H200" fill="none" />
+                </pattern>
+            </defs>
+            <svg x="50%" y="-1" class="overflow-visible fill-gray-800/20">
+                <path d="M-200 0h201v201h-201Z M600 0h201v201h-201Z M-400 600h201v201h-201Z M200 800h201v201h-201Z" stroke-width="0" />
+            </svg>
+            <rect width="100%" height="100%" stroke-width="0" fill="url(#warranty-pattern)" />
+        </svg>
+        <div class="absolute inset-x-0 top-[calc(100%-13rem)] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[calc(100%-30rem)]" aria-hidden="true">
+            <div class="relative left-[calc(50%+3rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 bg-gradient-to-tr from-[#8b5cf6] to-[#3b82f6] opacity-20 sm:left-[calc(50%+36rem)] sm:w-[72.1875rem]" style="clip-path: polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)"></div>
+        </div>
 
-    <h2>
-        <i class="fas fa-undo-alt fa-fw mr-3 text-sky-600"></i>Возврат и обмен товара
-    </h2>
-    <p>Мы соблюдаем законодательство РФ. Вы можете вернуть или обменять товар надлежащего качества в течение 14 дней с момента покупки (не считая дня покупки) при соблюдении следующих условий:</p>
-    
-    <h3><i class="fas fa-check-square fa-fw mr-2 text-slate-600"></i>Условия для возврата/обмена:</h3>
-    <ul>
-        <li>Товар не был в употреблении, сохранены его товарный вид, потребительские свойства, пломбы и фабричные ярлыки.</li>
-        <li>Сохранена оригинальная и неповрежденная упаковка товара со всеми комплектующими.</li>
-        <li>Имеются все документы, подтверждающие факт и условия покупки в нашем магазине.</li>
-        <li>Отсутствуют следы эксплуатации, механические повреждения (царапины, сколы и т.п.).</li>
-        <li>Товар не входит в <a href="http://www.consultant.ru/document/cons_doc_LAW_17579/2747a7495896168937f2159e17960f52778781f7/" target="_blank" rel="noopener noreferrer">перечень товаров</a>, не подлежащих возврату или обмену.</li>
-    </ul>
-    
-    <h3 class="mt-6"><i class="fas fa-tasks fa-fw mr-2 text-slate-600"></i>Процедура возврата/обмена:</h3>
-    <ol>
-        <li>Свяжитесь с нами по телефону <a href="tel:+79991234567">+7 (999) 123-45-67</a> или email <a href="mailto:info@gered-store.ru">info@gered-store.ru</a>, чтобы уведомить о намерении и уточнить детали.</li>
-        <li>Аккуратно упакуйте товар в полной комплектации. Приложите заявление на возврат/обмен (образец предоставим) и копию чека.</li>
-        <li>Согласуйте с менеджером способ передачи товара (в нашем офисе или отправка транспортной компанией).</li>
-        <li>После получения и проверки товара, мы произведем возврат денежных средств или обмен в установленные законом сроки (обычно до 10 дней для возврата денег).</li>
-    </ol>
-    
-    <div class="mt-10 p-6 bg-sky-50 border-l-4 border-sky-500 rounded-r-md">
-        <p class="text-slate-700 flex items-start">
-            <i class="fas fa-info-circle fa-lg mr-3 mt-1 text-sky-600"></i>
-            <span><strong>Обратите внимание:</strong> Подробные условия гарантии, возврата и обмена, а также актуальный перечень товаров, не подлежащих возврату, уточняйте у наших менеджеров или в соответствующих нормативных актах РФ. Мы всегда готовы помочь и ответить на ваши вопросы!</span>
-        </p>
+        <div class="max-w-7xl mx-auto px-6 lg:px-8 py-24 sm:py-32">
+            <!-- Header -->
+            <div class="text-center mb-16">
+                <h1 class="text-5xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-sky-500 mb-4">
+                    Гарантия и возврат
+                </h1>
+                <p class="text-xl text-slate-300 max-w-2xl mx-auto">
+                    Ваши права защищены - мы гарантируем качество и честность
+                </p>
+            </div>
+
+            <!-- Warranty Terms -->
+            <div class="mb-16">
+                <h2 class="text-3xl font-bold text-center text-slate-100 mb-12">Гарантийные обязательства</h2>
+                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="bg-slate-800/50 backdrop-blur-md p-6 rounded-xl shadow-lg ring-1 ring-white/10 hover:ring-sky-400/50 transition-all">
+                        <div class="w-12 h-12 bg-sky-500/20 rounded-xl flex items-center justify-center mb-4 ring-1 ring-sky-500/30">
+                            <i class="fas fa-mobile-alt text-sky-400 text-xl"></i>
+                        </div>
+                        <h3 class="font-bold text-sky-300 mb-2">Смартфоны</h3>
+                        <p class="text-2xl font-bold text-sky-400 mb-2">12 месяцев</p>
+                        <p class="text-slate-400 text-sm">Полная гарантия производителя</p>
+                    </div>
+                    
+                    <div class="bg-slate-800/50 backdrop-blur-md p-6 rounded-xl shadow-lg ring-1 ring-white/10 hover:ring-emerald-400/50 transition-all">
+                        <div class="w-12 h-12 bg-emerald-500/20 rounded-xl flex items-center justify-center mb-4 ring-1 ring-emerald-500/30">
+                            <i class="fas fa-headphones text-emerald-400 text-xl"></i>
+                        </div>
+                        <h3 class="font-bold text-emerald-300 mb-2">Наушники</h3>
+                        <p class="text-2xl font-bold text-emerald-400 mb-2">12 месяцев</p>
+                        <p class="text-slate-400 text-sm">Гарантия на все виды наушников</p>
+                    </div>
+                    
+                    <div class="bg-slate-800/50 backdrop-blur-md p-6 rounded-xl shadow-lg ring-1 ring-white/10 hover:ring-purple-400/50 transition-all">
+                        <div class="w-12 h-12 bg-purple-500/20 rounded-xl flex items-center justify-center mb-4 ring-1 ring-purple-500/30">
+                            <i class="fas fa-plug text-purple-400 text-xl"></i>
+                        </div>
+                        <h3 class="font-bold text-purple-300 mb-2">Зарядки</h3>
+                        <p class="text-2xl font-bold text-purple-400 mb-2">6 месяцев</p>
+                        <p class="text-slate-400 text-sm">Зарядные устройства и кабели</p>
+                    </div>
+                    
+                    <div class="bg-slate-800/50 backdrop-blur-md p-6 rounded-xl shadow-lg ring-1 ring-white/10 hover:ring-orange-400/50 transition-all">
+                        <div class="w-12 h-12 bg-orange-500/20 rounded-xl flex items-center justify-center mb-4 ring-1 ring-orange-500/30">
+                            <i class="fas fa-mobile text-orange-400 text-xl"></i>
+                        </div>
+                        <h3 class="font-bold text-orange-300 mb-2">Аксессуары</h3>
+                        <p class="text-2xl font-bold text-orange-400 mb-2">6 месяцев</p>
+                        <p class="text-slate-400 text-sm">Чехлы, стекла, держатели</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Warranty Service -->
+            <div class="grid lg:grid-cols-2 gap-8 mb-16">
+                <div class="bg-slate-800/50 backdrop-blur-md rounded-2xl shadow-xl p-8 ring-1 ring-white/10">
+                    <div class="flex items-center mb-6">
+                        <div class="w-12 h-12 bg-emerald-500/20 rounded-xl flex items-center justify-center mr-4 ring-1 ring-emerald-500/30">
+                            <i class="fas fa-tools text-emerald-400 text-xl"></i>
+                        </div>
+                        <h2 class="text-2xl font-bold text-emerald-300">Гарантийный сервис</h2>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <div class="flex items-start p-4 bg-emerald-700/30 rounded-lg ring-1 ring-emerald-600/40">
+                            <i class="fas fa-check-circle text-emerald-400 mr-3 mt-1 flex-shrink-0"></i>
+                            <div>
+                                <p class="font-medium text-emerald-200">Бесплатная диагностика</p>
+                                <p class="text-sm text-slate-300">Определим причину неисправности</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start p-4 bg-sky-700/30 rounded-lg ring-1 ring-sky-600/40">
+                            <i class="fas fa-wrench text-sky-400 mr-3 mt-1 flex-shrink-0"></i>
+                            <div>
+                                <p class="font-medium text-sky-200">Ремонт или замена</p>
+                                <p class="text-sm text-slate-300">Восстановим или заменим товар</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start p-4 bg-purple-700/30 rounded-lg ring-1 ring-purple-600/40">
+                            <i class="fas fa-clock text-purple-400 mr-3 mt-1 flex-shrink-0"></i>
+                            <div>
+                                <p class="font-medium text-purple-200">Срок ремонта до 45 дней</p>
+                                <p class="text-sm text-slate-300">Согласно закону о защите прав потребителей</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start p-4 bg-orange-700/30 rounded-lg ring-1 ring-orange-600/40">
+                            <i class="fas fa-plus text-orange-400 mr-3 mt-1 flex-shrink-0"></i>
+                            <div>
+                                <p class="font-medium text-orange-200">Продление гарантии</p>
+                                <p class="text-sm text-slate-300">После ремонта гарантия продлевается</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-slate-800/50 backdrop-blur-md rounded-2xl shadow-xl p-8 ring-1 ring-white/10">
+                    <div class="flex items-center mb-6">
+                        <div class="w-12 h-12 bg-red-500/20 rounded-xl flex items-center justify-center mr-4 ring-1 ring-red-500/30">
+                            <i class="fas fa-exclamation-triangle text-red-400 text-xl"></i>
+                        </div>
+                        <h2 class="text-2xl font-bold text-red-300">Исключения из гарантии</h2>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <div class="flex items-start p-4 bg-red-700/30 rounded-lg ring-1 ring-red-600/40">
+                            <i class="fas fa-times-circle text-red-400 mr-3 mt-1 flex-shrink-0"></i>
+                            <div>
+                                <p class="font-medium text-red-200">Механические повреждения</p>
+                                <p class="text-sm text-slate-300">Удары, падения, трещины</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start p-4 bg-red-700/30 rounded-lg ring-1 ring-red-600/40">
+                            <i class="fas fa-tint text-red-400 mr-3 mt-1 flex-shrink-0"></i>
+                            <div>
+                                <p class="font-medium text-red-200">Попадание влаги</p>
+                                <p class="text-sm text-slate-300">Вода, другие жидкости</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start p-4 bg-red-700/30 rounded-lg ring-1 ring-red-600/40">
+                            <i class="fas fa-user-cog text-red-400 mr-3 mt-1 flex-shrink-0"></i>
+                            <div>
+                                <p class="font-medium text-red-200">Самостоятельный ремонт</p>
+                                <p class="text-sm text-slate-300">Вскрытие корпуса, замена деталей</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start p-4 bg-red-700/30 rounded-lg ring-1 ring-red-600/40">
+                            <i class="fas fa-ban text-red-400 mr-3 mt-1 flex-shrink-0"></i>
+                            <div>
+                                <p class="font-medium text-red-200">Нарушение эксплуатации</p>
+                                <p class="text-sm text-slate-300">Неправильное использование</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Return Policy -->
+        <div class="mb-16">
+            <h2 class="text-3xl font-bold text-center text-slate-100 mb-12">Условия возврата</h2>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="bg-slate-800/50 backdrop-blur-md rounded-2xl shadow-xl p-8 ring-1 ring-white/10 hover:ring-emerald-400/50 transition-all">
+                    <div class="w-16 h-16 bg-emerald-500/20 rounded-2xl flex items-center justify-center mb-6 ring-1 ring-emerald-500/30">
+                        <i class="fas fa-calendar-alt text-emerald-400 text-2xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-emerald-300 mb-4">Сроки возврата</h3>
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-center">
+                            <span class="text-slate-300">Смартфоны</span>
+                            <span class="font-bold text-emerald-400">15 дней</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-slate-300">Аксессуары</span>
+                            <span class="font-bold text-emerald-400">14 дней</span>
+                        </div>
+                        <div class="bg-emerald-700/30 p-3 rounded-lg ring-1 ring-emerald-600/40">
+                            <p class="text-sm text-emerald-200 font-medium">При браке - в любое время</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-slate-800/50 backdrop-blur-md rounded-2xl shadow-xl p-8 ring-1 ring-white/10 hover:ring-sky-400/50 transition-all">
+                    <div class="w-16 h-16 bg-sky-500/20 rounded-2xl flex items-center justify-center mb-6 ring-1 ring-sky-500/30">
+                        <i class="fas fa-check-double text-sky-400 text-2xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-sky-300 mb-4">Условия</h3>
+                    <ul class="space-y-3 text-slate-300">
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-sky-400 mr-2"></i>
+                            Товарный вид сохранен
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-sky-400 mr-2"></i>
+                            Наличие упаковки
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-sky-400 mr-2"></i>
+                            Все документы
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-sky-400 mr-2"></i>
+                            Полная комплектация
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="bg-slate-800/50 backdrop-blur-md rounded-2xl shadow-xl p-8 ring-1 ring-white/10 hover:ring-purple-400/50 transition-all">
+                    <div class="w-16 h-16 bg-purple-500/20 rounded-2xl flex items-center justify-center mb-6 ring-1 ring-purple-500/30">
+                        <i class="fas fa-money-bill-wave text-purple-400 text-2xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-purple-300 mb-4">Возврат средств</h3>
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-center">
+                            <span class="text-slate-300">Срок возврата</span>
+                            <span class="font-bold text-purple-400">10 дней</span>
+                        </div>
+                        <div class="bg-purple-700/30 p-3 rounded-lg ring-1 ring-purple-600/40">
+                            <p class="text-sm text-purple-200 font-medium">Полная стоимость + доставка</p>
+                        </div>
+                        <p class="text-slate-300 text-sm">На карту или наличными</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Return Process -->
+        <div class="bg-slate-800/50 backdrop-blur-md rounded-2xl shadow-xl p-8 ring-1 ring-white/10">
+            <h2 class="text-3xl font-bold text-center text-slate-100 mb-8">Как оформить возврат</h2>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-gradient-to-br from-sky-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg ring-1 ring-white/20">
+                        <span class="text-white font-bold text-xl">1</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-sky-300 mb-3">Свяжитесь с нами</h3>
+                    <p class="text-slate-300">Позвоните по телефону +7 (351) 200-15-25 или напишите на claims@gered-store.ru</p>
+                </div>
+                
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-gradient-to-br from-emerald-500 to-sky-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg ring-1 ring-white/20">
+                        <span class="text-white font-bold text-xl">2</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-emerald-300 mb-3">Привезите товар</h3>
+                    <p class="text-slate-300">Доставьте товар в наш магазин на пр. Ленина, 58 или вызовите курьера</p>
+                </div>
+                
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-gradient-to-br from-purple-500 to-pink-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg ring-1 ring-white/20">
+                        <span class="text-white font-bold text-xl">3</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-purple-300 mb-3">Получите деньги</h3>
+                    <p class="text-slate-300">После проверки товара мы вернем деньги удобным для вас способом</p>
+                </div>
+            </div>
+            
+            <div class="mt-8 p-6 bg-slate-700/30 backdrop-blur-sm rounded-xl ring-1 ring-sky-500/30">
+                <div class="flex items-center justify-center mb-4">
+                    <i class="fas fa-info-circle text-sky-400 text-2xl mr-3"></i>
+                    <h3 class="text-xl font-bold text-sky-300">Важная информация</h3>
+                </div>
+                <div class="grid md:grid-cols-2 gap-4 text-sm text-slate-300">
+                    <div class="flex items-center">
+                        <i class="fas fa-receipt text-sky-400 mr-2"></i>
+                        <span>Сохраняйте чек до окончания срока возврата</span>
+                    </div>
+                    <div class="flex items-center">
+                        <i class="fas fa-box text-sky-400 mr-2"></i>
+                        <span>Не выбрасывайте оригинальную упаковку</span>
+                    </div>
+                    <div class="flex items-center">
+                        <i class="fas fa-phone text-sky-400 mr-2"></i>
+                        <span>При вопросах звоните нашим консультантам</span>
+                    </div>
+                    <div class="flex items-center">
+                        <i class="fas fa-shield-alt text-sky-400 mr-2"></i>
+                        <span>Ваши права защищены законом</span>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>',
             ]

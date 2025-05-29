@@ -39,6 +39,21 @@ class CartController extends Controller
 
         $totalPrice = $cart->items()->sum(DB::raw('price * count'));
 
+        // Трансформируем изображения товаров в корзине
+        if ($cart->items) {
+            $cart->items->transform(function ($item) {
+                if ($item->product && $item->product->images) {
+                    $item->product->images->transform(function ($image) {
+                        $image->image_path = Storage::url($image->image_path);
+
+                        return $image;
+                    });
+                }
+
+                return $item;
+            });
+        }
+
         $randomSmartphones = Smartphone::with(['images', 'specifications'])->inRandomOrder()->limit(5)->get();
 
         $randomSmartphones->transform(function ($smartphone) {

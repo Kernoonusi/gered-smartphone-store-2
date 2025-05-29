@@ -1,4 +1,3 @@
-import React, { useMemo, useState } from 'react';
 import ChangePassForm from '@/components/profile/change-pass-form';
 import { ChangeProfileForm } from '@/components/profile/change-profile-form';
 import { OrderReviewForm } from '@/components/profile/order-review-form';
@@ -18,6 +17,7 @@ import 'dayjs/locale/ru';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
 import { useLaravelReactI18n } from 'laravel-react-i18n';
 import { Calendar, Clock, LogOut, Package, Settings, Shield, User, X } from 'lucide-react';
+import React, { useMemo, useState } from 'react';
 
 interface PageProps {
   user: UserType;
@@ -35,8 +35,7 @@ export default function Profile() {
   // Мемоизация локали и форматтера
   const locale = useMemo(() => (currentLocale() === 'ru' ? 'ru' : 'en'), [currentLocale]);
   const currencyFormatter = useMemo(() => baseCurrencyFormatter, []); // если baseCurrencyFormatter зависит от локали, скорректируйте
-  const formatPrice = (price: number) =>
-    locale === 'ru' ? currencyFormatter.format(price) : `$${price}`;
+  const formatPrice = (price: number) => (locale === 'ru' ? currencyFormatter.format(price) : `$${price}`);
 
   const logOut = (): void => {
     router.post(route('logout'));
@@ -76,14 +75,30 @@ export default function Profile() {
   const lastOrder = orders.length > 0 ? orders[0] : null;
   const isAdmin = useMemo(() => user.roles.some((role) => role.name === Roles.Admin), [user.roles]);
   const totalSpentRaw = useMemo(() => orders.reduce((sum, order) => sum + order.total, 0), [orders]);
-  const totalSpent = formatPrice(totalSpentRaw);
+
+  const formatLargeNumber = (num: number): string => {
+    // Конвертируем доллары в рубли для русской локали
+    const convertedNum = locale === 'ru' ? currencyFormatter.convert(num) : num;
+    const currencySymbol = locale === 'ru' ? '₽' : '$';
+
+    if (convertedNum >= 1000000000) {
+      return (convertedNum / 1000000000).toFixed(1) + t('profile.billion') + ' ' + currencySymbol;
+    } else if (convertedNum >= 1000000) {
+      return (convertedNum / 1000000).toFixed(1) + t('profile.million') + ' ' + currencySymbol;
+    } else if (convertedNum >= 1000) {
+      return (convertedNum / 1000).toFixed(1) + t('profile.thousand') + ' ' + currencySymbol;
+    }
+    return formatPrice(num);
+  };
+
+  const totalSpent = formatLargeNumber(totalSpentRaw);
 
   return (
     <Layout>
-      <main className="mx-auto mt-6 flex w-full max-w-6xl flex-col gap-8 px-4">
+      <main className="mx-auto mt-6 flex w-full max-w-7xl flex-col gap-8">
         <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
           {/* Блок с профилем */}
-          <Card className="md:col-span-1">
+          <Card className="md:col-span-1 h-fit">
             <CardHeader className="flex flex-col items-center text-center">
               <Avatar className="mb-4 h-24 w-24">
                 <AvatarImage src={`https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(user.name)}`} alt={user.name} />
@@ -104,13 +119,13 @@ export default function Profile() {
                   <span className="text-muted-foreground text-sm">{t('profile.orders')}</span>
                 </div>
                 <div className="flex flex-col">
-                  <span className={`text-3xl text-[clamp(1.5rem,3rem_-_5cqw,3rem)] font-bold transition-all duration-300`}>{totalSpent}</span>
+                  <span className={`text-[clamp(1.5rem,3rem_-_5cqw,3rem)] font-bold transition-all duration-300`}>{totalSpent}</span>
                   <span className="text-muted-foreground text-sm">{t('profile.spent')}</span>
                 </div>
               </div>
             </CardContent>
             <CardFooter className="flex justify-center">
-              <Button variant="destructive" onClick={logOut} className="w-full">
+              <Button variant="destructive" onClick={logOut} className="w-full cursor-pointer">
                 <LogOut className="mr-2 h-4 w-4" /> {t('profile.log_out')}
               </Button>
             </CardFooter>
@@ -124,13 +139,13 @@ export default function Profile() {
             <CardContent>
               <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
                 <TabsList className="grid w-full grid-cols-3">
-                  <TabsTrigger value="profile">
+                  <TabsTrigger value="profile" className='cursor-pointer'>
                     <User className="mr-2 h-4 w-4" /> {t('profile.title')}
                   </TabsTrigger>
-                  <TabsTrigger value="orders">
+                  <TabsTrigger value="orders" className='cursor-pointer'>
                     <Package className="mr-2 h-4 w-4" /> {t('profile.orders')}
                   </TabsTrigger>
-                  <TabsTrigger value="settings">
+                  <TabsTrigger value="settings" className='cursor-pointer'>
                     <Settings className="mr-2 h-4 w-4" /> {t('profile.settings_title')}
                   </TabsTrigger>
                 </TabsList>
@@ -149,9 +164,7 @@ export default function Profile() {
                       </div>
                       <div>
                         <p className="text-muted-foreground text-sm">{t('profile.registration_date')}</p>
-                        <p className="font-medium">
-                          {dayjs(user.created_at).locale(locale).format('LL')}
-                        </p>
+                        <p className="font-medium">{dayjs(user.created_at).locale(locale).format('LL')}</p>
                       </div>
                       <div>
                         <p className="text-muted-foreground text-sm">{t('profile.role')}</p>
@@ -186,9 +199,7 @@ export default function Profile() {
                                   <span className="text-sm">
                                     {item.product.brand} {item.product.model} × {item.count}
                                   </span>
-                                  <span className="text-sm font-medium">
-                                    {formatPrice(item.price * item.count)}
-                                  </span>
+                                  <span className="text-sm font-medium">{formatPrice(item.price * item.count)}</span>
                                 </li>
                               ))}
                               {lastOrder.items.length > 2 && (
@@ -198,8 +209,8 @@ export default function Profile() {
                           </CardContent>
                           <CardFooter className="flex justify-between py-3">
                             <span className="text-sm font-medium">{t('profile.total')}</span>
-                            <span className="text-[clamp(1.25rem,2.5rem_-_0.0000125*${totalSpentRaw},2.5rem)] font-bold transition-all duration-300">
-                              {totalSpent}
+                            <span className="text-[clamp(1.25rem,2.5rem_-_0.0000125*${lastOrder.total},2.5rem)] font-bold transition-all duration-300">
+                              {formatPrice(lastOrder.total)}
                             </span>
                           </CardFooter>
                         </Card>
@@ -248,11 +259,7 @@ export default function Profile() {
                                     {statuses[order.status].label}
                                   </Badge>
                                 </div>
-                                <CardDescription>
-                                  {dayjs(order.created_at)
-                                    .locale(locale)
-                                    .format('LL')}
-                                </CardDescription>
+                                <CardDescription>{dayjs(order.created_at).locale(locale).format('LL')}</CardDescription>
                               </div>
                             </CardHeader>
                             <CardContent className="py-3">
@@ -272,9 +279,7 @@ export default function Profile() {
                                         </p>
                                       </div>
                                     </div>
-                                    <span className="font-medium">
-                                      {formatPrice(item.price * item.count)}
-                                    </span>
+                                    <span className="font-medium">{formatPrice(item.price * item.count)}</span>
                                   </li>
                                 ))}
                               </ul>
@@ -287,9 +292,7 @@ export default function Profile() {
                               </div>
                               <div className="flex items-center gap-2">
                                 <span className="text-sm font-medium">{t('profile.total')}:</span>
-                                <span className="text-lg font-bold">
-                                  {formatPrice(order.total)}
-                                </span>
+                                <span className="text-lg font-bold">{formatPrice(order.total)}</span>
                               </div>
                             </CardFooter>
                             {order.status === 'completed' && (

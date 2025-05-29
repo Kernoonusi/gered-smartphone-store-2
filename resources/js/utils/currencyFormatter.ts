@@ -20,6 +20,11 @@ class CurrencyFormatter {
     const converted = amount * this.rate;
     return this.formatter.format(converted);
   }
+
+  // Метод для простой конвертации суммы (в долларах)
+  convert(amount: number): number {
+    return amount * this.rate;
+  }
 }
 
 // Экспортируем инстанс с начальным курсом (например, 75)

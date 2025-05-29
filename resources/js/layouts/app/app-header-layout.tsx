@@ -4,7 +4,7 @@ import type { Order } from '@/types';
 import { Link, router, usePage } from '@inertiajs/react';
 import { animate } from 'animejs';
 import { useLaravelReactI18n } from 'laravel-react-i18n';
-import { Heart, Menu, ShoppingCart } from 'lucide-react';
+import { Heart, Menu, Phone, ShoppingCart } from 'lucide-react';
 import type React from 'react';
 import { Suspense, lazy, useEffect, useRef, useState } from 'react';
 import './header.css';
@@ -31,7 +31,7 @@ function SkeletonBrands() {
 export default function AppHeaderLayout({ children }: AppHeaderLayoutProps) {
   const { brands, cart } = usePage<{ brands: { brand: string }[]; cart: Order | null }>().props;
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const { t } = useLaravelReactI18n();
+  const { t, currentLocale, setLocale } = useLaravelReactI18n();
   const [searchQuery, setSearchQuery] = useState('');
 
   const headerRef = useRef<HTMLElement>(null); // Overall header element
@@ -138,8 +138,8 @@ export default function AppHeaderLayout({ children }: AppHeaderLayoutProps) {
     <>
       {/* Top info bar - remains unchanged */}
       <div className={`hidden w-full border-b border-white/10 bg-white/5 backdrop-blur-md md:block`}>
-        <div className="mx-auto grid w-full max-w-7xl grid-cols-[auto_auto_auto_auto_1fr_auto] items-center px-6 py-3">
-          <Link href="/about" className="px-3 text-sm font-medium text-white/80 transition-colors hover:text-white">
+        <div className="mx-auto grid w-full max-w-7xl grid-cols-[auto_auto_auto_auto_1fr_auto] items-center py-3">
+          <Link href="/about" className="pr-3 text-sm font-medium text-white/80 transition-colors hover:text-white">
             {t('header.about')}
           </Link>
           <Link href="/delivery" className="px-3 text-sm font-medium text-white/80 transition-colors hover:text-white">
@@ -152,40 +152,75 @@ export default function AppHeaderLayout({ children }: AppHeaderLayoutProps) {
             {t('header.contacts')}
           </Link>
           <div />
-          <div className="flex gap-4">
-            <p className="text-sm font-medium text-white/90">+7 (999) 999-99-99</p>
-            <p className="text-sm font-medium text-white/90">+7 (999) 999-99-99</p>
+          <div className="flex items-center gap-4">
+            <p className="flex items-center gap-1 text-sm font-medium text-white/90">
+              <Phone className="se inline" size={15} /> +7 (999) 999-99-99
+            </p>
+            <p className="flex items-center gap-1 text-sm font-medium text-white/90">
+              <Phone className="inline" size={15} />
+              +7 (999) 999-99-99
+            </p>
+            {/* Language Switcher */}
+            <div className="ml-3 flex items-center gap-2">
+              <button
+                className={`rounded px-2 py-1 text-xs font-medium transition-colors ${currentLocale() === 'ru' ? 'cursor-default text-fuchsia-400' : 'text-white/80 hover:bg-white/10 hover:text-white'}`}
+                onClick={() => {
+                  if (currentLocale() !== 'ru') {
+                    setLocale('ru');
+                    localStorage.setItem('locale', 'ru');
+                  }
+                }}
+                disabled={currentLocale() === 'ru'}
+                type="button"
+              >
+                RU
+              </button>
+              <button
+                className={`rounded px-2 py-1 text-xs font-medium transition-colors ${currentLocale() === 'en' ? 'cursor-default text-fuchsia-400' : 'text-white/80 hover:bg-white/10 hover:text-white'}`}
+                onClick={() => {
+                  if (currentLocale() !== 'en') {
+                    setLocale('en');
+                    localStorage.setItem('locale', 'en');
+                  }
+                }}
+                disabled={currentLocale() === 'en'}
+                type="button"
+              >
+                EN
+              </button>
+            </div>
           </div>
         </div>
       </div>
 
       {/* Unified, shrinkable header */}
       <header ref={headerRef} className={`header-container sticky top-0 z-50`} id="main-header">
-        <div ref={animatedHeaderContentRef} className="w-full border-b border-fuchsia-500/20 bg-fuchsia-900/80 py-4 shadow-lg backdrop-blur-md">
+        <div
+          ref={animatedHeaderContentRef}
+          className="flex w-full justify-center border-b border-fuchsia-500/20 bg-fuchsia-900/80 py-4 shadow-lg backdrop-blur-md"
+        >
           {/* Added py-4 for initial padding, will be animated */}
-          <div className="mx-auto flex items-center justify-between px-4 lg:w-4/5">
+          <div className="flex w-full max-w-7xl items-center justify-between">
             {/* Left side: Logo + Nav */}
             <div className="flex flex-shrink-0 items-center">
               <Link
                 ref={logoRef}
                 href="/"
-                className="mr-2 bg-gradient-to-r from-cyan-300 to-fuchsia-500 bg-clip-text text-3xl font-bold text-transparent sm:mr-4"
+                className="mr-2 bg-gradient-to-r from-cyan-300 to-fuchsia-500 bg-clip-text pl-2 text-3xl font-bold text-transparent sm:mr-4 sm:p-0"
               >
-                {t('header.title')}
+                GERED STORE
               </Link>
-              <nav className="scrollbar-hide hidden items-center sm:flex">
-                <Link href="/search">
-                  <Button variant="ghost" className="nav-button h-full rounded-none px-2 py-2 text-base text-white hover:bg-white/10">
-                    {t('header.all_phones')}
-                  </Button>
-                </Link>
+              <nav className="scrollbar-hide hidden items-center sm:flex sm:gap-2">
+                <Button variant="ghost" className="nav-button rounded-full px-2 text-base text-white hover:bg-white/10" asChild>
+                  <Link href="/search">{t('header.all_phones')}</Link>
+                </Button>
                 {brands.length === 0 ? (
                   <SkeletonBrands />
                 ) : (
                   brands.map(({ brand }) => (
                     <Button
                       variant="ghost"
-                      className="nav-button h-full rounded-none px-2 py-2 text-base text-gray-300 hover:bg-white/10 hover:text-white"
+                      className="nav-button rounded-full px-2 text-base text-gray-300 hover:bg-white/10 hover:text-white"
                       key={brand}
                       asChild
                     >
@@ -209,7 +244,7 @@ export default function AppHeaderLayout({ children }: AppHeaderLayoutProps) {
             </form>
 
             {/* Right side: Cart, Profile, Mobile Menu */}
-            <div className="flex flex-shrink-0 items-center gap-1 sm:gap-2 sm:ml-2">
+            <div className="flex flex-shrink-0 items-center gap-1 sm:ml-2 sm:gap-2">
               <Link href="/favorites" className="hidden sm:block">
                 <Button variant="ghost" className="h-10 w-10 rounded-full p-2 text-white hover:bg-white/20">
                   <Heart className="h-6 w-6" />
@@ -219,7 +254,7 @@ export default function AppHeaderLayout({ children }: AppHeaderLayoutProps) {
                 <Menu className="h-6 w-6" />
               </Button>
               <Link ref={cartButtonRef} href="/cart">
-                <Button variant="ghost" className="h-10 w-10 rounded-full p-2 text-white hover:bg-white/20">
+                <Button variant="ghost" className="h-10 w-10 rounded-full text-white hover:bg-white/20">
                   <ShoppingCart className="h-6 w-6" />
                   {cart && cart.items.length > 0 ? (
                     <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-fuchsia-500 text-xs text-white">
@@ -229,8 +264,8 @@ export default function AppHeaderLayout({ children }: AppHeaderLayoutProps) {
                 </Button>
               </Link>
               <Suspense fallback={<Skeleton className="h-10 w-10 rounded-full bg-white/10" />}>
-                <div ref={profileButtonContainerRef} className="profile-button-container-element">
-                  <ProfileButton className="profile-button-element" rounded />
+                <div ref={profileButtonContainerRef} className="profile-button-container-element pr-0">
+                  <ProfileButton className="profile-button-element nav-button" rounded />
                 </div>
               </Suspense>
             </div>
@@ -256,6 +291,37 @@ export default function AppHeaderLayout({ children }: AppHeaderLayoutProps) {
               <Link href="/favorites" className="py-2 text-white hover:underline" onClick={() => setMobileMenuOpen(false)}>
                 {t('header.favorites')}
               </Link>
+              {/* Mobile Language Switcher */}
+              <div className="mt-2 flex items-center justify-center gap-2 border-t border-white/10 pt-3">
+                <button
+                  className={`rounded px-3 py-1.5 text-sm font-medium transition-colors ${currentLocale() === 'ru' ? 'bg-fuchsia-500 text-white' : 'bg-white/10 text-white/80 hover:bg-white/20 hover:text-white'}`}
+                  onClick={() => {
+                    if (currentLocale() !== 'ru') {
+                      setLocale('ru');
+                      localStorage.setItem('locale', 'ru');
+                      setMobileMenuOpen(false);
+                    }
+                  }}
+                  disabled={currentLocale() === 'ru'}
+                  type="button"
+                >
+                  RU
+                </button>
+                <button
+                  className={`rounded px-3 py-1.5 text-sm font-medium transition-colors ${currentLocale() === 'en' ? 'bg-fuchsia-500 text-white' : 'bg-white/10 text-white/80 hover:bg-white/20 hover:text-white'}`}
+                  onClick={() => {
+                    if (currentLocale() !== 'en') {
+                      setLocale('en');
+                      localStorage.setItem('locale', 'en');
+                      setMobileMenuOpen(false);
+                    }
+                  }}
+                  disabled={currentLocale() === 'en'}
+                  type="button"
+                >
+                  EN
+                </button>
+              </div>
               {/* Mobile Search */}
               <form
                 onSubmit={(e) => {

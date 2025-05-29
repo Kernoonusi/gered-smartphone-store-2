@@ -59,21 +59,12 @@
 
 /* Navigation button */
 .nav-button {
-  padding-top: 1.25rem;
-  padding-bottom: 1.25rem;
-  font-size: 1rem;
   color: #e5e7eb; /* Tailwind gray-200 for good contrast */
   transition:
     padding 0.3s ease,
     font-size 0.3s ease,
     color 0.3s ease,
     background-color 0.3s ease;
-  border-radius: 0; /* Keep it as part of the bar */
-}
-
-.nav-button:hover {
-  background-color: rgba(255, 255, 255, 0.1);
-  color: white;
 }
 
 /* Cart and Profile buttons - prepare for anime.js */

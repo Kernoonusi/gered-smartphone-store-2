@@ -16,7 +16,7 @@ export default function Contacts() {
 
   return (
     <Layout>
-      <main className="mx-auto mt-6 flex w-full flex-col gap-12 md:w-10/12">
+      <main className="mx-auto mt-6 flex w-full flex-col gap-12 md:max-w-7xl">
         <h1 className="mb-4 text-2xl font-bold">{pageContent?.title || 'КОНТАКТЫ'}</h1>
         {pageContent ? (
           <div 

@@ -1,4 +1,5 @@
 <?php
+
 return [
     'title' => 'Profile Management',
     'greeting' => 'Personal information',
@@ -37,4 +38,7 @@ return [
     'sending' => 'Sending...',
     'review_success' => 'Review sent successfully',
     'review_error' => 'Failed to send review',
+    'thousand' => 'K',
+    'million' => 'M',
+    'billion' => 'B',
 ];

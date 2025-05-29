@@ -36,20 +36,14 @@ class SmartphoneResource extends Resource
                     ->schema([
                         Forms\Components\FileUpload::make('image_path')
                             ->label('Image/URL')
-                            ->directory('smartphones/images')
+                            ->directory('smartphones')
                             ->required()
                             ->multiple(false)
                             ->maxSize(2048)
-                            ->rule(
-                                \Illuminate\Validation\Rule::when(
-                                    fn ($state) => filter_var($state, FILTER_VALIDATE_URL),
-                                    ['url'],
-                                    ['image', 'max:2048']
-                                )
-                            )
+                            ->image()
                             ->disk('public')
-                            ->directory('smartphones/images')
-                            ->visibility('public'),
+                            ->visibility('public')
+                            ->previewable(),
                     ])
                     ->collapsible()
                     ->maxItems(5)
@@ -61,16 +55,77 @@ class SmartphoneResource extends Resource
                 Forms\Components\Repeater::make('specifications')
                     ->relationship('specifications')
                     ->schema([
-                        Forms\Components\TextInput::make('spec_key')
-                            ->required()
-                            ->maxLength(50),
-                        Forms\Components\TextInput::make('spec_value')
-                            ->required()
-                            ->maxLength(100),
+                        Forms\Components\Grid::make(2)
+                            ->schema([
+                                Forms\Components\Select::make('spec_key')
+                                    ->label('Характеристика')
+                                    ->options([
+                                        'screen_size' => 'Размер экрана',
+                                        'battery_capacity' => 'Емкость батареи',
+                                        'ram' => 'Оперативная память',
+                                        'storage' => 'Встроенная память',
+                                        'processor' => 'Процессор',
+                                        'os' => 'Операционная система',
+                                        'camera' => 'Камера',
+                                        'weight' => 'Вес',
+                                        'display' => 'Тип дисплея',
+                                        'year' => 'Год выпуска',
+                                    ])
+                                    ->searchable()
+                                    ->createOptionForm([
+                                        Forms\Components\TextInput::make('name')
+                                            ->required(),
+                                    ])
+                                    ->createOptionUsing(function (array $data) {
+                                        return $data['name'];
+                                    })
+                                    ->allowHtml(false)
+                                    ->required()
+                                    ->live()
+                                    ->columnSpan(1),
+                                Forms\Components\TextInput::make('spec_value')
+                                    ->label('Значение')
+                                    ->required()
+                                    ->maxLength(100)
+                                    ->columnSpan(1),
+                            ]),
                     ])
-                    ->defaultItems(1)
+                    ->defaultItems(3)
                     ->collapsible()
-                    ->itemLabel(fn (array $state): ?string => $state['spec_key'] ?? null),
+                    ->cloneable()
+                    ->reorderable()
+                    ->itemLabel(fn (array $state): ?string => ($state['spec_key'] ?? null) ? ($state['spec_key'].': '.($state['spec_value'] ?? '')) : null)
+                    ->addActionLabel('Добавить характеристику')
+                    ->extraItemActions([
+                        Forms\Components\Actions\Action::make('addCommonSpecs')
+                            ->label('Добавить базовые')
+                            ->icon('heroicon-m-plus-circle')
+                            ->action(function (Forms\Components\Repeater $component): void {
+                                $currentState = $component->getState();
+                                $commonSpecs = [
+                                    ['spec_key' => 'screen_size', 'spec_value' => '6.1'],
+                                    ['spec_key' => 'battery_capacity', 'spec_value' => '4000'],
+                                    ['spec_key' => 'ram', 'spec_value' => '8'],
+                                    ['spec_key' => 'storage', 'spec_value' => '128'],
+                                    ['spec_key' => 'processor', 'spec_value' => 'Qualcomm Snapdragon 888'],
+                                    ['spec_key' => 'os', 'spec_value' => 'Android'],
+                                    ['spec_key' => 'camera', 'spec_value' => '48'],
+                                    ['spec_key' => 'weight', 'spec_value' => '150'],
+                                    ['spec_key' => 'display', 'spec_value' => 'AMOLED'],
+                                    ['spec_key' => 'year', 'spec_value' => '2024'],
+                                ];
+
+                                foreach ($commonSpecs as $spec) {
+                                    $exists = collect($currentState)->contains('spec_key', $spec['spec_key']);
+                                    if (! $exists) {
+                                        $currentState[] = $spec;
+                                    }
+                                }
+
+                                $component->state($currentState);
+                            })
+                            ->color('success'),
+                    ]),
             ]);
     }
 
