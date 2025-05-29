@@ -15,22 +15,32 @@ class ReviewResource extends Resource
 {
     protected static ?string $model = Review::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationLabel = 'Отзывы';
+
+    protected static ?string $modelLabel = 'Отзыв';
+
+    protected static ?string $pluralModelLabel = 'Отзывы';
+
+    protected static ?string $navigationIcon = 'heroicon-o-chat-bubble-oval-left';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
                 Forms\Components\Select::make('user_id')
+                    ->label('Пользователь')
                     ->relationship('user', 'name')
                     ->required(),
                 Forms\Components\Select::make('smartphone_id')
+                    ->label('Смартфон')
                     ->relationship('smartphone', 'model')
                     ->required(),
                 Forms\Components\Textarea::make('comment')
+                    ->label('Комментарий')
                     ->required()
                     ->maxLength(1000),
                 Forms\Components\TextInput::make('rating')
+                    ->label('Оценка')
                     ->required()
                     ->numeric()
                     ->minValue(1)
@@ -43,6 +53,7 @@ class ReviewResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('user.name')
+                    ->label('Пользователь')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('smartphone.brand')
                     ->label('Бренд')
@@ -51,8 +62,10 @@ class ReviewResource extends Resource
                     ->label('Модель')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('rating')
+                    ->label('Оценка')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
+                    ->label('Дата создания')
                     ->dateTime()
                     ->sortable(),
             ])

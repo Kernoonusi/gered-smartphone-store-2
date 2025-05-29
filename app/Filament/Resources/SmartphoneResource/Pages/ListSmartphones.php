@@ -10,6 +10,8 @@ class ListSmartphones extends ListRecords
 {
     protected static string $resource = SmartphoneResource::class;
 
+    protected static ?string $title = 'Смартфоны';
+
     protected function getHeaderActions(): array
     {
         return [

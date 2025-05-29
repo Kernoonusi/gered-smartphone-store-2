@@ -13,6 +13,12 @@ class SmartphoneResource extends Resource
 {
     protected static ?string $model = Smartphone::class;
 
+    protected static ?string $navigationLabel = 'Cмартфоны';
+
+    protected static ?string $modelLabel = 'Смартфон';
+
+    protected static ?string $pluralModelLabel = 'Смартфоны';
+
     protected static ?string $navigationIcon = 'heroicon-o-device-phone-mobile';
 
     public static function form(Form $form): Form
@@ -20,18 +26,23 @@ class SmartphoneResource extends Resource
         return $form
             ->schema([
                 Forms\Components\TextInput::make('model')
+                    ->label('Модель')
                     ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('brand')
+                    ->label('Бренд')
                     ->required()
                     ->maxLength(50),
                 Forms\Components\TextInput::make('price')
+                    ->label('Цена')
                     ->required()
                     ->numeric()
                     ->prefix('$'),
                 Forms\Components\Textarea::make('description')
+                    ->label('Описание')
                     ->columnSpanFull(),
                 Forms\Components\Repeater::make('images')
+                    ->label('Изображения')
                     ->relationship('images')
                     ->schema([
                         Forms\Components\FileUpload::make('image_path')
@@ -53,6 +64,7 @@ class SmartphoneResource extends Resource
                                  : basename($path))
                              : null),
                 Forms\Components\Repeater::make('specifications')
+                    ->label('Характеристики')
                     ->relationship('specifications')
                     ->schema([
                         Forms\Components\Grid::make(2)
@@ -134,23 +146,34 @@ class SmartphoneResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('brand')
+                    ->label('Бренд')
+                    ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('model')
+                    ->label('Модель')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('price')
-                    ->money('USD')
+                    ->label('Цена (USD / RUB)')
+                    ->formatStateUsing(function ($state) {
+                        $usdPrice = number_format($state, 2);
+                        $rubPrice = number_format($state * \App\Services\ExchangeRateService::getUsdToRubRate(), 2);
+
+                        return "{$usdPrice} USD / {$rubPrice} RUB";
+                    })
                     ->sortable(),
                 Tables\Columns\ImageColumn::make('images.image_path')
-                    ->label('Preview')
+                    ->label('Изображения')
                     ->size(50)
                     ->stacked()
                     ->limit(3)
                     ->circular(),
                 Tables\Columns\TextColumn::make('created_at')
+                    ->label('Дата создания')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('updated_at')
+                    ->label('Дата обновления')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),

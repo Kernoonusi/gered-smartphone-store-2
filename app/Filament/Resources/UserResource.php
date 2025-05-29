@@ -17,20 +17,30 @@ class UserResource extends Resource
 {
     protected static ?string $model = User::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationLabel = 'Пользователи';
+
+    protected static ?string $modelLabel = 'Пользователь';
+
+    protected static ?string $pluralModelLabel = 'Пользователи';
+
+
+    protected static ?string $navigationIcon = 'heroicon-o-user';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
                 Forms\Components\TextInput::make('name')
+                    ->label('Имя')
                     ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('email')
+                    ->label('Email')
                     ->email()
                     ->required()
                     ->maxLength(255),
                 Forms\Components\Select::make('roles')
+                    ->label('Роль')
                     ->options([
                         'admin' => 'admin',
                         'user' => 'user',
@@ -38,6 +48,7 @@ class UserResource extends Resource
                     ->relationship('roles', 'name')
                     ->required(),
                 Forms\Components\TextInput::make('password')
+                    ->label('Пароль')
                     ->password()
                     ->required(fn (string $operation): bool => $operation === 'create')
                     ->maxLength(255)
@@ -50,10 +61,13 @@ class UserResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('name')
+                    ->label('Имя')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('email')
+                    ->label('Email')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('roles.name')
+                    ->label('Роль')
                     ->badge()
                     ->color(fn (string $state): string => match ($state) {
                         'admin' => 'danger',

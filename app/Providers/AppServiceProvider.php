@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Models\Order;
 use App\Models\Smartphone;
+use BezhanSalleh\FilamentLanguageSwitch\LanguageSwitch;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\ServiceProvider;
@@ -41,5 +42,9 @@ class AppServiceProvider extends ServiceProvider
                     ->first();
             },
         ]);
+        LanguageSwitch::configureUsing(function (LanguageSwitch $switch) {
+            $switch
+                ->locales(['en', 'ru']);
+        });
     }
 }

@@ -10,6 +10,8 @@ class ListReviews extends ListRecords
 {
     protected static string $resource = ReviewResource::class;
 
+    protected static ?string $title = 'Отзывы';
+
     protected function getHeaderActions(): array
     {
         return [

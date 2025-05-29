@@ -10,6 +10,8 @@ class EditSmartphone extends EditRecord
 {
     protected static string $resource = SmartphoneResource::class;
 
+    protected static ?string $title = 'Редактирование смартфона';
+
     protected function getHeaderActions(): array
     {
         return [

@@ -12,6 +12,8 @@ class OrderItemsRelationManager extends RelationManager
 {
     protected static string $relationship = 'items';
 
+    protected static ?string $title = 'Товары заказа';
+
     public function form(Form $form): Form
     {
         return $form

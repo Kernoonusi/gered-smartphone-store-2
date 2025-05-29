@@ -10,6 +10,8 @@ class EditReview extends EditRecord
 {
     protected static string $resource = ReviewResource::class;
 
+    protected static ?string $title = 'Редактирование отзыва';
+
     protected function getHeaderActions(): array
     {
         return [
