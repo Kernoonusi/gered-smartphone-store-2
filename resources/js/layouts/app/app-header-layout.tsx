@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import type { Order } from '@/types';
 import { Link, router, usePage } from '@inertiajs/react';
-import { animate } from 'animejs';
+import { animate, onScroll } from 'animejs';
 import { useLaravelReactI18n } from 'laravel-react-i18n';
 import { Heart, Menu, Phone, ShoppingCart } from 'lucide-react';
 import type React from 'react';
@@ -57,82 +57,94 @@ export default function AppHeaderLayout({ children }: AppHeaderLayoutProps) {
 
     const navButtons = headerContentEl.querySelectorAll('.nav-button');
 
-    let lastScrollY = window.scrollY;
-    let ticking = false;
+    // Header container padding animation
+    animate(headerContentEl, {
+      paddingTop: ['1rem', '0.5rem'],
+      paddingBottom: ['1rem', '0.5rem'],
+      duration: 300,
+      ease: 'outQuad',
+      autoplay: onScroll({
+        enter: '50px top',
+        leave: 'top top',
+        sync: true,
+      }),
+    });
 
-    const handleScroll = () => {
-      lastScrollY = window.scrollY;
-      if (!ticking) {
-        window.requestAnimationFrame(() => {
-          const isScrolled = lastScrollY > 50; // Threshold for shrinking
+    // Logo animation
+    if (logoEl) {
+      animate(logoEl, {
+        fontSize: ['2.25rem', '1.875rem'], // Tailwind: text-2xl/3xl to text-xl
+        duration: 300,
+        ease: 'outQuad',
+        autoplay: onScroll({
+          enter: '50px top',
+          leave: 'top top',
+          sync: true,
+        }),
+      });
+    }
 
-          // Animate header container padding (simulates shrinking)
-          animate(headerContentEl, {
-            paddingTop: isScrolled ? '0.5rem' : '1rem',
-            paddingBottom: isScrolled ? '0.5rem' : '1rem',
-            duration: 300,
-            easing: 'easeOutQuad',
-          });
+    // Nav Buttons animation
+    if (navButtons && navButtons.length > 0) {
+      animate(navButtons, {
+        fontSize: ['1rem', '0.875rem'], // Tailwind: text-base to text-sm
+        paddingTop: ['0.75rem', '0.5rem'],
+        paddingBottom: ['0.75rem', '0.5rem'],
+        duration: 300,
+        ease: 'outQuad',
+        autoplay: onScroll({
+          enter: '50px top',
+          leave: 'top top',
+          sync: true,
+        }),
+      });
+    }
 
-          // Animate Logo
-          if (logoEl) {
-            animate(logoEl, {
-              fontSize: isScrolled ? '1.875rem' : '2.25rem', // Tailwind: text-xl to text-2xl/3xl
-              duration: 300,
-              easing: 'easeOutQuad',
-            });
-          }
+    // Search Input animation
+    if (searchInputEl) {
+      animate(searchInputEl, {
+        height: ['2.5rem', '2rem'], // Tailwind: h-10 to h-8
+        fontSize: ['1rem', '0.875rem'],
+        paddingTop: ['0.5rem', '0.25rem'],
+        paddingBottom: ['0.5rem', '0.25rem'],
+        duration: 300,
+        ease: 'outQuad',
+        autoplay: onScroll({
+          enter: '50px top',
+          leave: 'top top',
+          sync: true,
+        }),
+      });
+    }
 
-          // Animate Nav Buttons
-          if (navButtons && navButtons.length > 0) {
-            animate(navButtons, {
-              fontSize: isScrolled ? '0.875rem' : '1rem', // Tailwind: text-sm to text-base
-              paddingTop: isScrolled ? '0.5rem' : '0.75rem',
-              paddingBottom: isScrolled ? '0.5rem' : '0.75rem',
-              duration: 300,
-              easing: 'easeOutQuad',
-            });
-          }
+    // Cart Button animation (scale)
+    if (cartButtonEl) {
+      animate(cartButtonEl, {
+        scale: [1, 0.9],
+        duration: 300,
+        ease: 'outQuad',
+        autoplay: onScroll({
+          enter: '50px top',
+          leave: 'top top',
+          sync: true,
+        }),
+      });
+    }
 
-          // Animate Search Input
-          if (searchInputEl) {
-            animate(searchInputEl, {
-              height: isScrolled ? '2rem' : '2.5rem', // Tailwind: h-8 to h-10
-              fontSize: isScrolled ? '0.875rem' : '1rem',
-              paddingTop: isScrolled ? '0.25rem' : '0.5rem',
-              paddingBottom: isScrolled ? '0.25rem' : '0.5rem',
-              duration: 300,
-              easing: 'easeOutQuad',
-            });
-          }
-
-          // Animate Cart Button (scale)
-          if (cartButtonEl) {
-            animate(cartButtonEl, {
-              scale: isScrolled ? 0.9 : 1,
-              duration: 300,
-              easing: 'easeOutQuad',
-            });
-          }
-
-          // Animate Profile Button container (scale)
-          if (profileContainerEl) {
-            animate(profileContainerEl, {
-              scale: isScrolled ? 0.9 : 1,
-              duration: 300,
-              easing: 'easeOutQuad',
-            });
-          }
-
-          ticking = false;
-        });
-        ticking = true;
-      }
-    };
-
-    handleScroll(); // Set initial state based on scroll position
-    window.addEventListener('scroll', handleScroll, { passive: true });
-  }, [t, brands]); // Added brands as it affects navButtons
+    // Profile Button container animation (scale)
+    if (profileContainerEl) {
+      animate(profileContainerEl, {
+        scale: [1, 0.9],
+        duration: 300,
+        ease: 'outQuad',
+        autoplay: onScroll({
+          enter: '50px top',
+          leave: 'top top',
+          sync: true,
+        }),
+      });
+    }
+  }, [t, brands]);
 
   return (
     <>
@@ -206,7 +218,7 @@ export default function AppHeaderLayout({ children }: AppHeaderLayoutProps) {
               <Link
                 ref={logoRef}
                 href="/"
-                className="mr-2 bg-gradient-to-r from-cyan-300 to-fuchsia-500 bg-clip-text pl-2 text-3xl font-bold text-transparent sm:mr-4 sm:p-0"
+                className="mr-2 bg-gradient-to-r from-cyan-300 to-fuchsia-500 bg-clip-text pl-2 text-xl font-bold text-transparent sm:mr-4 sm:p-0 sm:text-3xl"
               >
                 GERED STORE
               </Link>
