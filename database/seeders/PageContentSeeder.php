@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\PageContent;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class PageContentSeeder extends Seeder
 {
@@ -21,7 +22,7 @@ class PageContentSeeder extends Seeder
         //     </div>
         // </div>
         // Поэтому HTML в 'content' начинается сразу с содержимого этого блока.
-
+        DB::table('page_contents')->truncate();
         // Страница политики конфиденциальности
         PageContent::firstOrCreate(['key' => 'policy'],
             [
