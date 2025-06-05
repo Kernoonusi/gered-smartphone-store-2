@@ -47,6 +47,10 @@ export default function AppHeaderLayout({ children }: AppHeaderLayoutProps) {
   }
 
   useEffect(() => {
+    const isMobile = window.innerWidth < 768;
+
+    if (isMobile) return;
+
     const headerContentEl = animatedHeaderContentRef.current;
     const logoEl = logoRef.current;
     const searchInputEl = searchInputRef.current;
@@ -172,7 +176,6 @@ export default function AppHeaderLayout({ children }: AppHeaderLayoutProps) {
               <Phone className="inline" size={15} />
               +7 (999) 999-99-99
             </p>
-            {/* Language Switcher */}
             <div className="ml-3 flex items-center gap-2">
               <button
                 className={`rounded px-2 py-1 text-xs font-medium transition-colors ${currentLocale() === 'ru' ? 'cursor-default text-fuchsia-400' : 'text-white/80 hover:bg-white/10 hover:text-white'}`}
@@ -206,7 +209,7 @@ export default function AppHeaderLayout({ children }: AppHeaderLayoutProps) {
       </div>
 
       {/* Unified, shrinkable header */}
-      <header ref={headerRef} className={`header-container sticky top-0 z-50`} id="main-header">
+      <header ref={headerRef} className={`header-container top-0 sticky z-50`} id="main-header">
         <div
           ref={animatedHeaderContentRef}
           className="flex w-full justify-center border-b border-fuchsia-500/20 bg-fuchsia-900/80 py-4 shadow-lg backdrop-blur-md"

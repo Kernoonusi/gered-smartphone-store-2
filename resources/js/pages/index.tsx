@@ -3,7 +3,8 @@ import { Button } from '@/components/ui/button';
 import Layout from '@/layouts/app-layout';
 import { type SmartphoneFull } from '@/types';
 import { Head, Link, usePage } from '@inertiajs/react';
-import { ChevronRight, Clock, Gift, Star, TrendingUp } from 'lucide-react';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { ChevronRight, Gift, Star, TrendingUp } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 // Import shadcn carousel components
@@ -12,6 +13,7 @@ import { currencyFormatter } from '@/utils/currencyFormatter';
 
 interface PageProps {
   smartphones: SmartphoneFull[];
+  trendingProducts: SmartphoneFull[];
   heroSlides: {
     id: number;
     title: string;
@@ -27,19 +29,17 @@ interface PageProps {
 }
 
 export default function Welcome() {
-  const { smartphones, heroSlides } = usePage<PageProps>().props;
+  const { smartphones, trendingProducts, heroSlides } = usePage<PageProps>().props;
   const [isVisible, setIsVisible] = useState(false);
 
   // Featured products
   const featuredProducts = smartphones.slice(0, 3);
 
-  // Trending products
-  const trendingProducts = smartphones.slice(0, 5);
-
   // Recommended products
-  const recommendedProducts = smartphones.slice(0, 5);
+  const recommendedProducts = smartphones;
 
   // Limited time offers
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const limitedTimeOffers = smartphones.slice(0, 5);
 
   const brandsToShow = [
@@ -63,6 +63,8 @@ export default function Welcome() {
   useEffect(() => {
     setIsVisible(true);
   }, []);
+
+
 
   return (
     <Layout>
@@ -211,7 +213,7 @@ export default function Welcome() {
               <TrendingUp className="h-6 w-6 text-red-500" />
               <h2 className="text-3xl font-bold">Новинки</h2>
             </div>
-            <Link href="/products?sort=new" className="flex items-center gap-1 text-gray-600 hover:text-black">
+            <Link href="/search?yearMin=2025" className="flex items-center gap-1 text-gray-600 hover:text-black">
               Все новинки
               <ChevronRight className="h-4 w-4" />
             </Link>
@@ -225,8 +227,8 @@ export default function Welcome() {
                 </CarouselItem>
               ))}
             </CarouselContent>
-            <CarouselPrevious className="hidden md:block" />
-            <CarouselNext className="hidden md:block" />
+            <CarouselPrevious className="hidden 2xl:inline-flex" />
+            <CarouselNext className="hidden 2xl:inline-flex" />
           </Carousel>
         </section>
 
@@ -273,7 +275,7 @@ export default function Welcome() {
               <Star className="h-6 w-6 text-amber-500" />
               <h2 className="text-3xl font-bold">Рекомендуем</h2>
             </div>
-            <Link href="/products?sort=recommended" className="flex items-center gap-1 text-gray-600 hover:text-black">
+            <Link href="/search" className="flex items-center gap-1 text-gray-600 hover:text-black">
               Все товары
               <ChevronRight className="h-4 w-4" />
             </Link>
@@ -287,13 +289,13 @@ export default function Welcome() {
                 </CarouselItem>
               ))}
             </CarouselContent>
-            <CarouselPrevious className="hidden md:block" />
-            <CarouselNext className="hidden md:block" />
+            <CarouselPrevious className="hidden 2xl:inline-flex" />
+            <CarouselNext className="hidden 2xl:inline-flex" />
           </Carousel>
         </section>
 
         {/* Limited Time Offers */}
-        <section className="mx-auto mt-16 max-w-7xl py-6">
+        {/* <section className="mx-auto mt-16 max-w-7xl py-6">
           <div className="mb-6 flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Clock className="h-6 w-6 text-orange-500" />
@@ -314,10 +316,10 @@ export default function Welcome() {
                 </CarouselItem>
               ))}
             </CarouselContent>
-            <CarouselPrevious className="hidden md:block" />
-            <CarouselNext className="hidden md:block" />
+            <CarouselPrevious className="hidden 2xl:inline-flex" />
+            <CarouselNext className="hidden 2xl:inline-flex" />
           </Carousel>
-        </section>
+        </section> */}
       </main>
     </Layout>
   );

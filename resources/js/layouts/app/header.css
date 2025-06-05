@@ -1,10 +1,3 @@
-/* Header container - base for sticky positioning */
-.header-container {
-  position: sticky;
-  top: 0;
-  z-index: 50;
-  /* Transitions for properties animated by anime.js can be defined here or in anime.js itself */
-}
 
 /*
   Main glassmorphic surface for the header.

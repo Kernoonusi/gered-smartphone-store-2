@@ -115,8 +115,8 @@ export default function SearchList({ resetFilters }: { resetFilters: () => void 
       {(!data || data.length === 0) && (
         <div className="mt-8 rounded-2xl border border-purple-300/20 bg-purple-500/10 p-12 text-center shadow-xl backdrop-blur-lg">
           <Search className="mx-auto mb-4 h-12 w-12 text-purple-300" />
-          <h3 className="mb-2 text-xl font-medium text-white">{t('empty.title')}</h3>
-          <p className="mb-6 text-purple-200">{t('empty.message')}</p>
+          <h3 className="mb-2 text-xl font-medium text-white">{t('filters.emptytitle')}</h3>
+          <p className="mb-6 text-purple-200">{t('filters.emptymessage')}</p>
           <Button variant="outline" className="border-purple-400/30 text-purple-100 hover:bg-purple-700/20" onClick={resetFilters}>
             {t('actions.reset')}
           </Button>

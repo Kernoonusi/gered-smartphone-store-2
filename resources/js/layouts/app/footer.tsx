@@ -14,7 +14,7 @@ export default function Footer() {
             <h3 className="mb-4 text-lg font-semibold text-white">{t('footer.contacts')}</h3>
             <p className="text-sm text-white/70">+7 (999) 999-99-99</p>
             <p className="text-sm text-white/70">+7 (999) 999-99-99</p>
-            <p className="mt-2 text-sm text-white/70">info@geredstore.com</p>
+            <p className="mt-2 text-sm text-white/70">info@gered-store.ru</p>
           </div>
           <div className="text-center md:text-right">
             <h3 className="mb-4 text-lg font-semibold text-white">{t('footer.info')}</h3>

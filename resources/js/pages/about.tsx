@@ -1,5 +1,6 @@
 import Layout from '@/layouts/app-layout';
 import { usePage } from '@inertiajs/react';
+import { useEffect } from 'react';
 
 interface PageContentProps {
   pageContent: {
@@ -8,11 +9,32 @@ interface PageContentProps {
     title: string;
     content: string;
   } | null;
-  [key: string]: unknown; 
+  [key: string]: unknown;
 }
 
 export default function About() {
   const { pageContent } = usePage<PageContentProps>().props;
+
+  useEffect(() => {
+    // Загружаем Font Awesome CSS только для этой страницы
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css';
+    link.id = 'font-awesome-css';
+
+    // Проверяем, не загружен ли уже CSS
+    if (!document.getElementById('font-awesome-css')) {
+      document.head.appendChild(link);
+    }
+
+    // Очищаем при размонтировании компонента
+    return () => {
+      const existingLink = document.getElementById('font-awesome-css');
+      if (existingLink) {
+        document.head.removeChild(existingLink);
+      }
+    };
+  }, []);
 
   return (
     <Layout>

@@ -98,7 +98,7 @@ export default function Profile() {
       <main className="mx-auto mt-6 flex w-full max-w-7xl flex-col gap-8">
         <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
           {/* Блок с профилем */}
-          <Card className="md:col-span-1 h-fit">
+          <Card className="h-fit md:col-span-1">
             <CardHeader className="flex flex-col items-center text-center">
               <Avatar className="mb-4 h-24 w-24">
                 <AvatarImage src={`https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(user.name)}`} alt={user.name} />
@@ -139,14 +139,14 @@ export default function Profile() {
             <CardContent>
               <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
                 <TabsList className="grid w-full grid-cols-3">
-                  <TabsTrigger value="profile" className='cursor-pointer'>
-                    <User className="mr-2 h-4 w-4" /> {t('profile.title')}
+                  <TabsTrigger value="profile" className="cursor-pointer">
+                    <User className="mr-2 h-4 w-4" /> <p className="hidden sm:inline-block">{t('profile.title')}</p>
                   </TabsTrigger>
-                  <TabsTrigger value="orders" className='cursor-pointer'>
-                    <Package className="mr-2 h-4 w-4" /> {t('profile.orders')}
+                  <TabsTrigger value="orders" className="cursor-pointer">
+                    <Package className="mr-2 h-4 w-4" /> <p className="hidden sm:inline-block">{t('profile.orders')}</p>
                   </TabsTrigger>
-                  <TabsTrigger value="settings" className='cursor-pointer'>
-                    <Settings className="mr-2 h-4 w-4" /> {t('profile.settings_title')}
+                  <TabsTrigger value="settings" className="cursor-pointer">
+                    <Settings className="mr-2 h-4 w-4" /> <p className="hidden sm:inline-block">{t('profile.settings_title')}</p>
                   </TabsTrigger>
                 </TabsList>
 
@@ -156,11 +156,11 @@ export default function Profile() {
                     <div className="grid grid-cols-2 gap-4">
                       <div>
                         <p className="text-muted-foreground text-sm">{t('profile.name')}</p>
-                        <p className="font-medium">{user.name}</p>
+                        <p className="font-medium break-words">{user.name}</p>
                       </div>
                       <div>
                         <p className="text-muted-foreground text-sm">{t('profile.email')}</p>
-                        <p className="font-medium">{user.email}</p>
+                        <p className="font-medium break-words">{user.email}</p>
                       </div>
                       <div>
                         <p className="text-muted-foreground text-sm">{t('profile.registration_date')}</p>

@@ -33,8 +33,11 @@ export function ProductCard({ item }: { item: SmartphoneFull }) {
 
   // Правильная инициализация состояния корзины
   const itemInCart = cart?.items.find((cartItem) => cartItem.product_id === item.id);
-  const [optimisticIsInCart, setOptimisticIsInCart] = useOptimistic(!!itemInCart);
-  const [optimisticIsInFavorites, setOptimisticIsInFavorites] = useOptimistic(item.is_in_favorites || false);
+  const [optimisticIsInCart, setOptimisticIsInCart] = useOptimistic<boolean>(!!itemInCart);
+  const [optimisticIsInFavorites, setOptimisticIsInFavorites] = useOptimistic(
+    item.is_in_favorites || false,
+    (currentState: boolean, optimisticValue: boolean) => optimisticValue,
+  );
   const [quantity, setQuantity] = useState(itemInCart?.count || 0);
   const hasFullData = 'specifications' in item && 'images' in item;
   const fullData = hasFullData ? (item as SmartphoneFull) : null;
@@ -60,6 +63,11 @@ export function ProductCard({ item }: { item: SmartphoneFull }) {
   const onAddToCart = () => {
     setIsAddingToCart(true);
 
+    // Optimistically update UI immediately
+    startTransition(() => {
+      setOptimisticIsInCart(true);
+    });
+
     router.post(
       route('cart.add'),
       {
@@ -72,10 +80,13 @@ export function ProductCard({ item }: { item: SmartphoneFull }) {
         only: ['cart'],
         onSuccess: () => {
           toast.success(t('products.addedToCart'));
-          setOptimisticIsInCart(true);
         },
         onError: () => {
           toast.error(t('products.notAddedToCart'));
+          // Revert optimistic update on error
+          startTransition(() => {
+            setOptimisticIsInCart(false);
+          });
         },
         onFinish: () => {
           setQuantity(1);
@@ -86,9 +97,23 @@ export function ProductCard({ item }: { item: SmartphoneFull }) {
   };
 
   const removeItem = (item: OrderItem) => {
-    router.delete(route('cart.remove', { id: item.id }), { only: ['cart', 'totalPrice'], preserveScroll: true });
+    // Optimistically update UI immediately
+    startTransition(() => {
+      setOptimisticIsInCart(false);
+    });
     setQuantity(0);
-    setOptimisticIsInCart(false);
+
+    router.delete(route('cart.remove', { id: item.id }), {
+      only: ['cart', 'totalPrice'],
+      preserveScroll: true,
+      onError: () => {
+        // Revert optimistic update on error
+        startTransition(() => {
+          setOptimisticIsInCart(true);
+        });
+        setQuantity(item.count);
+      },
+    });
   };
 
   const increaseCount = (phone: SmartphoneFull) => {

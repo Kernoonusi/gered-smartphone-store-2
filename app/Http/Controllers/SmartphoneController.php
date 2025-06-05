@@ -109,7 +109,7 @@ class SmartphoneController extends Controller
         return Inertia::render('product/search', [
             'smartphones' => Inertia::defer(function () use ($request, $specKeys) {
                 return $this->getSearchResults($request, $specKeys->toArray());
-            })->deepMerge(),
+            }),
             'filters' => array_merge([
                 'priceRange' => [
                     'type' => 'range',
@@ -167,6 +167,7 @@ class SmartphoneController extends Controller
 
         // Базовый запрос
         $query = Smartphone::with(['images', 'specifications'])
+            ->distinct()
             ->when($search, function ($q) use ($search) {
                 $q->where(function ($query) use ($search) {
                     if (trim($search) !== '') {

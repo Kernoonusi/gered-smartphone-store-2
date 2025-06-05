@@ -14,4 +14,6 @@ return [
     'battery_capacity' => 'Battery capacity',
     'display' => 'Display',
     'year' => 'Year of release',
+    'emptytitle' => 'No results',
+    'emptymessage' => 'Try changing the search parameters'
 ];

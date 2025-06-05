@@ -4,6 +4,8 @@ return [
     'search' => 'Поиск',
     'reset' => 'Сбросить',
     'apply' => 'Применить',
+    'hide' => 'cкрыть',
+    'show' => 'показать',
     // auth
     'login_title' => 'Вход',
     'register_title' => 'Регистрация',
@@ -30,6 +32,5 @@ return [
     'have_account' => 'Уже есть аккаунт?',
     'remembered' => 'Вспомнили пароль?',
     'loading' => 'Загрузка...',
-    'login' => 'Вход',
-    'show' => 'Показать'
+    'login' => 'Вход'
 ];

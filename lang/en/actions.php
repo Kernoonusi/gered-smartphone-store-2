@@ -4,6 +4,8 @@ return [
     'search' => 'Search',
     'reset' => 'Reset',
     'apply' => 'Apply',
+    'show' => 'show',
+    'hide' => 'hide',
     // auth
     'login_title' => 'Login',
     'register_title' => 'Register',
@@ -30,6 +32,5 @@ return [
     'have_account' => 'Already have an account?',
     'remembered' => 'Remembered your password?',
     'loading' => 'Loading...',
-    'login' => 'Login',
-    'show' => 'Show'
+    'login' => 'Login'
 ];

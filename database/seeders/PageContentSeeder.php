@@ -245,7 +245,7 @@ HTML,
                                 <i class="fas fa-phone text-green-400 mr-3"></i>
                                 <h3 class="font-bold text-slate-100">Горячая линия</h3>
                             </div>
-                            <p class="text-slate-200 font-semibold">+7 (351) 200-15-25</p>
+                            <p class="text-slate-200 font-semibold">+7 (999) 999-99-99</p>
                             <p class="text-sm text-slate-400">Круглосуточно, без выходных</p>
                         </div>
                         
@@ -254,7 +254,7 @@ HTML,
                                 <i class="fab fa-whatsapp text-green-400 mr-3"></i>
                                 <h3 class="font-bold text-slate-100">WhatsApp</h3>
                             </div>
-                            <p class="text-slate-200 font-semibold">+7 (351) 200-15-25</p>
+                            <p class="text-slate-200 font-semibold">+7 (999) 999-99-99</p>
                             <p class="text-sm text-slate-400">Быстрые ответы в мессенджере</p>
                         </div>
                         
@@ -344,13 +344,13 @@ HTML,
                     и мы ответим в кратчайшие сроки.
                 </p>
                 <div class="flex flex-wrap justify-center gap-4">
-                    <a href="tel:+73512001525" class="bg-gradient-to-r from-sky-500 to-sky-600 text-white px-6 py-3 rounded-xl font-medium shadow-md hover:shadow-lg hover:from-sky-600 hover:to-sky-700 transition-all ring-1 ring-sky-700/50">
+                    <a href="tel:+79999999999" class="bg-gradient-to-r from-sky-500 to-sky-600 text-white px-6 py-3 rounded-xl font-medium shadow-md hover:shadow-lg hover:from-sky-600 hover:to-sky-700 transition-all ring-1 ring-sky-700/50">
                         <i class="fas fa-phone mr-2"></i>Позвонить
                     </a>
                     <a href="mailto:info@gered-store.ru" class="bg-gradient-to-r from-pink-500 to-pink-600 text-white px-6 py-3 rounded-xl font-medium shadow-md hover:shadow-lg hover:from-pink-600 hover:to-pink-700 transition-all ring-1 ring-pink-700/50">
                         <i class="fas fa-envelope mr-2"></i>Написать
                     </a>
-                    <a href="https://wa.me/73512001525" class="bg-gradient-to-r from-green-500 to-green-600 text-white px-6 py-3 rounded-xl font-medium shadow-md hover:shadow-lg hover:from-green-600 hover:to-green-700 transition-all ring-1 ring-green-700/50">
+                    <a href="https://wa.me/79999999999" class="bg-gradient-to-r from-green-500 to-green-600 text-white px-6 py-3 rounded-xl font-medium shadow-md hover:shadow-lg hover:from-green-600 hover:to-green-700 transition-all ring-1 ring-green-700/50">
                         <i class="fab fa-whatsapp mr-2"></i>WhatsApp
                     </a>
                 </div>
@@ -831,7 +831,7 @@ HTML,
                         <span class="text-white font-bold text-xl">1</span>
                     </div>
                     <h3 class="text-xl font-bold text-sky-300 mb-3">Свяжитесь с нами</h3>
-                    <p class="text-slate-300">Позвоните по телефону +7 (351) 200-15-25 или напишите на claims@gered-store.ru</p>
+                    <p class="text-slate-300">Позвоните по телефону +7 (999) 999-99-99 или напишите на claims@gered-store.ru</p>
                 </div>
                 
                 <div class="text-center">

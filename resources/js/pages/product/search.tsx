@@ -261,10 +261,10 @@ export default function SmartphoneSearchPage() {
     router.get('/search', { preserveState: true, preserveScroll: true }); // Navigate to base search URL to clear query params
   };
   const filtersContent = (
-    <div className="min-w-[300px] rounded-2xl border border-purple-300/20 bg-purple-500/10 p-6 shadow-xl backdrop-blur-lg dark:shadow-xl dark:shadow-purple-700/20">
+    <div className="min-w-[300px] rounded-2xl border border-purple-300/20 bg-purple-500/10 p-4 shadow-xl backdrop-blur-lg dark:shadow-xl dark:shadow-purple-700/20 flex flex-col max-h-[calc(100vh-12rem)]">
       <h3 className="mb-4 text-lg font-semibold text-white">{t('filters.title')}</h3>
-      <Tabs value={activeFilterTab} onValueChange={setActiveFilterTab} className="w-full">
-        <TabsList className="mb-4 hidden flex-wrap gap-2 border-purple-300/30 bg-purple-700/20">
+      <Tabs value={activeFilterTab} onValueChange={setActiveFilterTab} className="w-full flex flex-col flex-1 overflow-hidden">
+        <TabsList className="mb-4 hidden flex-wrap gap-2 border-purple-300/30 bg-purple-700/20 flex-shrink-0">
           {Object.entries(filterGroups).map(([groupKey, groupFilters]) => {
             // Find group config for the label
             const groupConfig = groupFilters.length > 0 ? specFiltersConfig.find((f) => f.group === groupKey) : null;
@@ -278,51 +278,53 @@ export default function SmartphoneSearchPage() {
             );
           })}
         </TabsList>
-        {Object.entries(filterGroups).map(([groupKey, groupFilters]) => (
-          <TabsContent key={groupKey} value={groupKey} className="mt-0">
-            {/* Use consistent grid gap */}
-            <div className="grid grid-cols-1 gap-4">
-              {groupFilters.map((filter) => (
-                <div key={filter.key}>
-                  <label className="mb-2 flex items-center text-sm font-medium text-purple-100">
-                    {/* {filter.icon && React.createElement(filter.icon, { className: 'mr-2 h-4 w-4' })} */}
-                    {filter.label}
-                  </label>
-                  {(filter.type === 'exact' || numericMultipleSelectorKeys.includes(filter.key)) &&
-                  Array.isArray(filter.options) &&
-                  filter.options.length > 0 ? (
-                    <MultipleSelector
-                      options={
-                        // If numeric, generate options from range
-                        filter.type === 'range' && numericMultipleSelectorKeys.includes(filter.key)
-                          ? Array.from({ length: filter.max - filter.min + 1 }, (_, i) => filter.min + i)
-                              .filter((v) => Array.isArray(filter.options) && filter.options.includes(v.toString()))
-                              .map((v) => ({ value: v.toString(), label: v.toString() }))
-                          : filter.options?.map((opt: string) => ({ value: opt, label: opt })) || []
-                      }
-                      value={(specFiltersState[filter.key] as string[]) || []}
-                      onValueChange={(selectedOptions) => handleMultiSelectChange(filter.key, selectedOptions)}
-                      placeholder={t('placeholders.select :label', { label: filter.label.toLowerCase() })}
-                      className="border-purple-300/30 bg-purple-700/20 text-white placeholder:text-purple-300"
-                    />
-                  ) : filter.type === 'range' ? (
-                    <RangeSlider
-                      f={filter}
-                      v={[
-                        (specFiltersState[filter.key] as { min: number; max: number })?.min ?? filter.min,
-                        (specFiltersState[filter.key] as { min: number; max: number })?.max ?? filter.max,
-                      ]}
-                      onChange={(value) => handleSpecFilterChange(filter.key, { min: value[0], max: value[1] })}
-                    />
-                  ) : null}
-                </div>
-              ))}
-            </div>
-          </TabsContent>
-        ))}
+        <div className="flex-1 overflow-y-auto overflow-x-visible pr-2 scrollbar-thin scrollbar-track-purple-900/20 scrollbar-thumb-purple-600/50 hover:scrollbar-thumb-purple-500/70">
+          {Object.entries(filterGroups).map(([groupKey, groupFilters]) => (
+            <TabsContent key={groupKey} value={groupKey} className="mt-0">
+              {/* Use consistent grid gap */}
+              <div className="grid grid-cols-1 gap-4">
+                {groupFilters.map((filter) => (
+                  <div key={filter.key}>
+                    <label className="mb-2 flex items-center text-sm font-medium text-purple-100">
+                      {/* {filter.icon && React.createElement(filter.icon, { className: 'mr-2 h-4 w-4' })} */}
+                      {filter.label}
+                    </label>
+                    {(filter.type === 'exact' || numericMultipleSelectorKeys.includes(filter.key)) &&
+                    Array.isArray(filter.options) &&
+                    filter.options.length > 0 ? (
+                      <MultipleSelector
+                        options={
+                          // If numeric, generate options from range
+                          filter.type === 'range' && numericMultipleSelectorKeys.includes(filter.key)
+                            ? Array.from({ length: filter.max - filter.min + 1 }, (_, i) => filter.min + i)
+                                .filter((v) => Array.isArray(filter.options) && filter.options.includes(v.toString()))
+                                .map((v) => ({ value: v.toString(), label: v.toString() }))
+                            : filter.options?.map((opt: string) => ({ value: opt, label: opt })) || []
+                        }
+                        value={(specFiltersState[filter.key] as string[]) || []}
+                        onValueChange={(selectedOptions) => handleMultiSelectChange(filter.key, selectedOptions)}
+                        placeholder={t('placeholders.select :label', { label: filter.label.toLowerCase() })}
+                        className="border-purple-300/30 bg-purple-700/20 text-white placeholder:text-purple-300"
+                      />
+                    ) : filter.type === 'range' ? (
+                      <RangeSlider
+                        f={filter}
+                        v={[
+                          (specFiltersState[filter.key] as { min: number; max: number })?.min ?? filter.min,
+                          (specFiltersState[filter.key] as { min: number; max: number })?.max ?? filter.max,
+                        ]}
+                        onChange={(value) => handleSpecFilterChange(filter.key, { min: value[0], max: value[1] })}
+                      />
+                    ) : null}
+                  </div>
+                ))}
+              </div>
+            </TabsContent>
+          ))}
+        </div>
       </Tabs>
       {/* Buttons placed inside the shared filter content block */}
-      <div className="mt-6 flex flex-col gap-2 md:gap-4">
+      <div className="mt-6 flex flex-col gap-2 md:gap-4 flex-shrink-0">
         <Button
           type="button"
           className="w-full bg-purple-600 hover:bg-purple-700"
@@ -368,7 +370,7 @@ export default function SmartphoneSearchPage() {
         {/* Main Content */}
         <div className="flex-1">
           {/* Search Input and Mobile Filter Toggle */}
-          <div className="mb-8 rounded-xl border border-white/10 bg-gradient-to-r from-purple-900/20 via-purple-800/15 to-fuchsia-900/20 p-6 shadow-2xl backdrop-blur-xl">
+          <div className="mb-8 sm:rounded-xl border border-white/10 bg-gradient-to-r from-purple-900/20 via-purple-800/15 to-fuchsia-900/20 p-6 shadow-2xl backdrop-blur-xl">
             <div className="flex flex-col gap-4 md:flex-row">
               <div className="relative flex-1">
                 <Search className="absolute top-1/2 left-4 h-5 w-5 -translate-y-1/2 text-purple-300/80" />
@@ -397,7 +399,7 @@ export default function SmartphoneSearchPage() {
             {/* Mobile Filters Block - Conditionally Renders filtersContent */}
             <div className="md:hidden">
               {showFilters && (
-                <div className="mt-6 rounded-xl bg-white/5 p-4 backdrop-blur-sm">
+                <div className="mt-6">
                   {/* Render the shared filter content */}
                   {filtersContent}
                 </div>
