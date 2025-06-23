@@ -3,7 +3,7 @@ import react from '@vitejs/plugin-react';
 import i18n from 'laravel-react-i18n/vite';
 import laravel from 'laravel-vite-plugin';
 import { defineConfig } from 'vite';
-import compression from 'vite-plugin-compression';
+import compression, { defineAlgorithm } from 'vite-plugin-compression2';
 
 const ReactCompilerConfig = {
   /* ... */
@@ -17,20 +17,9 @@ export default defineConfig({
       refresh: true,
     }),
     compression({
-      algorithm: 'gzip',
-      ext: '.gz',
+      algorithms: [defineAlgorithm('gz', { level: 9 }), defineAlgorithm('br', { level: 11 }), defineAlgorithm('zstd', { level: 15 })],
       threshold: 10240, // минимальный размер файла в байтах для сжатия (10 KiB)
       deleteOriginFile: false, // оставить оригинальные файлы
-    }),
-    // второй экземпляр — Brotli
-    compression({
-      algorithm: 'brotliCompress',
-      ext: '.br',
-      threshold: 10240, // тоже от 10KiB
-      brotliOptions: {
-        level: 11, // максимальный уровень сжатия
-      },
-      deleteOriginFile: false,
     }),
     react({
       babel: {
