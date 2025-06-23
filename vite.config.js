@@ -17,7 +17,7 @@ export default defineConfig({
       refresh: true,
     }),
     compression({
-      algorithms: [defineAlgorithm('gz', { level: 9 }), defineAlgorithm('br', { level: 11 }), defineAlgorithm('zstd', { level: 15 })],
+      algorithms: [defineAlgorithm('gz', { level: 9 }), defineAlgorithm('br', { level: 11 })],
       threshold: 10240, // минимальный размер файла в байтах для сжатия (10 KiB)
       deleteOriginFile: false, // оставить оригинальные файлы
     }),
